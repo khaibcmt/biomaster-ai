@@ -44,7 +44,7 @@ window.showBioToast = function(message, type = 'info') {
   }, 4500);
 };
 
-// Ghi đè khóa lưu trữ cache sang phiên bản v8_competition_pro
+// Ghi đè khóa lưu trữ cache sang phiên bản v9_pro
 window.getAICacheKey = function(mode, subject, grade, lessonTitle) {
   if (mode === '7991') {
     const lessonsKey = (typeof selectedLessonsForExam !== 'undefined' && selectedLessonsForExam.length > 0)
@@ -53,13 +53,13 @@ window.getAICacheKey = function(mode, subject, grade, lessonTitle) {
     const totalsKey = (typeof matrixGlobalTotals !== 'undefined' && matrixGlobalTotals)
       ? Object.values(matrixGlobalTotals).join('_')
       : 'default';
-    return `biomaster_v8_pro_${mode}_${subject}_${grade}_${lessonsKey}_${totalsKey}`.replace(/[^a-zA-Z0-9_]/g, '_');
+    return `biomaster_v9_pro_${mode}_${subject}_${grade}_${lessonsKey}_${totalsKey}`.replace(/[^a-zA-Z0-9_]/g, '_');
   }
-  return `biomaster_v8_pro_${mode}_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
+  return `biomaster_v9_pro_${mode}_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
 };
 
 window.getStructuredPlanKey = function(subject, grade, lessonTitle) {
-  return `structured_plan_v8_pro_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
+  return `structured_plan_v9_pro_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
 };
 
 // ============================================================================
@@ -651,14 +651,9 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
     });
 
     const examHtml = `
-      <div style="background: linear-gradient(90deg, #eff6ff 0%, #f0fdf4 100%); border: 2px solid #1e40af; border-radius: 8px; padding: 10px 14px; margin: 16px 0 10px 0;">
-        <p style="font-weight: bold; margin: 0; font-size: 12.5pt; color: #1e3a8a; text-transform: uppercase;">
-          III. ĐỀ KIỂM TRA CHÍNH THỨC — BẢN BIÊN SOẠN CHUYÊN SÂU BỞI AI (CHUẨN CÔNG VĂN 7991/BGDĐT-GDTrH)
-        </p>
-        <p style="margin: 3px 0 0 0; font-size: 10pt; color: #047857; font-weight: bold;">
-          ✔ Đề thi đã được AI phân hóa đầy đủ 3 cấp độ Nhận thức (Biết - Hiểu - Vận dụng) & kèm Bảng Hướng dẫn chấm chi tiết từng ý (Thang điểm 10,0)
-        </p>
-      </div>
+      <p style="font-weight: bold; margin: 15px 0 4px 0; font-size: 11.5pt; color: #1e3a8a;">
+        III. ĐỀ KIỂM TRA CHÍNH THỨC (CHUẨN CÔNG VĂN 7991/BGDĐT-GDTrH)
+      </p>
 
       <p style="font-weight: bold; color: #1e40af; margin: 8px 0 2px 0;">PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn (${countP1} câu, 3,0 điểm)</p>
       <p style="font-style: italic; font-size: 10.5pt; margin: 0 0 4px 0;">Thí sinh trả lời từ câu 1 đến câu ${countP1}. Mỗi câu hỏi thí sinh chỉ chọn một phương án đúng nhất.</p>
@@ -677,11 +672,9 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
 
       <div style="page-break-before: always; margin-top: 18px;"></div>
 
-      <div style="background: #f0fdf4; border: 2px solid #059669; border-radius: 8px; padding: 8px 12px; margin: 14px 0 8px 0;">
-        <p style="font-weight: bold; margin: 0; font-size: 12pt; color: #065f46; text-transform: uppercase;">
-          IV. BẢNG ĐÁP ÁN VÀ HƯỚNG DẪN CHẤM CHI TIẾT (THANG ĐIỂM 10,0 - CHUẨN CV 7991)
-        </p>
-      </div>
+      <p style="font-weight: bold; margin: 14px 0 6px 0; font-size: 11.5pt; color: #065f46; text-transform: uppercase;">
+        IV. BẢNG ĐÁP ÁN VÀ HƯỚNG DẪN CHẤM CHI TIẾT (THANG ĐIỂM 10,0 - CHUẨN CV 7991)
+      </p>
 
       <p style="font-weight: bold; margin: 6px 0 3px 0; color: #0f172a;">1. Bảng đáp án & Giải thích cơ sở khoa học Phần I (Trắc nghiệm 4 lựa chọn - 3,0 điểm):</p>
       <table>
@@ -1572,43 +1565,23 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
         solutionGuide: `1. Giải thích hiện tượng thực tiễn: ${profile.openingAnswer}\n2. Lời giải bài toán thực tế: ${profile.calcAnswer}`
       };
 
-  const aiHeaderBanner = isAI ? `
-    <div style="background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 50%, #ecfdf5 100%); border: 1.5px solid #6366f1; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
-        <span style="font-weight: bold; color: #312e81; font-size: 10.5pt;">
-          ★ BẢN BIÊN SOẠN CHUYÊN SÂU BỞI AI (${planData.aiModelBadge || 'Gemini AI'}) • CHUẨN CÔNG VĂN 5512/BGDĐT
-        </span>
-        <span style="background: #4f46e5; color: #ffffff; font-size: 9.5pt; font-weight: bold; padding: 2px 8px; border-radius: 4px;">
-          ĐÃ TỐI ƯU HÓA SƯ PHẠM & PHIẾU HỌC TẬP CHI TIẾT
-        </span>
-      </div>
-      <p style="margin: 4px 0 0 0; font-size: 10pt; color: #1e293b;">
-        <strong>Phương pháp & Kĩ thuật dạy học tích cực:</strong> ${planData.pedagogyStyle || 'Dạy học Giải quyết vấn đề, Trạm học tập (Station Rotation), Kĩ thuật Mảnh ghép & Mô hình 5E'}
-      </p>
-    </div>
-  ` : '';
+  const bietItems = [...new Set([
+    ...sections.map(s => s.yccd_nb).filter(Boolean),
+    knowledgeYccdList[0]
+  ].filter(Boolean))].slice(0, 3);
 
-  const aiBloomTableHtml = (isAI && planData.bloomTable) ? `
-    <table style="margin: 6px 0 8px 0;">
-      <thead>
-        <tr style="background: #e0e7ff; text-align: center; font-weight: bold; color: #1e3a8a;">
-          <th style="width: 33%;">Mức độ Nhận biết</th>
-          <th style="width: 34%;">Mức độ Thông hiểu</th>
-          <th style="width: 33%;">Mức độ Vận dụng</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="vertical-align: top;">${planData.bloomTable.nhanBiet || knowledgeYccdList[0] || ''}</td>
-          <td style="vertical-align: top;">${planData.bloomTable.thongHieu || knowledgeYccdList[1] || ''}</td>
-          <td style="vertical-align: top;">${planData.bloomTable.vanDung || knowledgeYccdList[knowledgeYccdList.length - 1] || ''}</td>
-        </tr>
-      </tbody>
-    </table>
-  ` : '';
+  const hieuItems = [...new Set([
+    ...sections.map(s => s.yccd_th).filter(Boolean),
+    knowledgeYccdList[1] || knowledgeYccdList[0]
+  ].filter(Boolean))].slice(0, 3);
+
+  const vanDungItems = [...new Set([
+    ...sections.map(s => s.yccd_vd).filter(Boolean),
+    knowledgeYccdList[knowledgeYccdList.length - 1],
+    `Vận dụng giải thích hiện tượng thực tiễn: ${profile.openingAnswer}`
+  ].filter(Boolean))].slice(0, 3);
 
   const htmlOutput = `
-    ${aiHeaderBanner}
     <div style="text-align: center; margin-bottom: 12px; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px;">
       <h2 style="margin: 0; font-size: 14pt; font-weight: bold; text-transform: uppercase; color: #0f172a;">KẾ HOẠCH BÀI DẠY</h2>
       <h3 style="margin: 4px 0 0 0; font-size: 13pt; font-weight: bold; color: #1e3a8a;">${lessonTitle.toUpperCase()}</h3>
@@ -1621,8 +1594,12 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
     <p style="font-weight: bold; margin: 10px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">I. MỤC TIÊU</p>
 
     <p style="margin: 4px 0 3px 10px;"><strong>1. Về kiến thức (Yêu cầu cần đạt chuẩn CT GDPT 2018):</strong></p>
-    ${knowledgeYccdList.map(item => `<p style="margin: 2px 0 2px 22px;">- ${item}</p>`).join('')}
-    ${aiBloomTableHtml}
+    <p style="margin: 3px 0 2px 18px;"><strong>- Biết:</strong> Nhận biết, nêu và trình bày được các khái niệm, thành phần, đặc điểm nền tảng của bài "${lessonTitle}":</p>
+    ${bietItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
+    <p style="margin: 4px 0 2px 18px;"><strong>- Hiểu:</strong> Phân tích, phân biệt và giải thích được bản chất, cơ chế khoa học trọng tâm của bài "${lessonTitle}":</p>
+    ${hieuItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
+    <p style="margin: 4px 0 2px 18px;"><strong>- Vận dụng:</strong> Vận dụng kiến thức bài "${lessonTitle}" vào giải thích hiện tượng thực tiễn, giải bài tập và ứng dụng trong đời sống, sản xuất:</p>
+    ${vanDungItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
 
     <p style="margin: 6px 0 3px 10px;"><strong>2. Về năng lực:</strong></p>
 
@@ -1656,38 +1633,16 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
 
     <!-- ==================== PHẦN II: THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU ==================== -->
     <p style="font-weight: bold; margin: 12px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</p>
-    ${isAI ? `
-      <table>
-        <thead>
-          <tr style="background: #E6EEF8; text-align: center; font-weight: bold;">
-            <th style="width: 48%;">Học liệu & Thiết bị của Giáo viên</th>
-            <th style="width: 52%;">Học liệu & Chuẩn bị của Học sinh</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="vertical-align: top;">
-              - SGK, SGV, SBT <strong>${subject} ${grade} - Kết nối tri thức với cuộc sống</strong>; Bộ 34 Slide bài giảng điện tử tương tác.<br>
-              - <span style="color: #92400e;">Bộ Phiếu học tập số 1, 2, 3 theo trạm nghiên cứu và Bảng tiêu chí Rubric đánh giá [${otherComp.code}].</span><br>
-              - <span style="color: #0369a1;">Infographic / Mô phỏng số hóa 3D phục vụ khai thác dữ liệu tại <em>${nlsInfo.targetSection}</em> [${nlsInfo.code}].</span><br>
-              - <span style="color: #b91c1c;">Thẻ tình huống "Fact-Check AI" chứa nhận định giả định để HS phản biện tại <em>${aiInfo.targetSection}</em> [${aiInfo.code}].</span>
-            </td>
-            <td style="vertical-align: top;">
-              - SGK ${subject} ${grade} (Kết nối tri thức với cuộc sống), vở ghi, bút màu sơ đồ tư duy, bảng phụ nhóm (A1/A0).<br>
-              - Đọc trước bài "${lessonTitle}" và tìm hiểu các hiện tượng thực tiễn liên quan đến bài học.<br>
-              - Thiết bị kết nối Internet (nếu có) để tra cứu học liệu số theo hướng dẫn của GV.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    ` : `
-      <p style="margin: 2px 0 2px 15px;"><strong>1. Đối với giáo viên:</strong></p>
-      <p style="margin: 2px 0 2px 25px;">- Sách giáo khoa, Sách giáo viên, Sách bài tập <strong>${subject} ${grade} - Kết nối tri thức với cuộc sống</strong>; Kế hoạch bài dạy và Bài giảng điện tử.</p>
-      <p style="margin: 2px 0 2px 25px; color: #92400e;">- Hệ thống Phiếu học tập số 1, số 2, bộ câu hỏi định hướng và bảng tiêu chí đánh giá hoạt động nhóm [${otherComp.code}].</p>
-      <p style="margin: 2px 0 2px 25px; color: #0369a1;">- Hình ảnh trực quan, mô phỏng số hóa phục vụ hoạt động khai thác dữ liệu tại <em>${nlsInfo.targetSection}</em> [${nlsInfo.code}].</p>
-      <p style="margin: 2px 0 2px 25px; color: #b91c1c;">- Thẻ tình huống chứa nhận định khoa học cần học sinh đối chiếu SGK để phản biện tại <em>${aiInfo.targetSection}</em> [${aiInfo.code}].</p>
-      <p style="margin: 4px 0 2px 15px;"><strong>2. Đối với học sinh:</strong> Sách giáo khoa ${subject} ${grade} (Kết nối tri thức với cuộc sống), vở ghi, dụng cụ học tập, bảng phụ nhóm.</p>
-    `}
+    <p style="margin: 3px 0 2px 15px;"><strong>1. Chuẩn bị của giáo viên:</strong> Hệ thống học liệu, thiết bị dạy học và công cụ đánh giá phục vụ bài "${lessonTitle}":</p>
+    <p style="margin: 2px 0 2px 28px;">+ Sách giáo khoa, Sách giáo viên, Sách bài tập <strong>${subject} ${grade} - Kết nối tri thức với cuộc sống</strong>; Kế hoạch bài dạy và Bộ 34 Slide bài giảng điện tử tương tác.</p>
+    <p style="margin: 2px 0 2px 28px; color: #92400e;">+ Bộ Phiếu học tập số 1, 2, 3 theo các mục kiến thức và Bảng tiêu chí Rubric đánh giá sản phẩm hoạt động nhóm [${otherComp.code}].</p>
+    <p style="margin: 2px 0 2px 28px; color: #0369a1;">+ Hình ảnh trực quan, sơ đồ/mô phỏng số hóa phục vụ hoạt động khai thác dữ liệu tại <em>${nlsInfo.targetSection}</em> [${nlsInfo.code}].</p>
+    <p style="margin: 2px 0 2px 28px; color: #b91c1c;">+ Thẻ tình huống chứa nhận định khoa học giả định cần học sinh đối chiếu SGK để kiểm chứng và phản biện tại <em>${aiInfo.targetSection}</em> [${aiInfo.code}].</p>
+
+    <p style="margin: 5px 0 2px 15px;"><strong>2. Chuẩn bị của học sinh:</strong> Học liệu cá nhân và sự chuẩn bị kiến thức trước tiết học:</p>
+    <p style="margin: 2px 0 2px 28px;">+ Sách giáo khoa <strong>${subject} ${grade} (Kết nối tri thức với cuộc sống)</strong>, vở ghi bài, dụng cụ học tập, bút màu vẽ sơ đồ tư duy và bảng phụ nhóm (A1/A0).</p>
+    <p style="margin: 2px 0 2px 28px;">+ Đọc trước nội dung bài "${lessonTitle}", trả lời các câu hỏi trong SGK và sưu tầm các ví dụ thực tiễn liên quan đến bài học.</p>
+    <p style="margin: 2px 0 2px 28px;">+ Thiết bị kết nối Internet (nếu có) để tham gia tra cứu học liệu số theo hướng dẫn của giáo viên.</p>
 
     <!-- ==================== PHẦN III: TIẾN TRÌNH DẠY HỌC ==================== -->
     <p style="font-weight: bold; margin: 12px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">III. TIẾN TRÌNH DẠY HỌC</p>
@@ -3624,47 +3579,47 @@ window.openRAGInspectorModal = function() {
 
   body.innerHTML = `
     <!-- Sơ đồ 3 tầng RAG -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-      <div class="p-3.5 rounded-2xl bg-cyan-950/50 border border-cyan-400/50 space-y-1">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+      <div class="p-4 rounded-2xl bg-cyan-950/50 border border-cyan-400/50 space-y-1.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-black uppercase text-cyan-300">Tầng 1 • Retrieval</span>
-          <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-200 font-bold text-[10px]">Đã truy xuất</span>
+          <span class="text-xs font-black uppercase text-cyan-300">Tầng 1 • Retrieval</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-200 font-bold text-xs">Đã truy xuất</span>
         </div>
-        <div class="text-sm font-black text-white">Truy Xuất Ngữ Liệu Gốc SGK</div>
-        <p class="text-[11px] text-slate-300">Trích xuất trực tiếp <strong>${profile.sections.length} phân đoạn kiến thức SGK</strong> và <strong>${profile.yccd.length} Yêu cầu cần đạt</strong> của bài <em>${lessonTitle}</em>.</p>
+        <div class="text-base font-black text-white">Truy Xuất Ngữ Liệu Gốc SGK</div>
+        <p class="text-sm text-slate-200">Trích xuất trực tiếp <strong>${profile.sections.length} phân đoạn kiến thức SGK</strong> và <strong>${profile.yccd.length} Yêu cầu cần đạt</strong> của bài <em>${lessonTitle}</em>.</p>
       </div>
 
-      <div class="p-3.5 rounded-2xl bg-amber-950/50 border border-amber-400/50 space-y-1">
+      <div class="p-4 rounded-2xl bg-amber-950/50 border border-amber-400/50 space-y-1.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-black uppercase text-amber-300">Tầng 2 • Augmented Grounding</span>
-          <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-bold text-[10px]">Khóa danh pháp</span>
+          <span class="text-xs font-black uppercase text-amber-300">Tầng 2 • Augmented Grounding</span>
+          <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-bold text-xs">Khóa danh pháp</span>
         </div>
-        <div class="text-sm font-black text-white">Khóa Ngữ Cảnh & Danh Pháp</div>
-        <p class="text-[11px] text-slate-300">Chuẩn hóa 100% thuật ngữ khoa học theo GDPT 2018 (DNA, RNA, ATP, enzyme, hormone, polypeptide...) và chặn suy diễn ngoài SGK.</p>
+        <div class="text-base font-black text-white">Khóa Ngữ Cảnh & Danh Pháp</div>
+        <p class="text-sm text-slate-200">Chuẩn hóa 100% thuật ngữ khoa học theo GDPT 2018 (DNA, RNA, ATP, enzyme, hormone, polypeptide...) và chặn suy diễn ngoài SGK.</p>
       </div>
 
-      <div class="p-3.5 rounded-2xl bg-emerald-950/50 border border-emerald-400/50 space-y-1">
+      <div class="p-4 rounded-2xl bg-emerald-950/50 border border-emerald-400/50 space-y-1.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-black uppercase text-emerald-300">Tầng 3 • Zero Hallucination</span>
-          <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 font-bold text-[10px]">Độ chính xác 100%</span>
+          <span class="text-xs font-black uppercase text-emerald-300">Tầng 3 • Zero Hallucination</span>
+          <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 font-bold text-xs">Độ chính xác 100%</span>
         </div>
-        <div class="text-sm font-black text-white">Triệt Tiêu Ảo Giác Khoa Học</div>
-        <p class="text-[11px] text-slate-300">Kiểm định chéo đầu ra Giáo án 5512, 34 Slide PPT và Đề thi 7991 với các vector kiến thức chuẩn của Bộ GD&ĐT.</p>
+        <div class="text-base font-black text-white">Triệt Tiêu Ảo Giác Khoa Học</div>
+        <p class="text-sm text-slate-200">Kiểm định chéo đầu ra Giáo án 5512, 34 Slide PPT và Đề thi 7991 với các vector kiến thức chuẩn của Bộ GD&ĐT.</p>
       </div>
     </div>
 
     <!-- Khối 1: Yêu cầu cần đạt đã neo trong RAG -->
-    <div class="bg-[#0b1324] border border-cyan-500/40 rounded-2xl p-4 space-y-2">
+    <div class="bg-[#0b1324] border border-cyan-500/40 rounded-2xl p-4 space-y-2.5">
       <div class="flex items-center justify-between">
-        <h4 class="text-xs font-black uppercase text-cyan-300 flex items-center gap-1.5">
+        <h4 class="text-sm font-black uppercase text-cyan-300 flex items-center gap-1.5">
           <i class="fa-solid fa-bullseye text-amber-400"></i> 1. Vector Yêu Cầu Cần Đạt Chuẩn CT GDPT 2018 (Neo Cố Định)
         </h4>
-        <span class="text-[10px] text-emerald-400 font-bold"><i class="fa-solid fa-lock mr-1"></i> Đã khóa chuẩn đầu ra</span>
+        <span class="text-xs text-emerald-400 font-bold"><i class="fa-solid fa-lock mr-1"></i> Đã khóa chuẩn đầu ra</span>
       </div>
-      <div class="space-y-1 pl-1">
+      <div class="space-y-1.5 pl-1 text-sm">
         ${profile.yccd.map((y, idx) => `
-          <div class="flex items-start gap-2 text-slate-200">
-            <span class="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-bold text-[10px] mt-0.5">YCCĐ ${idx + 1}</span>
+          <div class="flex items-start gap-2 text-slate-100">
+            <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold text-xs shrink-0 mt-0.5">YCCĐ ${idx + 1}</span>
             <span>${y}</span>
           </div>
         `).join('')}
@@ -3674,17 +3629,17 @@ window.openRAGInspectorModal = function() {
     <!-- Khối 2: Các phân đoạn (Chunks) Ngữ liệu gốc SGK Kết nối tri thức -->
     <div class="bg-[#0b1324] border border-emerald-500/40 rounded-2xl p-4 space-y-3">
       <div class="flex items-center justify-between">
-        <h4 class="text-xs font-black uppercase text-emerald-300 flex items-center gap-1.5">
+        <h4 class="text-sm font-black uppercase text-emerald-300 flex items-center gap-1.5">
           <i class="fa-solid fa-book-medical text-cyan-400"></i> 2. Các Phân Đoạn Ngữ Liệu Gốc (SGK Chunks) Được Truy Xuất Cho Bài Học
         </h4>
-        <span class="text-[10px] text-cyan-300 font-bold">Nguồn: SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống${hasCustomFile ? ' + Tài liệu GV' : ''}</span>
+        <span class="text-xs text-cyan-300 font-bold">Nguồn: SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống${hasCustomFile ? ' + Tài liệu GV' : ''}</span>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
         ${profile.sections.map((sec, idx) => `
-          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-700/80 space-y-1.5">
-            <div class="text-[10px] font-black text-amber-300 uppercase">CHUNK #0${idx + 1} • MỤC TRỌNG TÂM</div>
-            <div class="font-bold text-white text-xs">${sec.heading}</div>
-            <div class="space-y-1 text-[11px] text-slate-300">
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-700/80 space-y-1.5">
+            <div class="text-xs font-black text-amber-300 uppercase">CHUNK #0${idx + 1} • MỤC TRỌNG TÂM</div>
+            <div class="font-bold text-white text-sm">${sec.heading}</div>
+            <div class="space-y-1 text-sm text-slate-200">
               ${(sec.sgkContent || []).map(line => `<p>• ${line}</p>`).join('')}
             </div>
           </div>
@@ -3693,18 +3648,18 @@ window.openRAGInspectorModal = function() {
     </div>
 
     <!-- Khối 3: Minh chứng phát hiện & chặn Ảo giác Khoa học của bài học -->
-    <div class="bg-rose-950/30 border border-rose-500/50 rounded-2xl p-4 space-y-2">
-      <h4 class="text-xs font-black uppercase text-rose-300 flex items-center gap-1.5">
+    <div class="bg-rose-950/30 border border-rose-500/50 rounded-2xl p-4 space-y-2.5 text-sm">
+      <h4 class="text-sm font-black uppercase text-rose-300 flex items-center gap-1.5">
         <i class="fa-solid fa-filter-circle-xmark text-rose-400"></i> 3. Bộ Lọc Chặn "Ảo Giác Khoa Học" Điển Hình Của Bài Học (${profile.ai.code})
       </h4>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-        <div class="p-3 rounded-xl bg-black/40 border border-rose-500/40">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
+        <div class="p-3.5 rounded-xl bg-black/40 border border-rose-500/40">
           <div class="font-bold text-rose-300 mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Tình huống Ảo giác AI thông thường bị phát hiện:</div>
-          <p class="text-slate-200">${profile.ai.gvAction}</p>
+          <p class="text-slate-100">${profile.ai.gvAction}</p>
         </div>
-        <div class="p-3 rounded-xl bg-black/40 border border-emerald-500/40">
+        <div class="p-3.5 rounded-xl bg-black/40 border border-emerald-500/40">
           <div class="font-bold text-emerald-300 mb-1"><i class="fa-solid fa-check-double mr-1"></i> Đối chứng chuẩn xác từ Kho Ngữ liệu RAG SGK:</div>
-          <p class="text-slate-200">${profile.ai.hsAction}</p>
+          <p class="text-slate-100">${profile.ai.hsAction}</p>
         </div>
       </div>
     </div>
@@ -3742,10 +3697,10 @@ window.saveDriveScriptUrl = function() {
 };
 
 window.initBioMasterUpgrade = function() {
-  // Xóa cache cũ bị lệch câu vào Bài 1 của phiên bản trước
+  // Xóa cache cũ bị lệch câu hoặc định dạng bảng cũ của phiên bản trước
   try {
     Object.keys(localStorage).forEach(k => {
-      if (k.startsWith('biomaster_v7_')) {
+      if (k.startsWith('biomaster_v7_') || k.startsWith('biomaster_v8_') || k.startsWith('structured_plan_v8_')) {
         localStorage.removeItem(k);
       }
     });

@@ -692,161 +692,170 @@
         </div>
     </div>
 
-    <!-- MODAL CẨM NANG & HƯỚNG DẪN SỬ DỤNG TOÀN DIỆN CHO NGƯỜI MỚI -->
-    <div id="modal-user-guide" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print">
-        <div class="bg-brand-surface border border-cyan-500/40 rounded-3xl max-w-4xl w-full max-h-[88vh] flex flex-col shadow-2xl overflow-hidden">
+    <!-- MODAL CẨM NANG & HƯỚNG DẪN SỬ DỤNG TOÀN DIỆN CHO NGƯỜI MỚI (CỠ CHỮ LỚN DỄ ĐỌC) -->
+    <div id="modal-user-guide" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 no-print">
+        <div class="bg-brand-surface border-2 border-cyan-500/50 rounded-3xl max-w-5xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
             <!-- Header Modal -->
             <div class="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 border-b border-brand-border">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-white text-lg shadow-md">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-cyan-500 flex items-center justify-center text-white text-xl shadow-md">
                         <i class="fa-solid fa-book-open-reader"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-black text-white uppercase tracking-wide">
-                            Cẩm Nang & Hướng Dẫn Sử Dụng Hệ Thống BioMaster AI
+                        <h3 class="text-lg md:text-xl font-black text-white uppercase tracking-wide">
+                            Cẩm Nang & Hướng Dẫn Sử Dụng Toàn Diện Hệ Thống BioMaster AI
                         </h3>
-                        <p class="text-xs text-cyan-300 font-semibold">
+                        <p class="text-sm text-cyan-300 font-semibold mt-0.5">
                             Trợ Lý Sư Phạm Toàn Năng • Chuẩn Chương Trình GDPT 2018 & SGK Kết Nối Tri Thức Với Cuộc Sống
                         </p>
                     </div>
                 </div>
-                <button onclick="closeUserGuideModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition flex items-center justify-center">
-                    <i class="fa-solid fa-xmark text-base"></i>
+                <button onclick="closeUserGuideModal()" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <!-- Body Modal -->
-            <div class="p-6 overflow-y-auto space-y-5 text-xs leading-relaxed text-slate-200">
+            <!-- Body Modal (Tăng cỡ chữ lên text-sm / text-base để đọc rõ ràng) -->
+            <div class="p-6 overflow-y-auto space-y-6 text-sm md:text-[15px] leading-relaxed text-slate-100">
                 
                 <!-- Mục I: Vai trò & Sứ mệnh -->
-                <div class="bg-[#0b1324] border border-cyan-500/30 rounded-2xl p-4 space-y-2">
-                    <h4 class="text-sm font-black text-cyan-300 uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-award text-amber-400"></i> I. Vai Trò & Giá Trị Cốt Lõi Của Trang Web BioMaster AI
+                <div class="bg-[#0b1324] border border-cyan-500/40 rounded-2xl p-5 space-y-3">
+                    <h4 class="text-base md:text-lg font-black text-cyan-300 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-award text-amber-400"></i> I. Vai Trò & Giá Trị Cốt Lõi Của Hệ Thống BioMaster AI
                     </h4>
                     <p>
-                        <strong>BioMaster AI</strong> là hệ thống Trợ lý Sư phạm thông minh chuyên sâu dành cho giáo viên giảng dạy môn <strong>Sinh học</strong> và <strong>Công nghệ Nông nghiệp (Khối 10, 11, 12)</strong>. Hệ thống giúp giáo viên chuẩn hóa và tự động hóa toàn bộ quy trình chuẩn bị bài dạy theo đúng văn bản chỉ đạo của Bộ Giáo dục và Đào tạo:
+                        <strong>BioMaster AI</strong> là hệ thống Trợ lý Sư phạm thông minh chuyên sâu dành cho giáo viên giảng dạy môn <strong>Sinh học</strong> và <strong>Công nghệ Nông nghiệp (Khối 10, 11, 12)</strong>. Hệ thống giúp giáo viên chuẩn hóa và tự động hóa toàn bộ quy trình chuẩn bị bài dạy theo đúng văn bản chỉ đạo mới nhất của Bộ Giáo dục và Đào tạo:
                     </p>
-                    <ul class="list-disc list-inside space-y-1 text-slate-300 pl-1">
-                        <li><strong>Chuẩn hóa 100% theo Chương trình GDPT 2018:</strong> Toàn bộ Yêu cầu cần đạt và Nội dung kiến thức trọng tâm được trích xuất chính xác từ bộ sách giáo khoa <em>Kết nối tri thức với cuộc sống</em>.</li>
-                        <li><strong>Tích hợp bộ 3 Năng lực theo màu sắc trực quan:</strong> Tích hợp <strong>Năng lực số (Màu xanh dương)</strong>, <strong>Năng lực Trí tuệ nhân tạo - AI (Màu đỏ)</strong> và <strong>Năng lực đặc thù & Năng lực chung (Màu vàng)</strong> vào đúng từng bước chuyển giao, thực hiện nhiệm vụ của Giáo viên và Học sinh (chỉ tích hợp tinh gọn vào 1 hoạt động trọng tâm, không dàn trải).</li>
-                        <li><strong>Đồng bộ hóa 3 trong 1:</strong> Từ nội dung Hình thành kiến thức của Giáo án 5512 tự động chuyển hóa thành bộ <strong>34 Slide Bài giảng điện tử</strong> (kèm đủ 16 Slide câu hỏi luyện tập) và <strong>Ma trận, Bản đặc tả & Đề kiểm tra định kì 7991</strong>.</li>
+                    <ul class="list-disc list-inside space-y-2 text-slate-200 pl-1">
+                        <li><strong>Chuẩn hóa 100% theo Chương trình GDPT 2018:</strong> Toàn bộ Yêu cầu cần đạt và Nội dung kiến thức trọng tâm của <strong>84 bài học</strong> được trích xuất chính xác từ bộ sách giáo khoa <em>Kết nối tri thức với cuộc sống</em>.</li>
+                        <li><strong>Trình bày thể thức văn bản sư phạm chuẩn mực:</strong> Mục tiêu kiến thức được phân tách trực tiếp theo 3 cấp độ <strong>(- Biết / - Hiểu / - Vận dụng kèm các ý + chi tiết)</strong>; Phần chuẩn bị của Giáo viên và Học sinh trình bày mạch lạc theo mục <strong>1. Chuẩn bị của giáo viên</strong> và <strong>2. Chuẩn bị của học sinh</strong> (không đóng khung bảng rườm rà).</li>
+                        <li><strong>Tích hợp bộ 3 Năng lực phân màu trực quan:</strong> Tích hợp <strong>Năng lực số (Màu xanh dương - TT 02/2025)</strong>, <strong>Năng lực Trí tuệ nhân tạo - AI (Màu đỏ - QĐ 3439)</strong> và <strong>Năng lực đặc thù & Năng lực chung (Màu vàng)</strong> vào đúng từng bước chuyển giao, thực hiện nhiệm vụ của Giáo viên và Học sinh.</li>
+                        <li><strong>Đồng bộ hóa 3 trong 1:</strong> Từ nội dung Hình thành kiến thức của Giáo án 5512 tự động chuyển hóa thành bộ <strong>34 Slide Bài giảng điện tử cỡ chữ lớn</strong> (kèm đủ 16 Slide câu hỏi luyện tập) và <strong>Ma trận, Bản đặc tả & Đề kiểm tra định kì 7991 phân bổ đều số câu vào các bài</strong>.</li>
                     </ul>
                 </div>
 
                 <!-- Mục II: Ý nghĩa 3 Phân hệ 3D Xanh - Vàng - Đỏ -->
-                <div class="space-y-2.5">
-                    <h4 class="text-sm font-black text-amber-300 uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-cubes"></i> II. Chức Năng Của 3 Phân Hệ 3D (Xanh – Vàng – Đỏ) Trên Thanh Công Cụ
+                <div class="space-y-3">
+                    <h4 class="text-base md:text-lg font-black text-amber-300 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-cubes"></i> II. Chức Năng Chi Tiết Của 3 Phân Hệ 3D (Xanh – Vàng – Đỏ) Trên Thanh Công Cụ
                     </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <!-- Ô Xanh -->
-                        <div class="bg-blue-950/40 border-2 border-blue-500/50 rounded-2xl p-3.5 space-y-1.5">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-600 text-white font-extrabold text-xs shadow">
+                        <div class="bg-blue-950/45 border-2 border-blue-500/60 rounded-2xl p-4 space-y-2">
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-blue-600 text-white font-extrabold text-sm shadow">
                                 <i class="fa-solid fa-file-signature"></i> 1. Ô 3D Xanh: Giáo Án (5512)
                             </div>
-                            <p class="text-slate-200">
-                                Soạn <strong>Kế hoạch bài dạy</strong> đầy đủ 4 phần (<em>I. Mục tiêu; II. Thiết bị dạy học & Học liệu; III. Tiến trình dạy học 4 hoạt động; IV. Hồ sơ dạy học & Bảng Rubric đánh giá</em>). Cho phép chỉnh sửa trực tiếp trên trang giấy A4 và xuất file <strong>Word (.doc)</strong> chuẩn phông chữ Times New Roman.
+                            <p class="text-slate-100">
+                                Soạn <strong>Kế hoạch bài dạy chuẩn Công văn 5512</strong> đầy đủ 4 phần: <em>I. Mục tiêu (chia rõ - Biết, - Hiểu, - Vận dụng); II. Thiết bị dạy học & Học liệu (1. Chuẩn bị của GV, 2. Chuẩn bị của HS); III. Tiến trình dạy học 4 hoạt động kèm Phiếu học tập & Sơ đồ cơ chế; IV. Hồ sơ dạy học & Bảng Rubric đánh giá</em>. Cho phép chỉnh sửa trực tiếp trên giấy A4 và xuất file <strong>Word (.doc)</strong> chuẩn Times New Roman.
                             </p>
                         </div>
 
                         <!-- Ô Vàng -->
-                        <div class="bg-amber-950/40 border-2 border-amber-500/50 rounded-2xl p-3.5 space-y-1.5">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-600 text-white font-extrabold text-xs shadow">
+                        <div class="bg-amber-950/45 border-2 border-amber-500/60 rounded-2xl p-4 space-y-2">
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-600 text-white font-extrabold text-sm shadow">
                                 <i class="fa-solid fa-chalkboard-user"></i> 2. Ô 3D Vàng: Slide (34 Slide)
                             </div>
-                            <p class="text-slate-200">
-                                Thiết kế bộ <strong>34 Slide bài giảng 16:9</strong> lấy trực tiếp kiến thức từ Hoạt động 2 của Giáo án và <strong>16 Slide câu hỏi bài tập</strong> (8 câu nhiều lựa chọn, 4 câu Đúng/Sai, 4 câu trả lời ngắn). Tích hợp sẵn <em>Hẹn giờ thảo luận</em>, <em>Quay số học sinh ngẫu nhiên (01–50)</em> và xuất file <strong>PowerPoint (.pptx)</strong>.
+                            <p class="text-slate-100">
+                                Thiết kế bộ <strong>34 Slide bài giảng 16:9 cỡ chữ lớn</strong> cho giáo viên dự giờ và học sinh bàn cuối nhìn rõ nét. Gồm 18 Slide kiến thức lấy từ Hoạt động 2 Giáo án và <strong>16 Slide câu hỏi bài tập</strong> (8 câu nhiều lựa chọn, 4 câu Đúng/Sai, 4 câu trả lời ngắn). Có nút chỉnh cỡ chữ <strong>A- / 115% / A+</strong>, <strong>Toàn màn hình</strong>, <strong>Hẹn giờ thảo luận</strong>, <strong>Quay số học sinh (01–50)</strong> và xuất <strong>PowerPoint (.pptx)</strong>.
                             </p>
                         </div>
 
                         <!-- Ô Đỏ -->
-                        <div class="bg-rose-950/40 border-2 border-rose-500/50 rounded-2xl p-3.5 space-y-1.5">
-                            <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-600 text-white font-extrabold text-xs shadow">
+                        <div class="bg-rose-950/45 border-2 border-rose-500/60 rounded-2xl p-4 space-y-2">
+                            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-600 text-white font-extrabold text-sm shadow">
                                 <i class="fa-solid fa-list-check"></i> 3. Ô 3D Đỏ: Đề Thi (7991)
                             </div>
-                            <p class="text-slate-200">
-                                Xây dựng đồng bộ <strong>Khung Ma trận</strong>, <strong>Bản đặc tả Yêu cầu cần đạt</strong> và <strong>Đề kiểm tra kèm Hướng dẫn chấm</strong> theo cấu trúc 4 phần (Trắc nghiệm nhiều lựa chọn, Đúng/Sai, Trả lời ngắn, Tự luận) ở cả 3 mức độ <em>Nhận biết – Thông hiểu – Vận dụng</em>.
+                            <p class="text-slate-100">
+                                Xây dựng đồng bộ <strong>Khung Ma trận</strong>, <strong>Bản đặc tả YCCĐ</strong> và <strong>Đề kiểm tra kèm Hướng dẫn chấm chi tiết (Thang điểm 10,0)</strong> theo cấu trúc 4 phần (Nhiều lựa chọn, Đúng/Sai, Trả lời ngắn, Tự luận). Tự động <strong>phân bổ đều số câu vào tất cả các bài đã chọn</strong> theo chuẩn Công văn 7991 (không bị dồn câu vào Bài 1).
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Mục III: Hướng dẫn từng bước cho người mới -->
-                <div class="bg-[#0b1324] border border-emerald-500/30 rounded-2xl p-4 space-y-2.5">
-                    <h4 class="text-sm font-black text-emerald-300 uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-list-ol"></i> III. Hướng Dẫn Sử Dụng Nhanh Trong 4 Bước Dành Cho Người Mới
+                <!-- Mục III: Hướng dẫn từng bước từ A-Z -->
+                <div class="bg-[#0b1324] border border-emerald-500/40 rounded-2xl p-5 space-y-3.5">
+                    <h4 class="text-base md:text-lg font-black text-emerald-300 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol"></i> III. Quy Trình 6 Bước Sử Dụng Toàn Diện Các Tính Năng Của Trang Web
                     </h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                            <p class="font-bold text-cyan-300 mb-1">Bước 1: Chọn Môn học, Khối lớp & Bài học</p>
-                            <p class="text-slate-300">Tại cột bên trái, chọn <strong>Môn học</strong> (Sinh học / Công nghệ Nông nghiệp) và <strong>Khối lớp</strong> (10, 11, 12). Bấm vào tên bài học bất kỳ trong danh sách (hoặc tích chọn nhiều ô vuông nếu muốn ra Đề kiểm tra tổng hợp nhiều bài).</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <div class="p-3.5 rounded-xl bg-slate-900/95 border border-slate-700 space-y-1">
+                            <p class="font-extrabold text-cyan-300 text-base">Bước 1: Chọn Môn học, Khối lớp & Bài học (1 hoặc nhiều bài)</p>
+                            <p class="text-slate-200">Tại cột bên trái, chọn <strong>Môn học</strong> (Sinh học / Công nghệ Nông nghiệp) và <strong>Khối lớp</strong> (10, 11, 12). Nhấp vào tên bài học để xem Giáo án/Slide, hoặc <strong>tích chọn nhiều ô vuông</strong> (hoặc bấm nút <em>Chọn hết / 3 bài đầu / 5 bài đầu</em>) để ra Đề kiểm tra 7991 phân bổ đều cho nhiều bài.</p>
                         </div>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                            <p class="font-bold text-amber-300 mb-1">Bước 2: Chuyển đổi giữa 3 Ô 3D (Xanh – Vàng – Đỏ)</p>
-                            <p class="text-slate-300">Bấm vào 1 trong 3 nút 3D trên thanh công cụ trên cùng để xem ngay Kế hoạch bài dạy 5512, trình chiếu bộ 34 Slide hoặc xem Ma trận & Đề kiểm tra 7991 tương ứng với bài học vừa chọn.</p>
+                        <div class="p-3.5 rounded-xl bg-slate-900/95 border border-slate-700 space-y-1">
+                            <p class="font-extrabold text-amber-300 text-base">Bước 2: Chọn Mô hình AI Thế hệ mới & Cấu hình Key Gemini</p>
+                            <p class="text-slate-200">Bấm nút <strong>"AI Đang Chạy"</strong> để chọn 1 trong 4 mô hình: <code>gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao)</code>, <code>gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt)</code>, <code>gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu)</code>, <code>gemini-4-argon (Gemini 4 Argon — Thế hệ mới)</code> và mức độ tư duy. Có thể bấm nút <strong>"Nhập Key Gemini"</strong> để thêm API Key cá nhân chống nghẽn khi cao điểm.</p>
                         </div>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                            <p class="font-bold text-purple-300 mb-1">Bước 3: Cá nhân hóa sâu bằng Trí tuệ nhân tạo (AI)</p>
-                            <p class="text-slate-300">Có thể nhập thêm yêu cầu sư phạm riêng vào ô <em>Ghi chú cho AI</em> hoặc đính kèm tài liệu (<code>.txt, .csv</code>), chọn mô hình AI và bấm nút màu tím <strong>Soạn bằng AI</strong>. Sau khi AI tạo xong, bấm <strong>Lưu Lại</strong> để ghi nhớ.</p>
+                        <div class="p-3.5 rounded-xl bg-slate-900/95 border border-slate-700 space-y-1">
+                            <p class="font-extrabold text-purple-300 text-base">Bước 3: Nạp thêm Tài liệu RAG & Bấm "Soạn Bằng AI"</p>
+                            <p class="text-slate-200">Có thể kéo-thả thêm file tài liệu (<code>.pdf, .docx, .txt</code>) vào khung <strong>Kho RAG</strong> hoặc nhập yêu cầu riêng vào ô <em>Ghi chú sư phạm</em>, sau đó bấm nút màu tím <strong>Soạn Bằng AI</strong> để AI biên soạn nội dung mới chuyên sâu, bám sát 100% YCCĐ.</p>
                         </div>
-                        <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800">
-                            <p class="font-bold text-emerald-300 mb-1">Bước 4: Chỉnh sửa trực tiếp & Xuất hồ sơ hoàn chỉnh</p>
-                            <p class="text-slate-300">Giáo viên có thể nhấp chuột trực tiếp vào văn bản trên trang A4 để chỉnh sửa câu chữ theo ý muốn, sau đó bấm <strong>Tải File Word (.doc)</strong>, <strong>Tải PowerPoint (.pptx)</strong> hoặc <strong>In / Xuất PDF</strong>.</p>
+                        <div class="p-3.5 rounded-xl bg-slate-900/95 border border-slate-700 space-y-1">
+                            <p class="font-extrabold text-sky-300 text-base">Bước 4: Trình chiếu Slide chữ lớn & Tương tác lớp học</p>
+                            <p class="text-slate-200">Khi mở <strong>Ô 3D Vàng (34 Slide)</strong>, dùng nút <strong>A- / 115% / A+</strong> để tăng/giảm cỡ chữ cho học sinh bàn cuối nhìn rõ, bật <strong>Toàn màn hình</strong>, dùng bộ <strong>Hẹn giờ thảo luận (15s–5p)</strong>, <strong>Gọi số HS ngẫu nhiên (01–50)</strong> và bấm <strong>Hiện/Ẩn đáp án</strong> từng câu hỏi.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/95 border border-slate-700 space-y-1">
+                            <p class="font-extrabold text-rose-300 text-base">Bước 5: Cân bằng Ma trận Đề thi 7991 & Kiểm định RAG</p>
+                            <p class="text-slate-200">Ở <strong>Ô 3D Đỏ (Đề thi 7991)</strong>, hệ thống tự động chia đều số câu cho tất cả các bài đã chọn. Giáo viên có thể sửa số câu trực tiếp trên bảng Ma trận hoặc bấm nút <strong>"⚖️ Cân Bằng Đều Số Câu Vào Các Bài"</strong>. Bấm nút <strong>"Công Nghệ RAG"</strong> để đối chiếu ngữ liệu gốc SGK.</p>
+                        </div>
+                        <div class="p-3.5 rounded-xl bg-slate-900/95 border border-slate-700 space-y-1">
+                            <p class="font-extrabold text-emerald-300 text-base">Bước 6: Chỉnh sửa trực tiếp, Lưu bài & Xuất Word / PPTX / PDF</p>
+                            <p class="text-slate-200">Sau khi AI soạn xong, bấm <strong>Lưu Lại</strong> để ghi nhớ vào bộ nhớ trình duyệt. Giáo viên có thể nhấp chuột vào trang giấy A4 để sửa trực tiếp từng chữ, sau đó bấm <strong>Tải File Word (.doc)</strong>, <strong>Tải PowerPoint (.pptx)</strong>, <strong>In / Xuất PDF</strong> hoặc đồng bộ <strong>Google Drive</strong>.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Mục IV: Đột phá Công nghệ RAG: Triệt tiêu Ảo giác Khoa học -->
-                <div class="bg-gradient-to-r from-teal-950/70 via-cyan-950/60 to-slate-900 border-2 border-cyan-400/60 rounded-2xl p-4 space-y-2.5 shadow-lg">
-                    <div class="flex items-center justify-between">
-                        <h4 class="text-sm font-black text-cyan-300 uppercase flex items-center gap-2">
-                            <i class="fa-solid fa-shield-virus text-amber-300"></i> IV. Đột Phá Công Nghệ RAG: Triệt Tiêu Ảo Giác Khoa Học
+                <div class="bg-gradient-to-r from-teal-950/75 via-cyan-950/65 to-slate-900 border-2 border-cyan-400/60 rounded-2xl p-5 space-y-3 shadow-lg">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                        <h4 class="text-base md:text-lg font-black text-cyan-300 uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-shield-virus text-amber-300"></i> IV. Đột Phá Công Nghệ RAG: Triệt Tiêu 100% Ảo Giác Khoa Học
                         </h4>
-                        <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 font-black text-[10px]">
-                            RETRIEVAL-AUGMENTED GENERATION
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 font-black text-xs">
+                            RETRIEVAL-AUGMENTED GENERATION • 0% ẢO GIÁC
                         </span>
                     </div>
-                    <p class="text-slate-200">
+                    <p class="text-slate-100">
                         Khác biệt hoàn toàn với các công cụ AI thông thường dễ mắc lỗi <em>"Ảo giác khoa học" (AI Hallucination – tự bịa đặt khái niệm, sai danh pháp hoặc đưa kiến thức vượt ngoài chương trình phổ thông)</em>, <strong>BioMaster AI</strong> tích hợp kiến trúc <strong>RAG 3 Tầng chuyên biệt cho Giáo dục</strong>:
                     </p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-1">
-                        <div class="p-3 rounded-xl bg-black/40 border border-cyan-500/40">
-                            <p class="font-bold text-cyan-300 mb-1">1. Truy Xuất Ngữ Liệu Gốc (Retrieval)</p>
-                            <p class="text-slate-300 text-[11px]">Trích xuất chính xác từng mục kiến thức từ CSDL <strong>SGK Kết nối tri thức với cuộc sống</strong>, <strong>Khung YCCĐ Thông tư 32/2018</strong> và tài liệu giáo viên tải lên.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+                        <div class="p-3.5 rounded-xl bg-black/45 border border-cyan-500/40">
+                            <p class="font-extrabold text-cyan-300 mb-1 text-base">1. Truy Xuất Ngữ Liệu Gốc (Retrieval)</p>
+                            <p class="text-slate-200 text-sm">Trích xuất chính xác từng mục kiến thức từ CSDL <strong>SGK Kết nối tri thức với cuộc sống</strong>, <strong>Khung YCCĐ Thông tư 32/2018</strong> và tài liệu giáo viên tải lên.</p>
                         </div>
-                        <div class="p-3 rounded-xl bg-black/40 border border-amber-500/40">
-                            <p class="font-bold text-amber-300 mb-1">2. Khóa Ngữ Cảnh (Context Grounding)</p>
-                            <p class="text-slate-300 text-[11px]">Đóng khung phạm vi kiến thức cho phép AI khai thác; chuẩn hóa 100% danh pháp quốc tế (<em>DNA, RNA, ATP, enzyme, hormone, polypeptide...</em>).</p>
+                        <div class="p-3.5 rounded-xl bg-black/45 border border-amber-500/40">
+                            <p class="font-extrabold text-amber-300 mb-1 text-base">2. Khóa Ngữ Cảnh (Context Grounding)</p>
+                            <p class="text-slate-200 text-sm">Đóng khung phạm vi kiến thức cho phép AI khai thác; chuẩn hóa 100% danh pháp quốc tế (<em>DNA, RNA, ATP, enzyme, hormone, polypeptide...</em>).</p>
                         </div>
-                        <div class="p-3 rounded-xl bg-black/40 border border-emerald-500/40">
-                            <p class="font-bold text-emerald-300 mb-1">3. Kiểm Định Chéo (0% Ảo Giác)</p>
-                            <p class="text-slate-300 text-[11px]">Đối chiếu tự động từng câu hỏi, đáp án và hoạt động dạy học với ngữ liệu gốc SGK. Giáo viên có thể bấm nút <strong>Công Nghệ RAG</strong> trên thanh công cụ để kiểm tra trực tiếp.</p>
+                        <div class="p-3.5 rounded-xl bg-black/45 border border-emerald-500/40">
+                            <p class="font-extrabold text-emerald-300 mb-1 text-base">3. Kiểm Định Chéo (0% Ảo Giác)</p>
+                            <p class="text-slate-200 text-sm">Đối chiếu tự động từng câu hỏi, đáp án và hoạt động dạy học với ngữ liệu gốc SGK. Giáo viên có thể bấm nút <strong>Công Nghệ RAG</strong> trên thanh công cụ để kiểm tra trực tiếp.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Mục V: Cơ chế vận hành ổn định khi nhiều người cùng sử dụng -->
-                <div class="bg-[#0b1324] border border-purple-500/30 rounded-2xl p-4 space-y-1.5">
-                    <h4 class="text-sm font-black text-purple-300 uppercase flex items-center gap-2">
-                        <i class="fa-solid fa-shield-halved"></i> V. Cơ Chế Chống Nghẽn & Vận Hành Không Gián Đoạn Khi Nhiều Người Cùng Dùng
+                <div class="bg-[#0b1324] border border-purple-500/40 rounded-2xl p-5 space-y-2">
+                    <h4 class="text-base md:text-lg font-black text-purple-300 uppercase flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved"></i> V. Cơ Chế Đa Key Gemini & Chống Nghẽn Máy Chủ Tuyệt Đối (24/7)
                     </h4>
-                    <p class="text-slate-300">
-                        Hệ thống được trang bị <strong>Bộ điều phối đa luồng & Lưu đệm thông minh (Multi-Model Cascade & Hybrid Engine)</strong>: tự động gộp các yêu cầu trùng lặp, chia sẻ bộ nhớ đệm tốc độ cao trên máy chủ, tự động chuyển tiếp qua 6 cụm mô hình AI và kích hoạt Engine Sư phạm Nội bộ chuẩn SGK Kết nối tri thức khi lưu lượng truy cập đạt ngưỡng tối đa, đảm bảo giáo viên luôn xuất được hồ sơ bài dạy mượt mà 24/7.
+                    <p class="text-slate-200">
+                        Hệ thống trang bị nút <strong>"Nhập Key Gemini"</strong> hỗ trợ nhập 1 hoặc nhiều API Key để xoay vòng tải (Round-Robin), kết hợp cùng <strong>Bộ điều phối đa luồng & Lưu đệm thông minh (Multi-Model Cascade & Hybrid Engine)</strong> trên máy chủ. Khi lưu lượng truy cập đạt ngưỡng tối đa, hệ thống tự động chuyển tiếp qua các tầng mô hình <code>gemini-3.5-flash</code>, <code>gemini-3.5-flash-lite</code>, <code>gemini-3.1-pro</code>, <code>gemini-4-argon</code> và kích hoạt Engine Sư phạm Nội bộ chuẩn SGK Kết nối tri thức, đảm bảo giáo viên luôn xuất được hồ sơ bài dạy mượt mà 100% không bao giờ bị lỗi.
                     </p>
                 </div>
 
             </div>
 
             <!-- Footer Modal -->
-            <div class="px-6 py-3.5 bg-slate-950 border-t border-brand-border flex items-center justify-between text-xs">
-                <span class="text-slate-400">
-                    <i class="fa-solid fa-graduation-cap text-cyan-400 mr-1"></i> Tác giả: <strong>Hồ Tấn Khải</strong> • Trường THPT Mang Thít
+            <div class="px-6 py-4 bg-slate-950 border-t border-brand-border flex flex-wrap items-center justify-between gap-3 text-sm">
+                <span class="text-slate-300">
+                    <i class="fa-solid fa-graduation-cap text-cyan-400 mr-1.5"></i> Tác giả: <strong>Hồ Tấn Khải</strong> • Trường THPT Mang Thít
                 </span>
-                <div class="flex items-center gap-2">
-                    <button onclick="closeUserGuideModal(); openRAGInspectorModal();" class="btn-3d btn-3d-blue px-4 py-2 rounded-xl text-white font-bold">
+                <div class="flex items-center gap-2.5">
+                    <button onclick="closeUserGuideModal(); openRAGInspectorModal();" class="btn-3d btn-3d-blue px-4 py-2 rounded-xl text-white font-bold text-sm">
                         <i class="fa-solid fa-shield-virus mr-1"></i> Mở Trình Kiểm Định RAG
                     </button>
-                    <button onclick="closeUserGuideModal()" class="btn-3d btn-3d-emerald px-5 py-2 rounded-xl text-white font-extrabold">
+                    <button onclick="closeUserGuideModal()" class="btn-3d btn-3d-emerald px-5 py-2 rounded-xl text-white font-extrabold text-sm">
                         Đã Hiểu & Bắt Đầu Sử Dụng
                     </button>
                 </div>
@@ -865,38 +874,38 @@
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <h3 class="text-base font-black text-white uppercase tracking-wide">
+                            <h3 class="text-lg font-black text-white uppercase tracking-wide">
                                 Đột Phá Công Nghệ RAG: Triệt Tiêu Ảo Giác Khoa Học
                             </h3>
-                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 text-[10px] font-black">
+                            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 text-xs font-black">
                                 100% GROUNDED IN SGK
                             </span>
                         </div>
-                        <p id="rag-modal-subtitle" class="text-xs text-cyan-300 font-semibold mt-0.5">
+                        <p id="rag-modal-subtitle" class="text-sm text-cyan-300 font-semibold mt-0.5">
                             Hệ thống Truy xuất – Khóa ngữ cảnh – Đối chiếu Ngữ liệu gốc SGK Kết nối tri thức & CT GDPT 2018
                         </p>
                     </div>
                 </div>
-                <button onclick="closeRAGInspectorModal()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition flex items-center justify-center">
-                    <i class="fa-solid fa-xmark text-base"></i>
+                <button onclick="closeRAGInspectorModal()" class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white transition flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
             <!-- Body -->
-            <div id="rag-inspector-body" class="p-6 overflow-y-auto space-y-4 text-xs text-slate-200 leading-relaxed">
+            <div id="rag-inspector-body" class="p-6 overflow-y-auto space-y-4 text-sm text-slate-200 leading-relaxed">
             </div>
 
             <!-- Footer -->
-            <div class="px-6 py-3.5 bg-slate-950 border-t border-brand-border flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="px-6 py-4 bg-slate-950 border-t border-brand-border flex flex-wrap items-center justify-between gap-3 text-sm">
                 <div id="rag-audit-status-banner" class="text-emerald-400 font-bold flex items-center gap-2">
                     <i class="fa-solid fa-circle-check"></i>
                     <span>Trạng thái RAG: Đã khóa chặt ngữ cảnh theo SGK Kết nối tri thức với cuộc sống (Độ chính xác khoa học: 100%)</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button type="button" onclick="runRAGLiveAudit()" class="btn-3d btn-3d-amber px-4 py-2 rounded-xl text-white font-extrabold flex items-center gap-1.5">
+                    <button type="button" onclick="runRAGLiveAudit()" class="btn-3d btn-3d-amber px-4 py-2 rounded-xl text-white font-extrabold flex items-center gap-1.5 text-sm">
                         <i class="fa-solid fa-magnifying-glass-check"></i> Quét & Kiểm Định Chéo Văn Bản Hiện Tại
                     </button>
-                    <button type="button" onclick="closeRAGInspectorModal()" class="btn-3d btn-3d-emerald px-5 py-2 rounded-xl text-white font-extrabold">
+                    <button type="button" onclick="closeRAGInspectorModal()" class="btn-3d btn-3d-emerald px-5 py-2 rounded-xl text-white font-extrabold text-sm">
                         Đóng
                     </button>
                 </div>
@@ -904,9 +913,9 @@
         </div>
     </div>
 
-    <!-- ==================== MODAL CHỨC NĂNG TRANG WEB (VAI TRÒ, NHIỆM VỤ, TÍNH NĂNG NỔI BẬT & ỨNG DỤNG ĐA MÔN) ==================== -->
+    <!-- ==================== MODAL CHỨC NĂNG TRANG WEB (CẬP NHẬT ĐẦY ĐỦ TÍNH NĂNG MỚI & CỠ CHỮ LỚN DỄ ĐỌC) ==================== -->
     <div id="modal-web-features" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel max-w-6xl w-full max-h-[92vh] rounded-3xl border border-fuchsia-500/50 shadow-2xl overflow-hidden flex flex-col">
+        <div class="glass-panel max-w-6xl w-full max-h-[92vh] rounded-3xl border-2 border-fuchsia-500/50 shadow-2xl overflow-hidden flex flex-col">
             <!-- Header Modal -->
             <div class="p-5 bg-gradient-to-r from-fuchsia-950/90 via-indigo-950/95 to-slate-900 border-b border-fuchsia-500/40 flex items-center justify-between">
                 <div class="flex items-center gap-3.5">
@@ -914,50 +923,50 @@
                         <i class="fa-solid fa-layer-group text-2xl"></i>
                     </div>
                     <div>
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/50 text-amber-300 text-[10px] font-black uppercase tracking-wider">Hồ sơ Năng lực Hệ thống AI Giáo dục</span>
-                            <span class="px-2.5 py-0.5 rounded-md bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-[10px] font-black uppercase tracking-wider">Chuẩn CT GDPT 2018 • Bộ GD&ĐT</span>
+                        <div class="flex items-center gap-2 flex-wrap">
+                            <span class="px-2.5 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-black uppercase tracking-wider">Hồ sơ Năng lực Hệ thống AI Giáo dục</span>
+                            <span class="px-2.5 py-0.5 rounded-md bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 text-xs font-black uppercase tracking-wider">Chuẩn CT GDPT 2018 • Bộ GD&ĐT</span>
                         </div>
-                        <h3 class="font-black text-white text-xl tracking-wide uppercase mt-0.5">Chức Năng Trang Web: Vai Trò, Nhiệm Vụ & Khả Năng Ứng Dụng Liên Môn</h3>
+                        <h3 class="font-black text-white text-xl md:text-2xl tracking-wide uppercase mt-1">Chức Năng Trang Web: Vai Trò, Nhiệm Vụ & Hệ Thống Tính Năng Toàn Diện</h3>
                     </div>
                 </div>
-                <button type="button" onclick="closeWebFeaturesModal()" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 border border-slate-700 transition flex items-center justify-center">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+                <button type="button" onclick="closeWebFeaturesModal()" class="w-10 h-10 rounded-xl bg-slate-800 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 border border-slate-700 transition flex items-center justify-center">
+                    <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
 
-            <!-- Body Modal -->
-            <div class="p-6 overflow-y-auto space-y-7 text-slate-200 text-sm leading-relaxed">
+            <!-- Body Modal (Tăng cỡ chữ lên text-base để đọc rõ ràng, sắc nét) -->
+            <div class="p-6 overflow-y-auto space-y-7 text-slate-100 text-sm md:text-base leading-relaxed">
                 
                 <!-- PHẦN I: VAI TRÒ & NHIỆM VỤ CHI TIẾT CỦA TRANG WEB -->
                 <div class="p-6 rounded-2xl bg-gradient-to-br from-slate-900/95 via-indigo-950/50 to-slate-900/95 border-2 border-indigo-500/40 shadow-xl space-y-5">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-500/30 pb-3">
-                        <h4 class="font-black text-indigo-300 text-base uppercase tracking-wider flex items-center gap-2.5">
-                            <span class="w-7 h-7 rounded-lg bg-indigo-500 text-white flex items-center justify-center text-xs font-black shadow">I</span>
+                        <h4 class="font-black text-indigo-300 text-lg uppercase tracking-wider flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-indigo-500 text-white flex items-center justify-center text-sm font-black shadow">I</span>
                             Vai Trò Chiến Lược & Nhiệm Vụ Chi Tiết Của Trang Web BioMaster AI
                         </h4>
-                        <span class="text-xs font-bold text-indigo-200 bg-indigo-500/20 px-3 py-1 rounded-lg border border-indigo-400/30">Trợ lý Sư phạm Trí tuệ Nhân tạo Toàn diện</span>
+                        <span class="text-sm font-bold text-indigo-200 bg-indigo-500/20 px-3.5 py-1 rounded-lg border border-indigo-400/30">Trợ lý Sư phạm Trí tuệ Nhân tạo Toàn diện</span>
                     </div>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                         <!-- Vai trò chi tiết -->
-                        <div class="p-4 rounded-xl bg-slate-950/80 border border-cyan-500/30 space-y-3">
-                            <div class="font-black text-cyan-300 text-sm uppercase flex items-center gap-2">
+                        <div class="p-5 rounded-xl bg-slate-950/85 border border-cyan-500/40 space-y-3">
+                            <div class="font-black text-cyan-300 text-base uppercase flex items-center gap-2">
                                 <i class="fa-solid fa-compass-drafting text-cyan-400"></i> 1. Vai trò cốt lõi của Trang web
                             </div>
-                            <p class="text-xs text-slate-300 leading-relaxed">
-                                <strong>BioMaster AI</strong> đóng vai trò là một <strong>Hệ sinh thái Trợ lý Sư phạm Trí tuệ Nhân tạo (AI Pedagogical Workspace)</strong> chuyên sâu, kết nối trực tiếp <strong>Chương trình Giáo dục Phổ thông 2018</strong> và bộ sách giáo khoa <strong>Kết nối tri thức với cuộc sống</strong> với công nghệ AI tạo sinh kết hợp truy xuất tri thức gốc (RAG).
+                            <p class="text-sm md:text-[15px] text-slate-200 leading-relaxed">
+                                <strong>BioMaster AI</strong> đóng vai trò là một <strong>Hệ sinh thái Trợ lý Sư phạm Trí tuệ Nhân tạo (AI Pedagogical Workspace)</strong> chuyên sâu, kết nối trực tiếp <strong>Chương trình Giáo dục Phổ thông 2018</strong> và bộ sách giáo khoa <strong>Kết nối tri thức với cuộc sống</strong> với công nghệ AI tạo sinh thế hệ mới kết hợp truy xuất tri thức gốc (RAG).
                             </p>
-                            <ul class="space-y-2 text-xs text-slate-300">
-                                <li class="flex items-start gap-2">
+                            <ul class="space-y-2.5 text-sm md:text-[15px] text-slate-200">
+                                <li class="flex items-start gap-2.5">
                                     <i class="fa-solid fa-circle-check text-cyan-400 mt-1"></i>
-                                    <span><strong>Giải phóng sức lao động sư phạm:</strong> Rút ngắn hơn <strong>80% thời gian</strong> soạn kế hoạch bài dạy, thiết kế slide trình chiếu và xây dựng ma trận đề kiểm tra định kỳ cho giáo viên THPT.</span>
+                                    <span><strong>Giải phóng sức lao động sư phạm:</strong> Rút ngắn hơn <strong>85% thời gian</strong> soạn kế hoạch bài dạy, thiết kế slide trình chiếu cỡ chữ lớn và xây dựng ma trận đề kiểm tra định kỳ cho giáo viên THPT.</span>
                                 </li>
-                                <li class="flex items-start gap-2">
+                                <li class="flex items-start gap-2.5">
                                     <i class="fa-solid fa-circle-check text-cyan-400 mt-1"></i>
-                                    <span><strong>Chuẩn hóa pháp lý & chuyên môn:</strong> Đảm bảo 100% hồ sơ bài dạy tuân thủ nghiêm ngặt thể thức <strong>Công văn 5512/BGDĐT-GDTrH</strong> và đề kiểm tra chuẩn <strong>Công văn 7991/BGDĐT-GDTrH</strong>.</span>
+                                    <span><strong>Chuẩn hóa pháp lý & thể thức văn bản:</strong> Đảm bảo 100% hồ sơ bài dạy tuân thủ nghiêm ngặt thể thức <strong>Công văn 5512/BGDĐT-GDTrH</strong> (trình bày trực tiếp Yêu cầu cần đạt theo <em>- Biết, - Hiểu, - Vận dụng</em> và phần Chuẩn bị GV/HS chuẩn văn bản Word) và đề kiểm tra phân bổ đều chuẩn <strong>Công văn 7991/BGDĐT-GDTrH</strong>.</span>
                                 </li>
-                                <li class="flex items-start gap-2">
+                                <li class="flex items-start gap-2.5">
                                     <i class="fa-solid fa-circle-check text-cyan-400 mt-1"></i>
                                     <span><strong>Tiên phong chuyển đổi số & giáo dục AI:</strong> Đưa <strong>Khung Năng lực số (Thông tư 02/2025/TT-BGDĐT)</strong> và <strong>Khung Năng lực Trí tuệ nhân tạo (Quyết định 3439/QĐ-BGDĐT)</strong> đi vào thực chất trong từng hoạt động dạy và học trên lớp.</span>
                                 </li>
@@ -965,30 +974,34 @@
                         </div>
 
                         <!-- Nhiệm vụ chi tiết -->
-                        <div class="p-4 rounded-xl bg-slate-950/80 border border-amber-500/30 space-y-3">
-                            <div class="font-black text-amber-300 text-sm uppercase flex items-center gap-2">
-                                <i class="fa-solid fa-list-check text-amber-400"></i> 2. 5 Nhiệm vụ trọng tâm của Hệ thống
+                        <div class="p-5 rounded-xl bg-slate-950/85 border border-amber-500/40 space-y-3">
+                            <div class="font-black text-amber-300 text-base uppercase flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-amber-400"></i> 2. 6 Nhiệm vụ trọng tâm của Hệ thống
                             </div>
-                            <ul class="space-y-2 text-xs text-slate-300">
-                                <li class="flex items-start gap-2">
-                                    <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-[10px]">NV1</span>
+                            <ul class="space-y-2.5 text-sm md:text-[15px] text-slate-200">
+                                <li class="flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-xs shrink-0 mt-0.5">NV1</span>
                                     <span><strong>Số hóa & Cung cấp chuẩn Yêu cầu cần đạt:</strong> Cung cấp sẵn cơ sở dữ liệu 84 bài học Sinh học & Công nghệ Nông nghiệp 10, 11, 12 đúng từng câu chữ của Bộ GD&ĐT.</span>
                                 </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-[10px]">NV2</span>
-                                    <span><strong>Biên soạn Kế hoạch bài dạy 5512 trọn vẹn:</strong> Thiết kế đầy đủ từ Mục tiêu, Thiết bị dạy học đến 4 Hoạt động học tập (Bảng 2 cột chuẩn mực) kèm tích hợp mã Năng lực số, AI và Năng lực đặc thù.</span>
+                                <li class="flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-xs shrink-0 mt-0.5">NV2</span>
+                                    <span><strong>Biên soạn Kế hoạch bài dạy 5512 trọn vẹn:</strong> Trình bày rõ mục tiêu <em>- Biết / - Hiểu / - Vận dụng</em> (dấu <code>+</code>), phần chuẩn bị của GV & HS không kẻ bảng rườm rà, 4 hoạt động dạy học kèm Phiếu học tập và tích hợp 3 màu năng lực.</span>
                                 </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-[10px]">NV3</span>
-                                    <span><strong>Chuyển hóa Giáo án thành Slide Bài giảng >30 trang:</strong> Đồng bộ trực tiếp nội dung từ Hoạt động Hình thành kiến thức sang 34 Slide trình chiếu kèm 16 Slide câu hỏi bài tập tương tác.</span>
+                                <li class="flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-xs shrink-0 mt-0.5">NV3</span>
+                                    <span><strong>Chuyển hóa Giáo án thành 34 Slide Bài giảng cỡ chữ lớn:</strong> Đồng bộ trực tiếp nội dung từ Hoạt động Hình thành kiến thức sang 34 Slide trình chiếu kèm 16 Slide câu hỏi bài tập, có nút phóng to chữ <strong>A- / 115% / A+</strong> cho học sinh bàn cuối.</span>
                                 </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-[10px]">NV4</span>
-                                    <span><strong>Khởi tạo Đề thi & Ma trận Đặc tả 7991:</strong> Sinh tự động Ma trận, Bản đặc tả, Đề thi 3 định dạng câu hỏi mới và Hướng dẫn chấm bám sát Yêu cầu cần đạt.</span>
+                                <li class="flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-xs shrink-0 mt-0.5">NV4</span>
+                                    <span><strong>Khởi tạo Đề thi & Ma trận Đặc tả 7991 phân bổ đều:</strong> Tự động chia đều số câu hỏi vào tất cả các bài học được chọn (không dồn vào Bài 1), kèm Đề thi 4 phần và Hướng dẫn chấm thang điểm 10,0.</span>
                                 </li>
-                                <li class="flex items-start gap-2">
-                                    <span class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-[10px]">NV5</span>
+                                <li class="flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-xs shrink-0 mt-0.5">NV5</span>
                                     <span><strong>Kiểm soát chất lượng khoa học bằng RAG:</strong> Đối sánh thời gian thực với SGK gốc nhằm triệt tiêu 100% hiện tượng "ảo giác AI" (bịa đặt khái niệm hoặc sai lệch số liệu sinh học).</span>
+                                </li>
+                                <li class="flex items-start gap-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-black text-xs shrink-0 mt-0.5">NV6</span>
+                                    <span><strong>Điều phối Đa mô hình Gemini thế hệ mới & Pool Đa Key:</strong> Hỗ trợ nhập Gemini API Key cá nhân kết hợp Động cơ AI Đa tầng chống quá tải máy chủ tuyệt đối.</span>
                                 </li>
                             </ul>
                         </div>
@@ -998,27 +1011,27 @@
                 <!-- PHẦN II: CÁC CHỨC NĂNG NỔI BẬT (CÓ MÀU NỔI BẬT RIÊNG BIỆT) -->
                 <div class="space-y-4">
                     <div class="flex flex-wrap items-center justify-between gap-2">
-                        <h4 class="font-black text-white text-base uppercase tracking-wider flex items-center gap-2.5">
-                            <span class="w-7 h-7 rounded-lg bg-fuchsia-600 text-white flex items-center justify-center text-xs font-black shadow">II</span>
-                            Hệ Thống 6 Chức Năng Nổi Bật (Thiết Kế Phân Màu Trực Quan)
+                        <h4 class="font-black text-white text-lg uppercase tracking-wider flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-fuchsia-600 text-white flex items-center justify-center text-sm font-black shadow">II</span>
+                            Hệ Thống 6 Phân Hệ Chức Năng Nổi Bật (Thiết Kế Phân Màu Trực Quan)
                         </h4>
-                        <span class="text-xs font-bold text-fuchsia-300">Mỗi phân hệ được mã hóa bằng một dải màu 3D đặc trưng để tối ưu trải nghiệm sư phạm</span>
+                        <span class="text-sm font-bold text-fuchsia-300">Mỗi phân hệ được mã hóa bằng một dải màu 3D đặc trưng để tối ưu trải nghiệm sư phạm</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                         
                         <!-- Chức năng 1: MÀU XANH DƯƠNG NỔI BẬT (GIÁO ÁN 5512) -->
                         <div class="p-5 rounded-2xl bg-gradient-to-br from-blue-950/90 via-blue-900/40 to-slate-950 border-2 border-blue-400/70 shadow-lg shadow-blue-500/15 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="px-3 py-1 rounded-lg bg-blue-600 text-white font-black text-xs uppercase shadow">1. Phân hệ Màu Xanh Dương</span>
-                                <i class="fa-solid fa-book-open-reader text-blue-300 text-xl"></i>
+                                <i class="fa-solid fa-book-open-reader text-blue-300 text-2xl"></i>
                             </div>
-                            <h5 class="font-black text-blue-200 text-base">Soạn Giáo Án Chuẩn Công Văn 5512 & Tích Hợp 3 Nhóm Năng Lực Phân Màu</h5>
-                            <ul class="space-y-1.5 text-xs text-slate-200">
-                                <li>• <strong>Đầy đủ 4 phần & 4 hoạt động:</strong> Khởi động, Hình thành kiến thức mới, Luyện tập, Vận dụng với bảng 2 cột chuẩn (<em>Hoạt động của GV & HS</em> – <em>Dự kiến sản phẩm</em>) và đã tinh giản bỏ số phút cứng nhắc.</li>
-                                <li>• <strong>Tích hợp vừa vặn, đúng trọng tâm:</strong> Mỗi bài chỉ tích hợp 1 phần nhỏ thiết thực, ghi rõ giáo viên giao việc gì và học sinh thao tác như thế nào.</li>
+                            <h5 class="font-black text-blue-200 text-base md:text-lg">Soạn Giáo Án Chuẩn Công Văn 5512 & Tích Hợp 3 Nhóm Năng Lực Phân Màu</h5>
+                            <ul class="space-y-2 text-sm text-slate-100">
+                                <li>• <strong>Mục tiêu & Chuẩn bị đúng thể thức chuẩn:</strong> Mục tiêu kiến thức trình bày trực tiếp theo <strong>- Biết / - Hiểu / - Vận dụng</strong> (kèm dấu <code>+</code>); phần Thiết bị dạy học trình bày rõ <strong>1. Chuẩn bị của giáo viên</strong> và <strong>2. Chuẩn bị của học sinh</strong> (không kẻ bảng rườm rà, không chèn các thanh tiêu đề thừa).</li>
+                                <li>• <strong>Đầy đủ 4 hoạt động & Hồ sơ dạy học:</strong> Khởi động, Hình thành kiến thức mới (bảng 2 cột kèm Phiếu học tập & Sơ đồ cơ chế), Luyện tập, Vận dụng và Bảng tiêu chí Rubric.</li>
                                 <li>• <strong>Hệ thống 3 màu năng lực chuẩn Bộ GD&ĐT:</strong>
-                                    <div class="mt-1.5 space-y-1 pl-2 border-l-2 border-blue-400/50">
+                                    <div class="mt-1.5 space-y-1 pl-2.5 border-l-2 border-blue-400/50">
                                         <div class="text-sky-300 font-bold">■ Xanh Dương: Năng lực số (TT 02/2025)</div>
                                         <div class="text-rose-300 font-bold">■ Đỏ: Năng lực AI (QĐ 3439/BGDĐT)</div>
                                         <div class="text-amber-300 font-bold">■ Vàng: Năng lực đặc thù & Năng lực chung</div>
@@ -1031,19 +1044,19 @@
                         <div class="p-5 rounded-2xl bg-gradient-to-br from-amber-950/90 via-amber-900/40 to-slate-950 border-2 border-amber-400/70 shadow-lg shadow-amber-500/15 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="px-3 py-1 rounded-lg bg-amber-500 text-slate-950 font-black text-xs uppercase shadow">2. Phân hệ Màu Vàng</span>
-                                <i class="fa-solid fa-tv text-amber-300 text-xl"></i>
+                                <i class="fa-solid fa-tv text-amber-300 text-2xl"></i>
                             </div>
-                            <h5 class="font-black text-amber-200 text-base">Thiết Kế Bài Giảng PPT 34 Slide (>30 Slide) Lấy Từ Hoạt Động Hình Thành Kiến Thức</h5>
-                            <ul class="space-y-1.5 text-xs text-slate-200">
-                                <li>• <strong>Đồng bộ 100% từ Giáo án 5512:</strong> Tự động trích xuất nội dung cột <em>Dự kiến sản phẩm</em> của Hoạt động Hình thành kiến thức và Yêu cầu cần đạt để dựng <strong>18 Slide nội dung cốt lõi</strong>.</li>
-                                <li>• <strong>Đủ 16 Slide Câu hỏi Bài tập chuẩn định dạng:</strong>
-                                    <div class="mt-1 space-y-0.5 pl-2 border-l-2 border-amber-400/50 text-amber-100">
-                                        <div>- <strong>10 Slide</strong> Trắc nghiệm 4 phương án (Phần I)</div>
-                                        <div>- <strong>02 Slide</strong> Đúng/Sai 4 ý a, b, c, d (Phần II)</div>
+                            <h5 class="font-black text-amber-200 text-base md:text-lg">Bài Giảng PPT 34 Slide Cỡ Chữ Lớn Cho Giáo Viên Dự Giờ & Học Sinh Bàn Cuối</h5>
+                            <ul class="space-y-2 text-sm text-slate-100">
+                                <li>• <strong>Cỡ chữ lớn rõ nét & Không tràn khung:</strong> Trang bị thanh tăng/giảm cỡ chữ trực tiếp <strong>(A- / 115% / A+)</strong> và chế độ <strong>Toàn màn hình</strong> giúp học sinh bàn cuối và giáo viên dự giờ quan sát rõ 100%.</li>
+                                <li>• <strong>Đồng bộ 18 Slide Lý thuyết + 16 Slide Bài tập chuẩn YCCĐ:</strong>
+                                    <div class="mt-1 space-y-1 pl-2.5 border-l-2 border-amber-400/50 text-amber-100">
+                                        <div>- <strong>08 Slide</strong> Trắc nghiệm 4 phương án (Phần I)</div>
+                                        <div>- <strong>04 Slide</strong> Đúng/Sai 4 ý a, b, c, d (Phần II)</div>
                                         <div>- <strong>04 Slide</strong> Trả lời ngắn vận dụng (Phần III)</div>
                                     </div>
                                 </li>
-                                <li>• <strong>Tương tác trực tiếp & Xuất PPTX thật:</strong> Tích hợp đồng hồ bấm giờ thảo luận nhóm, nút Ẩn/Hiện đáp án kèm giải thích trên từng slide và xuất file <code>.pptx</code> nguyên gốc.</li>
+                                <li>• <strong>Tiện ích lớp học & Xuất PPTX thật:</strong> Tích hợp <em>Hẹn giờ thảo luận (15s–5p)</em>, <em>Quay số học sinh ngẫu nhiên (01–50)</em>, nút <em>Hiện/Ẩn đáp án</em> và xuất file <code>.pptx</code> cỡ chữ lớn.</li>
                             </ul>
                         </div>
 
@@ -1051,17 +1064,17 @@
                         <div class="p-5 rounded-2xl bg-gradient-to-br from-rose-950/90 via-rose-900/40 to-slate-950 border-2 border-rose-400/70 shadow-lg shadow-rose-500/15 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="px-3 py-1 rounded-lg bg-rose-600 text-white font-black text-xs uppercase shadow">3. Phân hệ Màu Đỏ</span>
-                                <i class="fa-solid fa-file-signature text-rose-300 text-xl"></i>
+                                <i class="fa-solid fa-file-signature text-rose-300 text-2xl"></i>
                             </div>
-                            <h5 class="font-black text-rose-200 text-base">Tạo Đề Kiểm Tra & Ma Trận Đặc Tả Chuẩn Công Văn 7991/BGDĐT</h5>
-                            <ul class="space-y-1.5 text-xs text-slate-200">
-                                <li>• <strong>Bám sát SGK Kết nối tri thức & CT GDPT 2018:</strong> Cho phép tích chọn 1 bài hoặc nhiều bài học (Ôn tập chương, Giữa kỳ, Cuối kỳ) để tổng hợp Yêu cầu cần đạt.</li>
+                            <h5 class="font-black text-rose-200 text-base md:text-lg">Ma Trận, Đặc Tả & Đề Kiểm Tra Chuẩn Công Văn 7991 (Phân Bổ Đều Các Bài)</h5>
+                            <ul class="space-y-2 text-sm text-slate-100">
+                                <li>• <strong>Thuật toán Phân bổ đều toàn cục (Global Balanced Round-Robin):</strong> Tự động chia đều số lượng câu hỏi vào tất cả các bài học được chọn (chênh lệch ≤ 1 câu, khắc phục triệt để lỗi dồn câu vào Bài 1).</li>
                                 <li>• <strong>Trọn bộ 4 thành phần chuẩn 7991:</strong>
-                                    <div class="mt-1 space-y-0.5 pl-2 border-l-2 border-rose-400/50 text-rose-100">
-                                        <div>1. Bảng Ma trận đề kiểm tra (Nhận biết - Thông hiểu - Vận dụng)</div>
+                                    <div class="mt-1 space-y-1 pl-2.5 border-l-2 border-rose-400/50 text-rose-100">
+                                        <div>1. Khung Ma trận đề kiểm tra (Biết - Hiểu - Vận dụng)</div>
                                         <div>2. Bản Đặc tả chi tiết từng đơn vị kiến thức</div>
-                                        <div>3. Đề kiểm tra chính thức (18 câu P.I + 4 câu P.II + 6 câu P.III)</div>
-                                        <div>4. Bảng Đáp án & Hướng dẫn chấm chi tiết từng lệnh hỏi</div>
+                                        <div>3. Đề kiểm tra chính thức (12 câu P.I + 2 câu P.II + 4 câu P.III + 2 câu P.IV)</div>
+                                        <div>4. Bảng Đáp án & Hướng dẫn chấm chi tiết thang điểm 10,0</div>
                                     </div>
                                 </li>
                             </ul>
@@ -1071,25 +1084,25 @@
                         <div class="p-5 rounded-2xl bg-gradient-to-br from-cyan-950/90 via-teal-900/40 to-slate-950 border-2 border-cyan-400/70 shadow-lg shadow-cyan-500/15 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="px-3 py-1 rounded-lg bg-cyan-500 text-slate-950 font-black text-xs uppercase shadow">4. Phân hệ Màu Xanh Ngọc</span>
-                                <i class="fa-solid fa-shield-virus text-cyan-300 text-xl"></i>
+                                <i class="fa-solid fa-shield-virus text-cyan-300 text-2xl"></i>
                             </div>
-                            <h5 class="font-black text-cyan-200 text-base">Đột Phá Công Nghệ RAG: Triệt Tiêu 100% Ảo Giác Khoa Học</h5>
-                            <ul class="space-y-1.5 text-xs text-slate-200">
-                                <li>• <strong>Khóa chặt kho dữ liệu chuẩn (Strict Grounding):</strong> AI không sinh văn bản tự do mà bắt buộc truy xuất từ Kho ngữ liệu chuẩn SGK Kết nối tri thức với cuộc sống và tài liệu do giáo viên tải lên.</li>
-                                <li>• <strong>Bảng Kiểm định RAG Trực tiếp:</strong> Cho phép đối chiếu song song giữa <em>Ngữ liệu gốc SGK</em> và <em>Bản thảo AI</em>, chấm điểm Độ phủ Yêu cầu cần đạt và Độ chuẩn xác thuật ngữ khoa học.</li>
+                            <h5 class="font-black text-cyan-200 text-base md:text-lg">Đột Phá Công Nghệ RAG: Triệt Tiêu 100% Ảo Giác Khoa Học</h5>
+                            <ul class="space-y-2 text-sm text-slate-100">
+                                <li>• <strong>Khóa chặt kho dữ liệu chuẩn (Strict Grounding):</strong> AI bắt buộc truy xuất từ Kho ngữ liệu chuẩn SGK Kết nối tri thức với cuộc sống và tài liệu PDF/DOCX/TXT do giáo viên tải lên.</li>
+                                <li>• <strong>Bảng Kiểm định RAG Trực tiếp:</strong> Cho phép đối chiếu song song giữa <em>Ngữ liệu gốc SGK</em> và <em>Bản thảo AI</em>, chấm điểm Độ phủ Yêu cầu cần đạt và Độ chuẩn xác thuật ngữ quốc tế (DNA, RNA, ATP, enzyme...).</li>
                             </ul>
                         </div>
 
-                        <!-- Chức năng 5: MÀU TÍM VŨ TRỤ NỔI BẬT (4 MÔ HÌNH AI & CHỐNG QUÁ TẢI) -->
+                        <!-- Chức năng 5: MÀU TÍM VŨ TRỤ NỔI BẬT (4 MÔ HÌNH AI & KEY GEMINI CHỐNG QUÁ TẢI) -->
                         <div class="p-5 rounded-2xl bg-gradient-to-br from-purple-950/90 via-indigo-900/40 to-slate-950 border-2 border-purple-400/70 shadow-lg shadow-purple-500/15 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="px-3 py-1 rounded-lg bg-purple-600 text-white font-black text-xs uppercase shadow">5. Phân hệ Màu Tím</span>
-                                <i class="fa-solid fa-microchip text-purple-300 text-xl"></i>
+                                <i class="fa-solid fa-microchip text-purple-300 text-2xl"></i>
                             </div>
-                            <h5 class="font-black text-purple-200 text-base">Trung Tâm 4 Mô Hình AI Thế Hệ Mới & Chịu Tải Đa Người Dùng</h5>
-                            <ul class="space-y-1.5 text-xs text-slate-200">
-                                <li>• <strong>4 Mô hình AI + 3 Mức độ Tư duy:</strong> Nút <em>"AI Đang Chạy"</em> trên thanh công cụ cho phép chuyển đổi tức thì giữa <code>gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao)</code>, <code>gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt)</code>, <code>gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu)</code>, <code>gemini-4-argon (Gemini 4 Argon — Thế hệ mới)</code> cùng 3 mức Suy luận (Thấp - Trung bình - Cao).</li>
-                                <li>• <strong>Kiến trúc 4 lớp chống nghẽn (High-Concurrency):</strong> Tích hợp Bộ nhớ đệm LRU Server, Hợp nhất yêu cầu đồng thời (Request Coalescing), Hàng đợi thông minh và Tự động xoay vòng 6 tầng mô hình dự phòng khi nhiều giáo viên cùng truy cập.</li>
+                            <h5 class="font-black text-purple-200 text-base md:text-lg">Trung Tâm 4 Mô Hình AI Thế Hệ Mới & Nút Nhập Key Gemini Chống Quá Tải</h5>
+                            <ul class="space-y-2 text-sm text-slate-100">
+                                <li>• <strong>4 Mô hình AI tiên tiến + 3 Mức độ Tư duy:</strong> Chuyển đổi tức thì giữa <code>gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao)</code>, <code>gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt)</code>, <code>gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu)</code>, <code>gemini-4-argon (Gemini 4 Argon — Thế hệ mới)</code>.</li>
+                                <li>• <strong>Nút Nhập Key Gemini & Pool Đa Key:</strong> Cho phép giáo viên nhập 1 hoặc nhiều Gemini API Key cá nhân (tự động xoay vòng tải) kết hợp <strong>Kiến trúc 4 lớp chống nghẽn</strong> đảm bảo vận hành mượt mà 100% khi dự thi và giảng dạy.</li>
                             </ul>
                         </div>
 
@@ -1097,12 +1110,12 @@
                         <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/90 via-teal-950/50 to-slate-950 border-2 border-emerald-400/70 shadow-lg shadow-emerald-500/15 space-y-3">
                             <div class="flex items-center justify-between">
                                 <span class="px-3 py-1 rounded-lg bg-emerald-500 text-slate-950 font-black text-xs uppercase shadow">6. Phân hệ Màu Xanh Lá</span>
-                                <i class="fa-solid fa-cloud-arrow-up text-emerald-300 text-xl"></i>
+                                <i class="fa-solid fa-cloud-arrow-up text-emerald-300 text-2xl"></i>
                             </div>
-                            <h5 class="font-black text-emerald-200 text-base">Chỉnh Sửa Trực Tiếp, Xuất File Chuẩn & Đồng Bộ Đám Mây</h5>
-                            <ul class="space-y-1.5 text-xs text-slate-200">
-                                <li>• <strong>Trình soạn thảo trực tiếp (Live Editor):</strong> Mọi văn bản Giáo án và Đề thi đều cho phép giáo viên gõ chỉnh sửa trực tiếp ngay trên trang web trước khi tải về.</li>
-                                <li>• <strong>Xuất bản đa định dạng 1-Click:</strong> Tải ngay file <code>.doc</code> (Microsoft Word giữ nguyên bảng biểu & màu sắc năng lực), file <code>.pptx</code> (PowerPoint 16:9), file <code>.html</code> hoặc lưu thẳng lên <strong>Google Drive</strong> tổ bộ môn.</li>
+                            <h5 class="font-black text-emerald-200 text-base md:text-lg">Chỉnh Sửa Trực Tiếp Trên Khổ A4, Xuất File Chuẩn & Đồng Bộ Đám Mây</h5>
+                            <ul class="space-y-2 text-sm text-slate-100">
+                                <li>• <strong>Trình soạn thảo trực tiếp (Live Editor):</strong> Mọi văn bản Giáo án và Đề thi đều cho phép giáo viên nhấp chuột chỉnh sửa trực tiếp ngay trên trang giấy A4 trước khi tải về.</li>
+                                <li>• <strong>Xuất bản đa định dạng 1-Click:</strong> Tải ngay file <code>.doc</code> (Microsoft Word giữ nguyên định dạng chuẩn & 3 màu năng lực), file <code>.pptx</code> (PowerPoint 16:9 chữ lớn), <code>In / Xuất PDF</code> hoặc đồng bộ <strong>Google Drive</strong>.</li>
                             </ul>
                         </div>
 
@@ -1112,38 +1125,38 @@
                 <!-- PHẦN III: TÍNH PHỔ BIẾN, KHẢ NĂNG NHÂN RỘNG & ỨNG DỤNG SANG CÁC MÔN HỌC KHÁC -->
                 <div class="p-6 rounded-2xl bg-gradient-to-r from-emerald-950/90 via-cyan-950/85 to-blue-950/90 border-2 border-emerald-400/60 shadow-2xl space-y-5">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-emerald-400/30 pb-3">
-                        <h4 class="font-black text-emerald-300 text-base uppercase tracking-wider flex items-center gap-2.5">
-                            <span class="w-7 h-7 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center text-xs font-black shadow">III</span>
+                        <h4 class="font-black text-emerald-300 text-lg uppercase tracking-wider flex items-center gap-2.5">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center text-sm font-black shadow">III</span>
                             Tính Phổ Biến, Khả Năng Nhân Rộng & Ứng Dụng Sang Các Môn Học Khác
                         </h4>
-                        <span class="px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/50 text-emerald-200 text-xs font-extrabold">Kiến Trúc Mở • Sẵn Sàng Nhân Rộng Toàn Ngành Giáo Dục</span>
+                        <span class="px-3.5 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/50 text-emerald-200 text-sm font-extrabold">Kiến Trúc Mở • Sẵn Sàng Nhân Rộng Toàn Ngành Giáo Dục</span>
                     </div>
 
                     <!-- 1. Tính phổ biến & Khả năng tiếp cận -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="p-4 rounded-xl bg-slate-950/75 border border-emerald-500/40 space-y-2">
-                            <div class="font-black text-emerald-300 text-xs uppercase flex items-center gap-2">
+                        <div class="p-4 rounded-xl bg-slate-950/80 border border-emerald-500/40 space-y-2">
+                            <div class="font-black text-emerald-300 text-sm md:text-base uppercase flex items-center gap-2">
                                 <i class="fa-solid fa-globe text-emerald-400"></i> 1. Tính Phổ Biến Toàn Diện (Zero-Install Web)
                             </div>
-                            <p class="text-xs text-slate-300 leading-relaxed">
-                                Hoạt động 100% trên nền tảng Web đám mây, tương thích mượt mà với mọi thiết bị (Máy tính để bàn phòng máy, Laptop cá nhân, Máy tính bảng, Điện thoại thông minh và Tivi/Màn hình tương tác trên lớp). Giáo viên không cần cài đặt phần mềm phức tạp hay cấu hình máy mạnh.
+                            <p class="text-sm text-slate-200 leading-relaxed">
+                                Hoạt động 100% trên nền tảng Web đám mây và GitHub Pages, tương thích mượt mà với mọi thiết bị (Máy tính để bàn phòng máy, Laptop cá nhân, Máy tính bảng, Điện thoại thông minh và Tivi/Màn hình tương tác trên lớp). Giáo viên không cần cài đặt phần mềm phức tạp.
                             </p>
                         </div>
 
-                        <div class="p-4 rounded-xl bg-slate-950/75 border border-cyan-500/40 space-y-2">
-                            <div class="font-black text-cyan-300 text-xs uppercase flex items-center gap-2">
+                        <div class="p-4 rounded-xl bg-slate-950/80 border border-cyan-500/40 space-y-2">
+                            <div class="font-black text-cyan-300 text-sm md:text-base uppercase flex items-center gap-2">
                                 <i class="fa-solid fa-users-gear text-cyan-400"></i> 2. Phù Hợp Mọi Vùng Miền & Trình Độ CNTT
                             </div>
-                            <p class="text-xs text-slate-300 leading-relaxed">
-                                Giao diện tiếng Việt trực quan theo quy trình 3 bước chuẩn mực. Ngay cả khi mất kết nối mạng hoặc AI đạt ngưỡng tải cao điểm, <strong>Chế độ Chuẩn SGK Offline</strong> vẫn hoạt động tức thì trong 0.1 giây, đảm bảo giáo viên vùng sâu, vùng xa luôn có bài giảng và đề thi chất lượng cao.
+                            <p class="text-sm text-slate-200 leading-relaxed">
+                                Giao diện tiếng Việt trực quan, cỡ chữ lớn rõ ràng. Ngay cả khi mất kết nối mạng hoặc AI đạt ngưỡng tải cao điểm, <strong>Động cơ AI Sư phạm Nội bộ & Chế độ Chuẩn SGK</strong> vẫn hoạt động tức thì trong 0.5 giây, đảm bảo giáo viên luôn có bài giảng và đề thi chất lượng cao.
                             </p>
                         </div>
 
-                        <div class="p-4 rounded-xl bg-slate-950/75 border border-amber-500/40 space-y-2">
-                            <div class="font-black text-amber-300 text-xs uppercase flex items-center gap-2">
+                        <div class="p-4 rounded-xl bg-slate-950/80 border border-amber-500/40 space-y-2">
+                            <div class="font-black text-amber-300 text-sm md:text-base uppercase flex items-center gap-2">
                                 <i class="fa-solid fa-sitemap text-amber-400"></i> 3. Tương Thích Cả 3 Bộ SGK & 3 Cấp Học
                             </div>
-                            <p class="text-xs text-slate-300 leading-relaxed">
+                            <p class="text-sm text-slate-200 leading-relaxed">
                                 Cơ sở dữ liệu RAG được thiết kế dạng mô-đun độc lập, cho phép mở rộng tức thì từ bộ <em>Kết nối tri thức với cuộc sống</em> sang bộ <em>Chân trời sáng tạo</em>, <em>Cánh diều</em> và áp dụng đồng bộ cho cả 3 cấp học: <strong>Tiểu học, THCS và THPT</strong>.
                             </p>
                         </div>
@@ -1152,50 +1165,50 @@
                     <!-- 2. Khả năng ứng dụng sang các môn học khác -->
                     <div class="p-5 rounded-2xl bg-slate-950/85 border border-cyan-400/40 space-y-4">
                         <div class="flex flex-wrap items-center justify-between gap-2">
-                            <div class="font-black text-amber-300 text-sm uppercase flex items-center gap-2">
+                            <div class="font-black text-amber-300 text-base uppercase flex items-center gap-2">
                                 <i class="fa-solid fa-rocket text-amber-400"></i> Khả Năng Chuyển Giao & Ứng Dụng Trực Tiếp Sang Tất Cả Các Môn Học Khác (CT GDPT 2018)
                             </div>
-                            <span class="text-[11px] text-cyan-300 font-semibold">Cùng chung quy chuẩn Công văn 5512, Công văn 7991, TT 02/2025 & QĐ 3439</span>
+                            <span class="text-xs md:text-sm text-cyan-300 font-semibold">Cùng chung quy chuẩn Công văn 5512, Công văn 7991, TT 02/2025 & QĐ 3439</span>
                         </div>
-                        <p class="text-xs text-slate-300 leading-relaxed">
-                            Nhờ kiến trúc <strong>Động cơ Sư phạm Tách biệt Dữ liệu (Modular Curriculum RAG Engine)</strong>, toàn bộ quy trình <em>Soạn Giáo án 5512 phân 3 màu năng lực</em> + <em>Tạo 34 Slide bài giảng</em> + <em>Tạo Ma trận & Đề kiểm tra 7991</em> có thể áp dụng nguyên vẹn sang tất cả các môn học khác chỉ bằng việc nạp tệp Yêu cầu cần đạt của môn đó (hoặc kéo-thả tệp PDF/Word của giáo viên bộ môn vào ô tài liệu RAG):
+                        <p class="text-sm md:text-[15px] text-slate-200 leading-relaxed">
+                            Nhờ kiến trúc <strong>Động cơ Sư phạm Tách biệt Dữ liệu (Modular Curriculum RAG Engine)</strong>, toàn bộ quy trình <em>Soạn Giáo án 5512 phân 3 màu năng lực</em> + <em>Tạo 34 Slide bài giảng chữ lớn</em> + <em>Tạo Ma trận & Đề kiểm tra 7991 phân bổ đều</em> có thể áp dụng nguyên vẹn sang tất cả các môn học khác chỉ bằng việc nạp tệp Yêu cầu cần đạt của môn đó vào ô tài liệu RAG:
                         </p>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 text-sm">
                             <!-- Nhóm KHTN & Toán - Tin -->
-                            <div class="p-3.5 rounded-xl bg-blue-950/50 border border-blue-400/40 space-y-1.5">
+                            <div class="p-4 rounded-xl bg-blue-950/50 border border-blue-400/40 space-y-1.5">
                                 <div class="font-black text-blue-300 uppercase flex items-center gap-1.5">
                                     <i class="fa-solid fa-atom"></i> Khối KHTN, Toán & Tin Học
                                 </div>
-                                <div class="text-slate-200 font-semibold">• Toán học, Vật lí, Hóa học, Tin học, KHTN (THCS), Công nghệ Công nghiệp</div>
-                                <p class="text-[11px] text-slate-300">Tự động hóa thiết kế bài tập trắc nghiệm 3 phần (Đúng/Sai, Trả lời ngắn tính toán), mô phỏng thí nghiệm số và chuẩn hóa công thức khoa học.</p>
+                                <div class="text-white font-bold">• Toán học, Vật lí, Hóa học, Tin học, KHTN (THCS), Công nghệ Công nghiệp</div>
+                                <p class="text-xs md:text-sm text-slate-200">Tự động hóa thiết kế bài tập trắc nghiệm 3 phần (Đúng/Sai, Trả lời ngắn tính toán), mô phỏng thí nghiệm số và chuẩn hóa công thức khoa học.</p>
                             </div>
 
                             <!-- Nhóm KHXH & Nhân văn -->
-                            <div class="p-3.5 rounded-xl bg-amber-950/50 border border-amber-400/40 space-y-1.5">
+                            <div class="p-4 rounded-xl bg-amber-950/50 border border-amber-400/40 space-y-1.5">
                                 <div class="font-black text-amber-300 uppercase flex items-center gap-1.5">
                                     <i class="fa-solid fa-feather-pointed"></i> Khối KHXH & Nhân Văn
                                 </div>
-                                <div class="text-slate-200 font-semibold">• Ngữ văn, Lịch sử, Địa lí, Giáo dục Kinh tế & Pháp luật</div>
-                                <p class="text-[11px] text-slate-300">Truy xuất chính xác ngữ liệu văn học, sự kiện lịch sử, số liệu thống kê địa lí – kinh tế và điều khoản pháp luật bằng công nghệ RAG không sai lệch.</p>
+                                <div class="text-white font-bold">• Ngữ văn, Lịch sử, Địa lí, Giáo dục Kinh tế & Pháp luật</div>
+                                <p class="text-xs md:text-sm text-slate-200">Truy xuất chính xác ngữ liệu văn học, sự kiện lịch sử, số liệu thống kê địa lí – kinh tế và điều khoản pháp luật bằng công nghệ RAG không sai lệch.</p>
                             </div>
 
                             <!-- Nhóm Ngoại ngữ -->
-                            <div class="p-3.5 rounded-xl bg-purple-950/50 border border-purple-400/40 space-y-1.5">
+                            <div class="p-4 rounded-xl bg-purple-950/50 border border-purple-400/40 space-y-1.5">
                                 <div class="font-black text-purple-300 uppercase flex items-center gap-1.5">
                                     <i class="fa-solid fa-language"></i> Khối Ngoại Ngữ
                                 </div>
-                                <div class="text-slate-200 font-semibold">• Tiếng Anh & Các môn Ngoại ngữ khác</div>
-                                <p class="text-[11px] text-slate-300">Thiết kế giáo án phát triển 4 kỹ năng (Nghe - Nói - Đọc - Viết), tạo slide từ vựng - ngữ pháp tương tác và đề kiểm tra chuẩn khung năng lực ngoại ngữ.</p>
+                                <div class="text-white font-bold">• Tiếng Anh & Các môn Ngoại ngữ khác</div>
+                                <p class="text-xs md:text-sm text-slate-200">Thiết kế giáo án phát triển 4 kỹ năng (Nghe - Nói - Đọc - Viết), tạo slide từ vựng - ngữ pháp tương tác và đề kiểm tra chuẩn khung năng lực ngoại ngữ.</p>
                             </div>
 
                             <!-- Nhóm HĐ Trải nghiệm & GD Địa phương -->
-                            <div class="p-3.5 rounded-xl bg-emerald-950/50 border border-emerald-400/40 space-y-1.5">
+                            <div class="p-4 rounded-xl bg-emerald-950/50 border border-emerald-400/40 space-y-1.5">
                                 <div class="font-black text-emerald-300 uppercase flex items-center gap-1.5">
                                     <i class="fa-solid fa-compass"></i> HĐ Trải Nghiệm & GD Địa Phương
                                 </div>
-                                <div class="text-slate-200 font-semibold">• HĐTN-HN, Giáo dục Địa phương, GDQP-AN</div>
-                                <p class="text-[11px] text-slate-300">Giáo viên chỉ cần kéo-thả tài liệu Giáo dục địa phương của tỉnh/thành phố vào kho RAG để AI tự động soạn kế hoạch bài dạy và slide thuyết trình dự án.</p>
+                                <div class="text-white font-bold">• HĐTN-HN, Giáo dục Địa phương, GDQP-AN</div>
+                                <p class="text-xs md:text-sm text-slate-200">Giáo viên chỉ cần kéo-thả tài liệu Giáo dục địa phương của tỉnh/thành phố vào kho RAG để AI tự động soạn kế hoạch bài dạy và slide thuyết trình dự án.</p>
                             </div>
                         </div>
                     </div>
@@ -1204,16 +1217,16 @@
             </div>
 
             <!-- Footer Modal -->
-            <div class="p-4 bg-slate-900/95 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
-                <span class="text-slate-300 flex items-center gap-2">
-                    <i class="fa-solid fa-award text-amber-400 text-base"></i>
-                    <span><strong>BioMaster AI Pro:</strong> Giải pháp Sư phạm Thông minh chuẩn hóa toàn diện từ Giáo án 5512, Bài giảng >30 Slide đến Ma trận Đề thi 7991.</span>
+            <div class="p-4 bg-slate-900/95 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3 text-sm">
+                <span class="text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-award text-amber-400 text-lg"></i>
+                    <span><strong>BioMaster AI Pro:</strong> Giải pháp Sư phạm Thông minh chuẩn hóa toàn diện từ Giáo án 5512, Bài giảng 34 Slide chữ lớn đến Ma trận Đề thi 7991 phân bổ đều.</span>
                 </span>
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="closeWebFeaturesModal(); openRAGInspectorModal();" class="btn-3d bg-gradient-to-b from-cyan-600 to-teal-800 border border-cyan-300/70 px-4 py-2 rounded-xl text-white font-extrabold flex items-center gap-1.5">
+                <div class="flex items-center gap-2.5">
+                    <button type="button" onclick="closeWebFeaturesModal(); openRAGInspectorModal();" class="btn-3d bg-gradient-to-b from-cyan-600 to-teal-800 border border-cyan-300/70 px-4 py-2 rounded-xl text-white font-extrabold flex items-center gap-1.5 text-sm">
                         <i class="fa-solid fa-shield-virus text-amber-300"></i> Xem Kiểm Định RAG
                     </button>
-                    <button type="button" onclick="closeWebFeaturesModal()" class="btn-3d btn-3d-emerald px-5 py-2 rounded-xl text-white font-extrabold">
+                    <button type="button" onclick="closeWebFeaturesModal()" class="btn-3d btn-3d-emerald px-5 py-2 rounded-xl text-white font-extrabold text-sm">
                         Đã Hiểu & Quay Lại Trang Chính
                     </button>
                 </div>
@@ -5857,6 +5870,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
 
 
 
+
 // ============================================================================
 // BIOMASTER AI - HỆ THỐNG SOẠN KẾ HOẠCH BÀI DẠY 5512, BÀI GIẢNG 34 SLIDE & ĐỀ THI 7991
 // Chuẩn Chương trình GDPT 2018 & SGK Kết nối tri thức với cuộc sống
@@ -5903,7 +5917,7 @@ window.showBioToast = function(message, type = 'info') {
   }, 4500);
 };
 
-// Ghi đè khóa lưu trữ cache sang phiên bản v8_competition_pro
+// Ghi đè khóa lưu trữ cache sang phiên bản v9_pro
 window.getAICacheKey = function(mode, subject, grade, lessonTitle) {
   if (mode === '7991') {
     const lessonsKey = (typeof selectedLessonsForExam !== 'undefined' && selectedLessonsForExam.length > 0)
@@ -5912,13 +5926,13 @@ window.getAICacheKey = function(mode, subject, grade, lessonTitle) {
     const totalsKey = (typeof matrixGlobalTotals !== 'undefined' && matrixGlobalTotals)
       ? Object.values(matrixGlobalTotals).join('_')
       : 'default';
-    return `biomaster_v8_pro_${mode}_${subject}_${grade}_${lessonsKey}_${totalsKey}`.replace(/[^a-zA-Z0-9_]/g, '_');
+    return `biomaster_v9_pro_${mode}_${subject}_${grade}_${lessonsKey}_${totalsKey}`.replace(/[^a-zA-Z0-9_]/g, '_');
   }
-  return `biomaster_v8_pro_${mode}_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
+  return `biomaster_v9_pro_${mode}_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
 };
 
 window.getStructuredPlanKey = function(subject, grade, lessonTitle) {
-  return `structured_plan_v8_pro_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
+  return `structured_plan_v9_pro_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
 };
 
 // ============================================================================
@@ -6510,14 +6524,9 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
     });
 
     const examHtml = `
-      <div style="background: linear-gradient(90deg, #eff6ff 0%, #f0fdf4 100%); border: 2px solid #1e40af; border-radius: 8px; padding: 10px 14px; margin: 16px 0 10px 0;">
-        <p style="font-weight: bold; margin: 0; font-size: 12.5pt; color: #1e3a8a; text-transform: uppercase;">
-          III. ĐỀ KIỂM TRA CHÍNH THỨC — BẢN BIÊN SOẠN CHUYÊN SÂU BỞI AI (CHUẨN CÔNG VĂN 7991/BGDĐT-GDTrH)
-        </p>
-        <p style="margin: 3px 0 0 0; font-size: 10pt; color: #047857; font-weight: bold;">
-          ✔ Đề thi đã được AI phân hóa đầy đủ 3 cấp độ Nhận thức (Biết - Hiểu - Vận dụng) & kèm Bảng Hướng dẫn chấm chi tiết từng ý (Thang điểm 10,0)
-        </p>
-      </div>
+      <p style="font-weight: bold; margin: 15px 0 4px 0; font-size: 11.5pt; color: #1e3a8a;">
+        III. ĐỀ KIỂM TRA CHÍNH THỨC (CHUẨN CÔNG VĂN 7991/BGDĐT-GDTrH)
+      </p>
 
       <p style="font-weight: bold; color: #1e40af; margin: 8px 0 2px 0;">PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn (${countP1} câu, 3,0 điểm)</p>
       <p style="font-style: italic; font-size: 10.5pt; margin: 0 0 4px 0;">Thí sinh trả lời từ câu 1 đến câu ${countP1}. Mỗi câu hỏi thí sinh chỉ chọn một phương án đúng nhất.</p>
@@ -6536,11 +6545,9 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
 
       <div style="page-break-before: always; margin-top: 18px;"></div>
 
-      <div style="background: #f0fdf4; border: 2px solid #059669; border-radius: 8px; padding: 8px 12px; margin: 14px 0 8px 0;">
-        <p style="font-weight: bold; margin: 0; font-size: 12pt; color: #065f46; text-transform: uppercase;">
-          IV. BẢNG ĐÁP ÁN VÀ HƯỚNG DẪN CHẤM CHI TIẾT (THANG ĐIỂM 10,0 - CHUẨN CV 7991)
-        </p>
-      </div>
+      <p style="font-weight: bold; margin: 14px 0 6px 0; font-size: 11.5pt; color: #065f46; text-transform: uppercase;">
+        IV. BẢNG ĐÁP ÁN VÀ HƯỚNG DẪN CHẤM CHI TIẾT (THANG ĐIỂM 10,0 - CHUẨN CV 7991)
+      </p>
 
       <p style="font-weight: bold; margin: 6px 0 3px 0; color: #0f172a;">1. Bảng đáp án & Giải thích cơ sở khoa học Phần I (Trắc nghiệm 4 lựa chọn - 3,0 điểm):</p>
       <table>
@@ -7431,43 +7438,23 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
         solutionGuide: `1. Giải thích hiện tượng thực tiễn: ${profile.openingAnswer}\n2. Lời giải bài toán thực tế: ${profile.calcAnswer}`
       };
 
-  const aiHeaderBanner = isAI ? `
-    <div style="background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 50%, #ecfdf5 100%); border: 1.5px solid #6366f1; border-radius: 8px; padding: 8px 12px; margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
-        <span style="font-weight: bold; color: #312e81; font-size: 10.5pt;">
-          ★ BẢN BIÊN SOẠN CHUYÊN SÂU BỞI AI (${planData.aiModelBadge || 'Gemini AI'}) • CHUẨN CÔNG VĂN 5512/BGDĐT
-        </span>
-        <span style="background: #4f46e5; color: #ffffff; font-size: 9.5pt; font-weight: bold; padding: 2px 8px; border-radius: 4px;">
-          ĐÃ TỐI ƯU HÓA SƯ PHẠM & PHIẾU HỌC TẬP CHI TIẾT
-        </span>
-      </div>
-      <p style="margin: 4px 0 0 0; font-size: 10pt; color: #1e293b;">
-        <strong>Phương pháp & Kĩ thuật dạy học tích cực:</strong> ${planData.pedagogyStyle || 'Dạy học Giải quyết vấn đề, Trạm học tập (Station Rotation), Kĩ thuật Mảnh ghép & Mô hình 5E'}
-      </p>
-    </div>
-  ` : '';
+  const bietItems = [...new Set([
+    ...sections.map(s => s.yccd_nb).filter(Boolean),
+    knowledgeYccdList[0]
+  ].filter(Boolean))].slice(0, 3);
 
-  const aiBloomTableHtml = (isAI && planData.bloomTable) ? `
-    <table style="margin: 6px 0 8px 0;">
-      <thead>
-        <tr style="background: #e0e7ff; text-align: center; font-weight: bold; color: #1e3a8a;">
-          <th style="width: 33%;">Mức độ Nhận biết</th>
-          <th style="width: 34%;">Mức độ Thông hiểu</th>
-          <th style="width: 33%;">Mức độ Vận dụng</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td style="vertical-align: top;">${planData.bloomTable.nhanBiet || knowledgeYccdList[0] || ''}</td>
-          <td style="vertical-align: top;">${planData.bloomTable.thongHieu || knowledgeYccdList[1] || ''}</td>
-          <td style="vertical-align: top;">${planData.bloomTable.vanDung || knowledgeYccdList[knowledgeYccdList.length - 1] || ''}</td>
-        </tr>
-      </tbody>
-    </table>
-  ` : '';
+  const hieuItems = [...new Set([
+    ...sections.map(s => s.yccd_th).filter(Boolean),
+    knowledgeYccdList[1] || knowledgeYccdList[0]
+  ].filter(Boolean))].slice(0, 3);
+
+  const vanDungItems = [...new Set([
+    ...sections.map(s => s.yccd_vd).filter(Boolean),
+    knowledgeYccdList[knowledgeYccdList.length - 1],
+    `Vận dụng giải thích hiện tượng thực tiễn: ${profile.openingAnswer}`
+  ].filter(Boolean))].slice(0, 3);
 
   const htmlOutput = `
-    ${aiHeaderBanner}
     <div style="text-align: center; margin-bottom: 12px; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px;">
       <h2 style="margin: 0; font-size: 14pt; font-weight: bold; text-transform: uppercase; color: #0f172a;">KẾ HOẠCH BÀI DẠY</h2>
       <h3 style="margin: 4px 0 0 0; font-size: 13pt; font-weight: bold; color: #1e3a8a;">${lessonTitle.toUpperCase()}</h3>
@@ -7480,8 +7467,12 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
     <p style="font-weight: bold; margin: 10px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">I. MỤC TIÊU</p>
 
     <p style="margin: 4px 0 3px 10px;"><strong>1. Về kiến thức (Yêu cầu cần đạt chuẩn CT GDPT 2018):</strong></p>
-    ${knowledgeYccdList.map(item => `<p style="margin: 2px 0 2px 22px;">- ${item}</p>`).join('')}
-    ${aiBloomTableHtml}
+    <p style="margin: 3px 0 2px 18px;"><strong>- Biết:</strong> Nhận biết, nêu và trình bày được các khái niệm, thành phần, đặc điểm nền tảng của bài "${lessonTitle}":</p>
+    ${bietItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
+    <p style="margin: 4px 0 2px 18px;"><strong>- Hiểu:</strong> Phân tích, phân biệt và giải thích được bản chất, cơ chế khoa học trọng tâm của bài "${lessonTitle}":</p>
+    ${hieuItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
+    <p style="margin: 4px 0 2px 18px;"><strong>- Vận dụng:</strong> Vận dụng kiến thức bài "${lessonTitle}" vào giải thích hiện tượng thực tiễn, giải bài tập và ứng dụng trong đời sống, sản xuất:</p>
+    ${vanDungItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
 
     <p style="margin: 6px 0 3px 10px;"><strong>2. Về năng lực:</strong></p>
 
@@ -7515,38 +7506,16 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
 
     <!-- ==================== PHẦN II: THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU ==================== -->
     <p style="font-weight: bold; margin: 12px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</p>
-    ${isAI ? `
-      <table>
-        <thead>
-          <tr style="background: #E6EEF8; text-align: center; font-weight: bold;">
-            <th style="width: 48%;">Học liệu & Thiết bị của Giáo viên</th>
-            <th style="width: 52%;">Học liệu & Chuẩn bị của Học sinh</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td style="vertical-align: top;">
-              - SGK, SGV, SBT <strong>${subject} ${grade} - Kết nối tri thức với cuộc sống</strong>; Bộ 34 Slide bài giảng điện tử tương tác.<br>
-              - <span style="color: #92400e;">Bộ Phiếu học tập số 1, 2, 3 theo trạm nghiên cứu và Bảng tiêu chí Rubric đánh giá [${otherComp.code}].</span><br>
-              - <span style="color: #0369a1;">Infographic / Mô phỏng số hóa 3D phục vụ khai thác dữ liệu tại <em>${nlsInfo.targetSection}</em> [${nlsInfo.code}].</span><br>
-              - <span style="color: #b91c1c;">Thẻ tình huống "Fact-Check AI" chứa nhận định giả định để HS phản biện tại <em>${aiInfo.targetSection}</em> [${aiInfo.code}].</span>
-            </td>
-            <td style="vertical-align: top;">
-              - SGK ${subject} ${grade} (Kết nối tri thức với cuộc sống), vở ghi, bút màu sơ đồ tư duy, bảng phụ nhóm (A1/A0).<br>
-              - Đọc trước bài "${lessonTitle}" và tìm hiểu các hiện tượng thực tiễn liên quan đến bài học.<br>
-              - Thiết bị kết nối Internet (nếu có) để tra cứu học liệu số theo hướng dẫn của GV.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    ` : `
-      <p style="margin: 2px 0 2px 15px;"><strong>1. Đối với giáo viên:</strong></p>
-      <p style="margin: 2px 0 2px 25px;">- Sách giáo khoa, Sách giáo viên, Sách bài tập <strong>${subject} ${grade} - Kết nối tri thức với cuộc sống</strong>; Kế hoạch bài dạy và Bài giảng điện tử.</p>
-      <p style="margin: 2px 0 2px 25px; color: #92400e;">- Hệ thống Phiếu học tập số 1, số 2, bộ câu hỏi định hướng và bảng tiêu chí đánh giá hoạt động nhóm [${otherComp.code}].</p>
-      <p style="margin: 2px 0 2px 25px; color: #0369a1;">- Hình ảnh trực quan, mô phỏng số hóa phục vụ hoạt động khai thác dữ liệu tại <em>${nlsInfo.targetSection}</em> [${nlsInfo.code}].</p>
-      <p style="margin: 2px 0 2px 25px; color: #b91c1c;">- Thẻ tình huống chứa nhận định khoa học cần học sinh đối chiếu SGK để phản biện tại <em>${aiInfo.targetSection}</em> [${aiInfo.code}].</p>
-      <p style="margin: 4px 0 2px 15px;"><strong>2. Đối với học sinh:</strong> Sách giáo khoa ${subject} ${grade} (Kết nối tri thức với cuộc sống), vở ghi, dụng cụ học tập, bảng phụ nhóm.</p>
-    `}
+    <p style="margin: 3px 0 2px 15px;"><strong>1. Chuẩn bị của giáo viên:</strong> Hệ thống học liệu, thiết bị dạy học và công cụ đánh giá phục vụ bài "${lessonTitle}":</p>
+    <p style="margin: 2px 0 2px 28px;">+ Sách giáo khoa, Sách giáo viên, Sách bài tập <strong>${subject} ${grade} - Kết nối tri thức với cuộc sống</strong>; Kế hoạch bài dạy và Bộ 34 Slide bài giảng điện tử tương tác.</p>
+    <p style="margin: 2px 0 2px 28px; color: #92400e;">+ Bộ Phiếu học tập số 1, 2, 3 theo các mục kiến thức và Bảng tiêu chí Rubric đánh giá sản phẩm hoạt động nhóm [${otherComp.code}].</p>
+    <p style="margin: 2px 0 2px 28px; color: #0369a1;">+ Hình ảnh trực quan, sơ đồ/mô phỏng số hóa phục vụ hoạt động khai thác dữ liệu tại <em>${nlsInfo.targetSection}</em> [${nlsInfo.code}].</p>
+    <p style="margin: 2px 0 2px 28px; color: #b91c1c;">+ Thẻ tình huống chứa nhận định khoa học giả định cần học sinh đối chiếu SGK để kiểm chứng và phản biện tại <em>${aiInfo.targetSection}</em> [${aiInfo.code}].</p>
+
+    <p style="margin: 5px 0 2px 15px;"><strong>2. Chuẩn bị của học sinh:</strong> Học liệu cá nhân và sự chuẩn bị kiến thức trước tiết học:</p>
+    <p style="margin: 2px 0 2px 28px;">+ Sách giáo khoa <strong>${subject} ${grade} (Kết nối tri thức với cuộc sống)</strong>, vở ghi bài, dụng cụ học tập, bút màu vẽ sơ đồ tư duy và bảng phụ nhóm (A1/A0).</p>
+    <p style="margin: 2px 0 2px 28px;">+ Đọc trước nội dung bài "${lessonTitle}", trả lời các câu hỏi trong SGK và sưu tầm các ví dụ thực tiễn liên quan đến bài học.</p>
+    <p style="margin: 2px 0 2px 28px;">+ Thiết bị kết nối Internet (nếu có) để tham gia tra cứu học liệu số theo hướng dẫn của giáo viên.</p>
 
     <!-- ==================== PHẦN III: TIẾN TRÌNH DẠY HỌC ==================== -->
     <p style="font-weight: bold; margin: 12px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">III. TIẾN TRÌNH DẠY HỌC</p>
@@ -9483,47 +9452,47 @@ window.openRAGInspectorModal = function() {
 
   body.innerHTML = `
     <!-- Sơ đồ 3 tầng RAG -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-      <div class="p-3.5 rounded-2xl bg-cyan-950/50 border border-cyan-400/50 space-y-1">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+      <div class="p-4 rounded-2xl bg-cyan-950/50 border border-cyan-400/50 space-y-1.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-black uppercase text-cyan-300">Tầng 1 • Retrieval</span>
-          <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-200 font-bold text-[10px]">Đã truy xuất</span>
+          <span class="text-xs font-black uppercase text-cyan-300">Tầng 1 • Retrieval</span>
+          <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-200 font-bold text-xs">Đã truy xuất</span>
         </div>
-        <div class="text-sm font-black text-white">Truy Xuất Ngữ Liệu Gốc SGK</div>
-        <p class="text-[11px] text-slate-300">Trích xuất trực tiếp <strong>${profile.sections.length} phân đoạn kiến thức SGK</strong> và <strong>${profile.yccd.length} Yêu cầu cần đạt</strong> của bài <em>${lessonTitle}</em>.</p>
+        <div class="text-base font-black text-white">Truy Xuất Ngữ Liệu Gốc SGK</div>
+        <p class="text-sm text-slate-200">Trích xuất trực tiếp <strong>${profile.sections.length} phân đoạn kiến thức SGK</strong> và <strong>${profile.yccd.length} Yêu cầu cần đạt</strong> của bài <em>${lessonTitle}</em>.</p>
       </div>
 
-      <div class="p-3.5 rounded-2xl bg-amber-950/50 border border-amber-400/50 space-y-1">
+      <div class="p-4 rounded-2xl bg-amber-950/50 border border-amber-400/50 space-y-1.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-black uppercase text-amber-300">Tầng 2 • Augmented Grounding</span>
-          <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-bold text-[10px]">Khóa danh pháp</span>
+          <span class="text-xs font-black uppercase text-amber-300">Tầng 2 • Augmented Grounding</span>
+          <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-200 font-bold text-xs">Khóa danh pháp</span>
         </div>
-        <div class="text-sm font-black text-white">Khóa Ngữ Cảnh & Danh Pháp</div>
-        <p class="text-[11px] text-slate-300">Chuẩn hóa 100% thuật ngữ khoa học theo GDPT 2018 (DNA, RNA, ATP, enzyme, hormone, polypeptide...) và chặn suy diễn ngoài SGK.</p>
+        <div class="text-base font-black text-white">Khóa Ngữ Cảnh & Danh Pháp</div>
+        <p class="text-sm text-slate-200">Chuẩn hóa 100% thuật ngữ khoa học theo GDPT 2018 (DNA, RNA, ATP, enzyme, hormone, polypeptide...) và chặn suy diễn ngoài SGK.</p>
       </div>
 
-      <div class="p-3.5 rounded-2xl bg-emerald-950/50 border border-emerald-400/50 space-y-1">
+      <div class="p-4 rounded-2xl bg-emerald-950/50 border border-emerald-400/50 space-y-1.5">
         <div class="flex items-center justify-between">
-          <span class="text-[10px] font-black uppercase text-emerald-300">Tầng 3 • Zero Hallucination</span>
-          <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 font-bold text-[10px]">Độ chính xác 100%</span>
+          <span class="text-xs font-black uppercase text-emerald-300">Tầng 3 • Zero Hallucination</span>
+          <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-200 font-bold text-xs">Độ chính xác 100%</span>
         </div>
-        <div class="text-sm font-black text-white">Triệt Tiêu Ảo Giác Khoa Học</div>
-        <p class="text-[11px] text-slate-300">Kiểm định chéo đầu ra Giáo án 5512, 34 Slide PPT và Đề thi 7991 với các vector kiến thức chuẩn của Bộ GD&ĐT.</p>
+        <div class="text-base font-black text-white">Triệt Tiêu Ảo Giác Khoa Học</div>
+        <p class="text-sm text-slate-200">Kiểm định chéo đầu ra Giáo án 5512, 34 Slide PPT và Đề thi 7991 với các vector kiến thức chuẩn của Bộ GD&ĐT.</p>
       </div>
     </div>
 
     <!-- Khối 1: Yêu cầu cần đạt đã neo trong RAG -->
-    <div class="bg-[#0b1324] border border-cyan-500/40 rounded-2xl p-4 space-y-2">
+    <div class="bg-[#0b1324] border border-cyan-500/40 rounded-2xl p-4 space-y-2.5">
       <div class="flex items-center justify-between">
-        <h4 class="text-xs font-black uppercase text-cyan-300 flex items-center gap-1.5">
+        <h4 class="text-sm font-black uppercase text-cyan-300 flex items-center gap-1.5">
           <i class="fa-solid fa-bullseye text-amber-400"></i> 1. Vector Yêu Cầu Cần Đạt Chuẩn CT GDPT 2018 (Neo Cố Định)
         </h4>
-        <span class="text-[10px] text-emerald-400 font-bold"><i class="fa-solid fa-lock mr-1"></i> Đã khóa chuẩn đầu ra</span>
+        <span class="text-xs text-emerald-400 font-bold"><i class="fa-solid fa-lock mr-1"></i> Đã khóa chuẩn đầu ra</span>
       </div>
-      <div class="space-y-1 pl-1">
+      <div class="space-y-1.5 pl-1 text-sm">
         ${profile.yccd.map((y, idx) => `
-          <div class="flex items-start gap-2 text-slate-200">
-            <span class="px-1.5 py-0.2 rounded bg-cyan-500/20 text-cyan-300 font-bold text-[10px] mt-0.5">YCCĐ ${idx + 1}</span>
+          <div class="flex items-start gap-2 text-slate-100">
+            <span class="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 font-bold text-xs shrink-0 mt-0.5">YCCĐ ${idx + 1}</span>
             <span>${y}</span>
           </div>
         `).join('')}
@@ -9533,17 +9502,17 @@ window.openRAGInspectorModal = function() {
     <!-- Khối 2: Các phân đoạn (Chunks) Ngữ liệu gốc SGK Kết nối tri thức -->
     <div class="bg-[#0b1324] border border-emerald-500/40 rounded-2xl p-4 space-y-3">
       <div class="flex items-center justify-between">
-        <h4 class="text-xs font-black uppercase text-emerald-300 flex items-center gap-1.5">
+        <h4 class="text-sm font-black uppercase text-emerald-300 flex items-center gap-1.5">
           <i class="fa-solid fa-book-medical text-cyan-400"></i> 2. Các Phân Đoạn Ngữ Liệu Gốc (SGK Chunks) Được Truy Xuất Cho Bài Học
         </h4>
-        <span class="text-[10px] text-cyan-300 font-bold">Nguồn: SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống${hasCustomFile ? ' + Tài liệu GV' : ''}</span>
+        <span class="text-xs text-cyan-300 font-bold">Nguồn: SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống${hasCustomFile ? ' + Tài liệu GV' : ''}</span>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
         ${profile.sections.map((sec, idx) => `
-          <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-700/80 space-y-1.5">
-            <div class="text-[10px] font-black text-amber-300 uppercase">CHUNK #0${idx + 1} • MỤC TRỌNG TÂM</div>
-            <div class="font-bold text-white text-xs">${sec.heading}</div>
-            <div class="space-y-1 text-[11px] text-slate-300">
+          <div class="p-3.5 rounded-xl bg-slate-900/90 border border-slate-700/80 space-y-1.5">
+            <div class="text-xs font-black text-amber-300 uppercase">CHUNK #0${idx + 1} • MỤC TRỌNG TÂM</div>
+            <div class="font-bold text-white text-sm">${sec.heading}</div>
+            <div class="space-y-1 text-sm text-slate-200">
               ${(sec.sgkContent || []).map(line => `<p>• ${line}</p>`).join('')}
             </div>
           </div>
@@ -9552,18 +9521,18 @@ window.openRAGInspectorModal = function() {
     </div>
 
     <!-- Khối 3: Minh chứng phát hiện & chặn Ảo giác Khoa học của bài học -->
-    <div class="bg-rose-950/30 border border-rose-500/50 rounded-2xl p-4 space-y-2">
-      <h4 class="text-xs font-black uppercase text-rose-300 flex items-center gap-1.5">
+    <div class="bg-rose-950/30 border border-rose-500/50 rounded-2xl p-4 space-y-2.5 text-sm">
+      <h4 class="text-sm font-black uppercase text-rose-300 flex items-center gap-1.5">
         <i class="fa-solid fa-filter-circle-xmark text-rose-400"></i> 3. Bộ Lọc Chặn "Ảo Giác Khoa Học" Điển Hình Của Bài Học (${profile.ai.code})
       </h4>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-        <div class="p-3 rounded-xl bg-black/40 border border-rose-500/40">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-1">
+        <div class="p-3.5 rounded-xl bg-black/40 border border-rose-500/40">
           <div class="font-bold text-rose-300 mb-1"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Tình huống Ảo giác AI thông thường bị phát hiện:</div>
-          <p class="text-slate-200">${profile.ai.gvAction}</p>
+          <p class="text-slate-100">${profile.ai.gvAction}</p>
         </div>
-        <div class="p-3 rounded-xl bg-black/40 border border-emerald-500/40">
+        <div class="p-3.5 rounded-xl bg-black/40 border border-emerald-500/40">
           <div class="font-bold text-emerald-300 mb-1"><i class="fa-solid fa-check-double mr-1"></i> Đối chứng chuẩn xác từ Kho Ngữ liệu RAG SGK:</div>
-          <p class="text-slate-200">${profile.ai.hsAction}</p>
+          <p class="text-slate-100">${profile.ai.hsAction}</p>
         </div>
       </div>
     </div>
@@ -9601,10 +9570,10 @@ window.saveDriveScriptUrl = function() {
 };
 
 window.initBioMasterUpgrade = function() {
-  // Xóa cache cũ bị lệch câu vào Bài 1 của phiên bản trước
+  // Xóa cache cũ bị lệch câu hoặc định dạng bảng cũ của phiên bản trước
   try {
     Object.keys(localStorage).forEach(k => {
-      if (k.startsWith('biomaster_v7_')) {
+      if (k.startsWith('biomaster_v7_') || k.startsWith('biomaster_v8_') || k.startsWith('structured_plan_v8_')) {
         localStorage.removeItem(k);
       }
     });
