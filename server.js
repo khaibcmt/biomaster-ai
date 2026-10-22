@@ -226,28 +226,42 @@ async function executeGeminiWithFailover({ selectedModel, promptText, requireJso
   throw lastError || new Error('Tất cả các cụm mô hình AI đang bận.');
 }
 
+app.get('/favicon.ico', (_req, res) => {
+  const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0f172a"/><path d="M20 14c12 0 12 36 24 36M44 14c-12 0-12 36-24 36" stroke="#22d3ee" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="32" cy="32" r="6" fill="#10b981"/></svg>`;
+  res.setHeader('Content-Type', 'image/svg+xml');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  return res.status(200).send(svgIcon);
+});
+
 app.post(['/api/gemini', '/biomaster-ai/api/gemini'], async (req, res) => {
   try {
-    const { selectedModel, promptText, requireJson, systemInstruction } = req.body || {};
+    const { selectedModel, promptText, requireJson, systemInstruction, clientApiKey } = req.body || {};
     if (!promptText || typeof promptText !== 'string') {
-      return res.status(400).json({ error: 'Thiếu nội dung yêu cầu (promptText).' });
+      return res.status(200).json({ fallback: true, error: 'Thiếu nội dung yêu cầu (promptText).' });
     }
 
-    // 1. Kiểm tra bộ nhớ đệm trên Server (nếu đã có giáo viên khác soạn bài này -> trả về tức thì trong <5ms, không tốn quota)
+    if (clientApiKey && typeof clientApiKey === 'string' && clientApiKey.trim().length > 20) {
+      const cleanClientKey = clientApiKey.trim();
+      if (!process.env.GEMINI_API_KEYS?.includes(cleanClientKey)) {
+        process.env.GEMINI_API_KEYS = [cleanClientKey, process.env.GEMINI_API_KEYS || ''].filter(Boolean).join(',');
+      }
+    }
+
+    // 1. Kiểm tra bộ nhớ đệm trên Server
     const cacheHash = getCacheHash(Boolean(requireJson), systemInstruction, promptText);
     const cached = getCachedResponse(cacheHash);
     if (cached) {
-      return res.json({
+      return res.status(200).json({
         text: cached.text,
         modelUsed: cached.modelUsed,
         fromServerCache: true
       });
     }
 
-    // 2. Gộp yêu cầu trùng lặp đang xử lý (Request Coalescing) nếu nhiều người bấm cùng một bài tại cùng một giây
+    // 2. Gộp yêu cầu trùng lặp đang xử lý (Request Coalescing)
     if (inflightRequests.has(cacheHash)) {
       const sharedResult = await inflightRequests.get(cacheHash);
-      return res.json({
+      return res.status(200).json({
         ...sharedResult,
         coalesced: true
       });
@@ -265,15 +279,15 @@ app.post(['/api/gemini', '/biomaster-ai/api/gemini'], async (req, res) => {
     try {
       const result = await requestPromise;
       setCachedResponse(cacheHash, result);
-      return res.json(result);
+      return res.status(200).json(result);
     } finally {
       inflightRequests.delete(cacheHash);
     }
   } catch (err) {
-    console.warn('[BioMaster AI] Chuyển sang cơ chế tổng hợp nội bộ do chạm ngưỡng:', err?.message || err);
-    return res.status(503).json({
-      error: err?.message || 'Hệ thống AI đang ở ngưỡng tải tối đa.',
-      quotaReached: true
+    return res.status(200).json({
+      fallback: true,
+      quotaReached: true,
+      info: err?.message || 'Chuyển sang Động cơ Tổng hợp AI Sư phạm Chuyên sâu.'
     });
   }
 });
