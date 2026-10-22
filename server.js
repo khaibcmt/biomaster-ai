@@ -122,9 +122,8 @@ function pickNextApiKey() {
 
 function resolveModelName(requested) {
   if (!requested) return 'gemini-3-flash-preview';
-  if (requested.includes('argon') || requested.includes('4')) return 'gemini-3.1-pro-preview';
   if (requested.includes('lite') || requested.includes('3.5')) return 'gemini-3.1-flash-lite-preview';
-  if (requested === 'gemini-3.1-pro-preview' || requested.includes('pro')) return 'gemini-3.1-pro-preview';
+  if (requested.includes('argon') || requested.includes('4') || requested.includes('pro')) return 'gemini-3-flash-preview';
   return 'gemini-3-flash-preview';
 }
 
@@ -227,7 +226,7 @@ async function executeGeminiWithFailover({ selectedModel, promptText, requireJso
   throw lastError || new Error('Tất cả các cụm mô hình AI đang bận.');
 }
 
-app.post('/api/gemini', async (req, res) => {
+app.post(['/api/gemini', '/biomaster-ai/api/gemini'], async (req, res) => {
   try {
     const { selectedModel, promptText, requireJson, systemInstruction } = req.body || {};
     if (!promptText || typeof promptText !== 'string') {

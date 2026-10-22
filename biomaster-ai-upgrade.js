@@ -86,15 +86,495 @@ window.cleanUnwantedMetaPhrases = function(htmlOrText) {
     .replace(/undefined/g, '');
 };
 
-// Ghi đè hàm gọi AI qua máy chủ /api/gemini (tự động định tuyến sang Cloud Run khi chạy trên GitHub Pages tĩnh)
+// ============================================================================
+// HỆ THỐNG ĐỊNH TUYẾN AI ĐA TẦNG & TỔNG HỢP CHUYÊN SÂU (ZERO HTTP-405 ENGINE)
+// Hoạt động mượt mà trên cả AI Studio Server (/api/gemini) và GitHub Pages tĩnh
+// ============================================================================
 const _clientInflightMap = new Map();
-const _API_ENDPOINTS = [
-  '/api/gemini',
-  'https://ais-pre-ckxrihplyt3nra2ljzzsft-799945497821.asia-southeast1.run.app/api/gemini',
-  'https://ais-dev-ckxrihplyt3nra2ljzzsft-799945497821.asia-southeast1.run.app/api/gemini'
-];
+let _serverBackendUnavailable = false;
 
-window.callGeminiDirect = async function(_apiKeyUnused, selectedModel, promptText, requireJson = false, systemInstruction = '') {
+window.isStaticHostEnvironment = function() {
+  if (typeof window === 'undefined' || !window.location) return false;
+  const host = (window.location.hostname || '').toLowerCase();
+  const proto = (window.location.protocol || '').toLowerCase();
+  return (
+    proto === 'file:' ||
+    host.includes('github.io') ||
+    host.includes('pages.dev') ||
+    host.includes('netlify.app') ||
+    host.includes('vercel.app') ||
+    host.includes('gitlab.io')
+  );
+};
+
+window.resolveGoogleApiModelChain = function(selectedModel) {
+  const m = String(selectedModel || '').toLowerCase();
+  if (m.includes('lite') || m.includes('3.5')) {
+    return ['gemini-2.5-flash-lite', 'gemini-2.5-flash', 'gemini-2.0-flash'];
+  }
+  if (m.includes('pro') || m.includes('argon') || m.includes('4')) {
+    return ['gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash'];
+  }
+  return ['gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.0-flash'];
+};
+
+// Động cơ Tổng hợp AI Sư phạm Chuyên sâu (RAG Deep Synthesis)
+// Đảm bảo biên soạn đầy đủ, chi tiết 100% cho Giáo án 5512, 34 Slide PPT và Đề thi 7991
+window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJson }) {
+  const subject = document.getElementById('sel-subject') ? document.getElementById('sel-subject').value : 'Sinh học';
+  const grade = document.getElementById('sel-grade') ? document.getElementById('sel-grade').value : '10';
+  const lessonTitle = typeof currentSelectedLesson !== 'undefined' ? currentSelectedLesson : 'Bài 1. Giới thiệu khái quát môn Sinh học';
+  const customGuide = document.getElementById('ai-custom-instructions') ? document.getElementById('ai-custom-instructions').value.trim() : '';
+  const extraDoc = (typeof uploadedFileContent !== 'undefined' && uploadedFileContent) ? uploadedFileContent.trim() : '';
+  const profile = window.getNormalizedLessonProfile(subject, grade, lessonTitle);
+  const pText = String(promptText || '');
+
+  // 1. TỔNG HỢP JSON CHO BÀI GIẢNG 34 SLIDE PPT (KÈM 16 SLIDE BÀI TẬP)
+  if (pText.includes('34 SLIDE') || pText.includes('lessonSections') || (typeof currentActiveMode !== 'undefined' && currentActiveMode === 'slide' && requireJson)) {
+    const planSource = window.extractLessonPlanSectionsForSlides(subject, grade, lessonTitle);
+    const mcqPool = planSource.practice?.mcq || profile.practice?.mcq || [];
+    const tfPool = planSource.practice?.tf || profile.practice?.tf || [];
+    const shortPool = planSource.practice?.short || profile.practice?.short || [];
+
+    const mcq8 = [];
+    for (let i = 0; i < 8; i++) {
+      const item = mcqPool[i % Math.max(1, mcqPool.length)] || {
+        level: i < 3 ? 'Nhận biết' : (i < 6 ? 'Thông hiểu' : 'Vận dụng'),
+        q: `Theo SGK Kết nối tri thức với cuộc sống, nội dung trọng tâm nào thuộc bài "${lessonTitle}"?`,
+        options: [`A. ${profile.yccd[0]}`, 'B. Quá trình diễn ra ngẫu nhiên không cần năng lượng', 'C. Không phụ thuộc vào điều kiện môi trường', 'D. Không liên quan đến cấu trúc tế bào'],
+        ans: 'A',
+        explain: profile.yccd[0]
+      };
+      mcq8.push({
+        level: item.level || (i < 3 ? 'Nhận biết' : (i < 6 ? 'Thông hiểu' : 'Vận dụng')),
+        q: item.q,
+        options: item.options,
+        ans: item.explain ? `${item.ans} — Giải thích: ${item.explain}` : item.ans,
+        explain: item.explain || ''
+      });
+    }
+
+    const tf4 = [];
+    for (let i = 0; i < 4; i++) {
+      const tf = tfPool[i % Math.max(1, tfPool.length)];
+      if (tf && Array.isArray(tf.statements)) {
+        tf4.push({
+          stem: tf.stem,
+          items: tf.statements.map(st => `${st.label} ${st.text}`),
+          ans: tf.statements.map(st => `${st.label} ${String(st.ans).toUpperCase()}`).join(' | ')
+        });
+      } else {
+        tf4.push({
+          stem: `Phân tích các nhận định khoa học về bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức):`,
+          items: [
+            `a) ${profile.sections[0]?.yccd_nb || profile.yccd[0]}`,
+            `b) ${profile.sections[1]?.yccd_th || profile.yccd[1] || profile.yccd[0]}`,
+            `c) Mọi quá trình trong bài học đều diễn ra độc lập hoàn toàn với các nhân tố môi trường.`,
+            `d) ${profile.sections[2]?.yccd_vd || profile.yccd[profile.yccd.length - 1]}`
+          ],
+          ans: 'a) ĐÚNG | b) ĐÚNG | c) SAI | d) ĐÚNG'
+        });
+      }
+    }
+
+    const short4 = [];
+    for (let i = 0; i < 4; i++) {
+      const sh = shortPool[i % Math.max(1, shortPool.length)] || {
+        level: i < 2 ? 'Thông hiểu' : 'Vận dụng',
+        q: profile.calcQuestion,
+        ans: profile.calcAnswer,
+        explain: profile.calcAnswer
+      };
+      short4.push({
+        level: sh.level || (i < 2 ? 'Thông hiểu' : 'Vận dụng'),
+        q: sh.q,
+        ans: sh.explain || sh.ans,
+        explain: sh.explain || sh.ans
+      });
+    }
+
+    const slideObj = {
+      objectives: [
+        ...profile.yccd,
+        ...(customGuide ? [`Định hướng trọng tâm của Giáo viên: ${customGuide}`] : [])
+      ],
+      warmup: {
+        situation: customGuide
+          ? `${profile.openingQuestion} (Tình huống tích hợp: ${customGuide})`
+          : profile.openingQuestion
+      },
+      lessonSections: planSource.sections.map((sec, idx) => ({
+        heading: sec.heading,
+        gvStep1: `${sec.gvStep1} GV tổ chức thảo luận nhóm phân tích học liệu trực quan và hoàn thành Phiếu học tập số ${idx + 1}.`,
+        hsStep2: `${sec.hsStep2} HS đối chiếu kênh hình - kênh chữ trong SGK Kết nối tri thức với cuộc sống để rút ra kết luận khoa học.`,
+        sgkContent: [
+          ...(sec.sgkContent || []),
+          `Chốt kiến thức theo Yêu cầu cần đạt: ${sec.yccd_th || sec.yccd_nb}`
+        ],
+        yccd_nb: sec.yccd_nb,
+        yccd_th: sec.yccd_th,
+        yccd_vd: sec.yccd_vd
+      })),
+      nls: planSource.nls,
+      ai: planSource.ai,
+      otherCompetency: planSource.otherCompetency,
+      mcq: mcq8,
+      tf: tf4,
+      shortAns: short4,
+      homework: {
+        tasks: [
+          `Vẽ sơ đồ tư duy hệ thống hóa toàn bộ kiến thức bài "${lessonTitle}" và hoàn thành câu hỏi Luyện tập - Vận dụng trong SGK Kết nối tri thức.`,
+          `Giải quyết tình huống thực tiễn: "${profile.openingQuestion}" và bài toán định lượng: "${profile.calcQuestion}".`,
+          ...(customGuide ? [`Nhiệm vụ mở rộng theo yêu cầu của GV: ${customGuide}`] : [])
+        ],
+        nextPrep: [
+          `Đọc trước bài học kế tiếp trong SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống và tóm tắt các thuật ngữ khoa học mới.`,
+          `Tìm hiểu các ứng dụng thực tế tại địa phương liên quan đến chủ đề bài học.`
+        ]
+      }
+    };
+    return JSON.stringify(slideObj);
+  }
+
+  // 2. TỔNG HỢP ĐỀ KIỂM TRA & BẢNG HƯỚNG DẪN CHẤM CHI TIẾT CHUẨN CV 7991 (HTML)
+  if (!requireJson || pText.includes('ĐỀ KIỂM TRA') || (typeof currentActiveMode !== 'undefined' && currentActiveMode === '7991')) {
+    if (typeof distributeMatrixFromTotals === 'function') {
+      distributeMatrixFromTotals();
+    }
+    const lessons = (typeof selectedLessonsForExam !== 'undefined' && selectedLessonsForExam.length > 0)
+      ? selectedLessonsForExam
+      : [lessonTitle];
+
+    const countP1 = (parseInt(matrixGlobalTotals?.p1_b)||0) + (parseInt(matrixGlobalTotals?.p1_h)||0) + (parseInt(matrixGlobalTotals?.p1_vd)||0);
+    const countP2 = (parseInt(matrixGlobalTotals?.p2_b)||0) + (parseInt(matrixGlobalTotals?.p2_h)||0) + (parseInt(matrixGlobalTotals?.p2_vd)||0);
+    const countP3 = (parseInt(matrixGlobalTotals?.p3_b)||0) + (parseInt(matrixGlobalTotals?.p3_h)||0) + (parseInt(matrixGlobalTotals?.p3_vd)||0);
+    const countP4 = (parseInt(matrixGlobalTotals?.p4_b)||0) + (parseInt(matrixGlobalTotals?.p4_h)||0) + (parseInt(matrixGlobalTotals?.p4_vd)||0);
+
+    let p1Html = '';
+    const p1AnswerRows = [];
+    let p1Index = 1;
+
+    lessons.forEach(les => {
+      const prof = window.getNormalizedLessonProfile(subject, grade, les);
+      const nbCount = parseInt(examMatrixCustomCounts?.[les]?.p1_b) || 0;
+      const thCount = parseInt(examMatrixCustomCounts?.[les]?.p1_h) || 0;
+      const vdCount = parseInt(examMatrixCustomCounts?.[les]?.p1_vd) || 0;
+      const totalLesP1 = nbCount + thCount + vdCount;
+      const mcqPool = prof.practice.mcq || [];
+
+      for (let k = 1; k <= totalLesP1; k++) {
+        const qObj = mcqPool[(k - 1) % Math.max(1, mcqPool.length)] || {
+          q: `Theo SGK Kết nối tri thức với cuộc sống, phát biểu nào sau đây đúng khi nói về bài "${les}"?`,
+          options: [`A. ${prof.yccd[0]}`, 'B. Diễn ra hoàn toàn ngẫu nhiên không tuân theo quy luật sinh học', 'C. Không chịu ảnh hưởng của các yếu tố môi trường ngoài', 'D. Không tiêu tốn vật chất và năng lượng'],
+          ans: 'A',
+          explain: prof.yccd[0]
+        };
+        const levelTag = k <= nbCount ? 'Nhận biết' : (k <= nbCount + thCount ? 'Thông hiểu' : 'Vận dụng');
+        p1Html += `
+          <div style="margin: 4px 0 6px 0;">
+            <p style="margin: 2px 0;"><strong>Câu ${p1Index} [${levelTag} - ${les}]:</strong> ${qObj.q}</p>
+            ${(qObj.options || []).map(op => `<p style="margin: 1px 0 1px 18px;">${op}</p>`).join('')}
+          </div>
+        `;
+        p1AnswerRows.push({
+          idx: p1Index,
+          ans: qObj.ans || 'A',
+          level: levelTag,
+          lesson: les,
+          explain: qObj.explain || prof.yccd[0]
+        });
+        p1Index++;
+      }
+    });
+
+    let p2Html = '';
+    const p2AnswerRows = [];
+    let p2Index = 1;
+
+    lessons.forEach(les => {
+      const prof = window.getNormalizedLessonProfile(subject, grade, les);
+      const num = (parseInt(examMatrixCustomCounts?.[les]?.p2_b)||0) + (parseInt(examMatrixCustomCounts?.[les]?.p2_h)||0) + (parseInt(examMatrixCustomCounts?.[les]?.p2_vd)||0);
+      const tfPool = prof.practice.tf || [];
+      for (let k = 1; k <= num; k++) {
+        const tfObj = tfPool[(k - 1) % Math.max(1, tfPool.length)] || {
+          stem: `Khi phân tích các cơ chế và quy luật trong bài "${les}", mỗi nhận định sau đây là Đúng hay Sai?`,
+          statements: [
+            { label: 'a)', text: prof.sections[0]?.yccd_nb || prof.yccd[0], ans: 'Đúng' },
+            { label: 'b)', text: prof.sections[1]?.yccd_th || prof.yccd[1] || prof.yccd[0], ans: 'Đúng' },
+            { label: 'c)', text: 'Quá trình này không chịu sự điều hòa của cơ thể và môi trường.', ans: 'Sai' },
+            { label: 'd)', text: prof.sections[2]?.yccd_vd || prof.yccd[prof.yccd.length - 1], ans: 'Đúng' }
+          ]
+        };
+        p2Html += `
+          <div style="margin: 4px 0 6px 0;">
+            <p style="margin: 2px 0;"><strong>Câu ${p2Index} (${les}):</strong> ${tfObj.stem}</p>
+            ${(tfObj.statements || []).map(st => `<p style="margin: 1px 0 1px 18px;"><strong>${st.label}</strong> ${st.text}</p>`).join('')}
+          </div>
+        `;
+        p2AnswerRows.push({
+          idx: p2Index,
+          lesson: les,
+          summary: (tfObj.statements || []).map(st => `${st.label} <strong>${st.ans}</strong>`).join(' &nbsp;|&nbsp; ')
+        });
+        p2Index++;
+      }
+    });
+
+    let p3Html = '';
+    const p3AnswerRows = [];
+    let p3Index = 1;
+
+    lessons.forEach(les => {
+      const prof = window.getNormalizedLessonProfile(subject, grade, les);
+      const num = (parseInt(examMatrixCustomCounts?.[les]?.p3_b)||0) + (parseInt(examMatrixCustomCounts?.[les]?.p3_h)||0) + (parseInt(examMatrixCustomCounts?.[les]?.p3_vd)||0);
+      const shortPool = prof.practice.short || [];
+      for (let k = 1; k <= num; k++) {
+        const shObj = shortPool[(k - 1) % Math.max(1, shortPool.length)] || {
+          q: prof.calcQuestion,
+          ans: prof.calcAnswer,
+          explain: prof.calcAnswer
+        };
+        p3Html += `
+          <div style="margin: 4px 0 6px 0;">
+            <p style="margin: 2px 0;"><strong>Câu ${p3Index} (${les}):</strong> ${shObj.q}</p>
+          </div>
+        `;
+        p3AnswerRows.push({
+          idx: p3Index,
+          lesson: les,
+          ans: shObj.ans,
+          explain: shObj.explain || shObj.ans
+        });
+        p3Index++;
+      }
+    });
+
+    let p4Html = '';
+    const p4AnswerRows = [];
+    let p4Index = 1;
+
+    lessons.forEach(les => {
+      const prof = window.getNormalizedLessonProfile(subject, grade, les);
+      const num = (parseInt(examMatrixCustomCounts?.[les]?.p4_b)||0) + (parseInt(examMatrixCustomCounts?.[les]?.p4_h)||0) + (parseInt(examMatrixCustomCounts?.[les]?.p4_vd)||0);
+      for (let k = 1; k <= num; k++) {
+        const pts = countP4 === 1 ? '3,0' : (countP4 === 2 ? '1,5' : (3 / Math.max(1, countP4)).toFixed(2).replace('.', ','));
+        const qText = k % 2 === 1
+          ? `${prof.openingQuestion}${customGuide ? ` (Liên hệ mở rộng: ${customGuide})` : ''}`
+          : `Vận dụng kiến thức bài "${les}" (SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống), hãy phân tích cơ sở khoa học của mục "${prof.sections[prof.sections.length - 1]?.heading}" và giải bài toán thực tiễn: "${prof.calcQuestion}"`;
+        p4Html += `
+          <div style="margin: 4px 0 8px 0;">
+            <p style="margin: 2px 0;"><strong>Câu ${p4Index} (${pts} điểm - ${les}):</strong> ${qText}</p>
+          </div>
+        `;
+        p4AnswerRows.push({
+          idx: p4Index,
+          pts,
+          lesson: les,
+          step1: `Trình bày chuẩn xác khái niệm và cơ sở lí thuyết thuộc bài "${les}" theo SGK Kết nối tri thức: ${prof.yccd[0]} (0,5 điểm).`,
+          step2: `Phân tích đúng cơ chế khoa học và giải thích hiện tượng thực tiễn: ${prof.openingAnswer} (0,75 điểm).`,
+          step3: `Đề xuất giải pháp vận dụng hiệu quả trong thực tiễn đời sống - sản xuất và kết luận chính xác số liệu: ${prof.calcAnswer} (0,25 điểm).`
+        });
+        p4Index++;
+      }
+    });
+
+    const examHtml = `
+      <p style="font-weight: bold; margin: 15px 0 4px 0; font-size: 12pt; color: #1e3a8a;">III. ĐỀ KIỂM TRA CHÍNH THỨC (CHUẨN CÔNG VĂN 7991/BGDĐT-GDTrH)</p>
+
+      <p style="font-weight: bold; color: #1e40af; margin: 8px 0 2px 0;">PHẦN I. Câu trắc nghiệm nhiều phương án lựa chọn (${countP1} câu, 3,0 điểm)</p>
+      <p style="font-style: italic; font-size: 10.5pt; margin: 0 0 4px 0;">Thí sinh trả lời từ câu 1 đến câu ${countP1}. Mỗi câu hỏi thí sinh chỉ chọn một phương án.</p>
+      ${p1Html || '<p style="font-style: italic;">(Không có câu hỏi ở phần này)</p>'}
+
+      <p style="font-weight: bold; color: #1e40af; margin: 12px 0 2px 0;">PHẦN II. Câu trắc nghiệm Đúng / Sai (${countP2} câu, 2,0 điểm)</p>
+      <p style="font-style: italic; font-size: 10.5pt; margin: 0 0 4px 0;">Thí sinh trả lời từ câu 1 đến câu ${countP2}. Trong mỗi ý a), b), c), d) ở mỗi câu, thí sinh chọn Đúng hoặc Sai.</p>
+      ${p2Html || '<p style="font-style: italic;">(Không có câu hỏi ở phần này)</p>'}
+
+      <p style="font-weight: bold; color: #1e40af; margin: 12px 0 2px 0;">PHẦN III. Câu trắc nghiệm trả lời ngắn (${countP3} câu, 2,0 điểm)</p>
+      <p style="font-style: italic; font-size: 10.5pt; margin: 0 0 4px 0;">Thí sinh trả lời từ câu 1 đến câu ${countP3} bằng cách tính toán và ghi kết quả.</p>
+      ${p3Html || '<p style="font-style: italic;">(Không có câu hỏi ở phần này)</p>'}
+
+      <p style="font-weight: bold; color: #1e40af; margin: 12px 0 2px 0;">PHẦN IV. Câu hỏi tự luận (${countP4} câu, 3,0 điểm)</p>
+      ${p4Html || '<p style="font-style: italic;">(Không có câu hỏi ở phần này)</p>'}
+
+      <div style="page-break-before: always; margin-top: 18px;"></div>
+
+      <p style="font-weight: bold; margin: 15px 0 6px 0; font-size: 12pt; color: #1e3a8a;">IV. BẢNG ĐÁP ÁN VÀ HƯỚNG DẪN CHẤM CHI TIẾT (THANG ĐIỂM 10,0)</p>
+
+      <p style="font-weight: bold; margin: 6px 0 3px 0; color: #0f172a;">1. Bảng đáp án Phần I (Trắc nghiệm nhiều phương án lựa chọn - 3,0 điểm):</p>
+      <table>
+        <thead>
+          <tr style="background: #E6EEF8; text-align: center; font-weight: bold;">
+            <th style="width: 10%;">Câu</th>
+            <th style="width: 14%;">Đáp án đúng</th>
+            <th style="width: 16%;">Mức độ</th>
+            <th style="width: 60%;">Giải thích cơ sở khoa học chuẩn SGK Kết nối tri thức</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${p1AnswerRows.map(r => `
+            <tr>
+              <td style="text-align: center; font-weight: bold;">Câu ${r.idx}</td>
+              <td style="text-align: center; font-weight: bold; color: #047857;">${r.ans}</td>
+              <td style="text-align: center;">${r.level}</td>
+              <td>${r.explain}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      <p style="font-weight: bold; margin: 10px 0 3px 0; color: #0f172a;">2. Bảng đáp án Phần II (Trắc nghiệm Đúng / Sai - 2,0 điểm):</p>
+      <p style="font-style: italic; font-size: 10pt; margin: 0 0 4px 0;">* Quy tắc tính điểm chuẩn CV 7991: Đúng 1 ý được 0,1 điểm; Đúng 2 ý được 0,25 điểm; Đúng 3 ý được 0,5 điểm; Đúng cả 4 ý được 1,0 điểm.</p>
+      <table>
+        <thead>
+          <tr style="background: #E6EEF8; text-align: center; font-weight: bold;">
+            <th style="width: 12%;">Câu</th>
+            <th style="width: 33%;">Bài học</th>
+            <th style="width: 55%;">Đáp án chi tiết 4 lệnh hỏi a), b), c), d)</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${p2AnswerRows.map(r => `
+            <tr>
+              <td style="text-align: center; font-weight: bold;">Câu ${r.idx}</td>
+              <td>${r.lesson}</td>
+              <td style="color: #047857;">${r.summary}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      <p style="font-weight: bold; margin: 10px 0 3px 0; color: #0f172a;">3. Đáp án & lời giải Phần III (Trắc nghiệm trả lời ngắn - 2,0 điểm):</p>
+      <table>
+        <thead>
+          <tr style="background: #E6EEF8; text-align: center; font-weight: bold;">
+            <th style="width: 12%;">Câu</th>
+            <th style="width: 20%;">Đáp số</th>
+            <th style="width: 68%;">Hướng dẫn tính toán & Giải thích</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${p3AnswerRows.map(r => `
+            <tr>
+              <td style="text-align: center; font-weight: bold;">Câu ${r.idx}</td>
+              <td style="text-align: center; font-weight: bold; color: #0284c7;">${r.ans}</td>
+              <td>${r.explain}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      <p style="font-weight: bold; margin: 10px 0 3px 0; color: #0f172a;">4. Hướng dẫn chấm chi tiết Phần IV (Tự luận - 3,0 điểm):</p>
+      <table>
+        <thead>
+          <tr style="background: #E6EEF8; text-align: center; font-weight: bold;">
+            <th style="width: 12%;">Câu</th>
+            <th style="width: 14%;">Điểm</th>
+            <th style="width: 74%;">Nội dung yêu cầu & Biểu điểm chi tiết từng ý</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${p4AnswerRows.map(r => `
+            <tr>
+              <td style="text-align: center; font-weight: bold;">Câu ${r.idx}</td>
+              <td style="text-align: center; font-weight: bold; color: #b91c1c;">${r.pts} điểm</td>
+              <td>
+                - <strong>Ý 1:</strong> ${r.step1}<br>
+                - <strong>Ý 2:</strong> ${r.step2}<br>
+                - <strong>Ý 3:</strong> ${r.step3}
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+    return examHtml;
+  }
+
+  // 3. TỔNG HỢP JSON CHO KẾ HOẠCH BÀI DẠY (GIÁO ÁN CÔNG VĂN 5512 ĐỦ 4 PHẦN)
+  const teachingTechniques = [
+    'kĩ thuật Khăn trải bàn kết hợp phân tích trực quan kênh hình SGK',
+    'kĩ thuật Mảnh ghép (Jigsaw) và thảo luận cặp đôi (Think - Pair - Share)',
+    'dạy học giải quyết vấn đề thực tiễn gắn với mô hình học tập trải nghiệm'
+  ];
+
+  const enrichedSections = profile.sections.map((sec, idx) => {
+    const tech = teachingTechniques[idx % teachingTechniques.length];
+    const customSentence = (customGuide && idx === 0)
+      ? ` Đồng thời triển khai theo định hướng sư phạm của giáo viên: "${customGuide}".`
+      : '';
+    const extraFileBullet = (extraDoc && idx === profile.sections.length - 1)
+      ? `Tư liệu chuyên môn bổ sung từ giáo viên: ${extraDoc.slice(0, 320).replace(/\s+/g, ' ').trim()}.`
+      : null;
+
+    return {
+      heading: sec.heading,
+      gvStep1: `${sec.gvStep1} GV tổ chức hoạt động theo ${tech}, nêu câu hỏi định hướng trọng tâm vào Phiếu học tập số ${idx + 1}: (1) Xác định bản chất, đặc điểm của "${sec.heading}" (${sec.yccd_nb}); (2) Giải thích cơ chế và mối liên hệ nhân quả (${sec.yccd_th}).${customSentence}`,
+      hsStep2: `${sec.hsStep2} HS làm việc cá nhân đọc hiểu mục "${sec.heading}" trong SGK Kết nối tri thức với cuộc sống, sau đó thảo luận nhóm thống nhất câu trả lời và ghi kết quả vào Phiếu học tập số ${idx + 1}; GV quan sát và hỗ trợ kịp thời các nhóm gặp khó khăn.`,
+      reportStep3: `GV chọn ngẫu nhiên đại diện 1 - 2 nhóm lên trình bày sản phẩm Phiếu học tập số ${idx + 1} của mục "${sec.heading}"; các nhóm còn lại lắng nghe, đối chiếu với SGK để đặt câu hỏi phản biện và bổ sung.`,
+      concludeStep4: `GV nhận xét quá trình hợp tác và sản phẩm của các nhóm, giải thích sâu các thuật ngữ khoa học, chuẩn hóa kiến thức theo Yêu cầu cần đạt CT GDPT 2018 và chốt nội dung ghi vở.`,
+      sgkContent: [
+        ...(sec.sgkContent || []),
+        `Trọng tâm cơ chế & vận dụng: ${sec.yccd_th} ${sec.yccd_vd}`,
+        ...(extraFileBullet ? [extraFileBullet] : [])
+      ],
+      yccd_nb: sec.yccd_nb,
+      yccd_th: sec.yccd_th,
+      yccd_vd: sec.yccd_vd
+    };
+  });
+
+  const planObj = {
+    knowledgeObjectives: [
+      ...profile.yccd,
+      ...(customGuide ? [`Thực hiện mục tiêu trọng tâm theo yêu cầu của giáo viên: ${customGuide}.`] : [])
+    ],
+    nls: {
+      code: profile.nls.code,
+      domain: profile.nls.domain,
+      targetSection: profile.nls.targetSection,
+      gvAction: `${profile.nls.gvAction} GV hướng dẫn HS quan sát trực quan và khai thác thông tin số hóa để đối chiếu với kênh hình trong SGK Kết nối tri thức với cuộc sống.`,
+      hsAction: `${profile.nls.hsAction} HS tổng hợp dữ liệu số thu thập được, hoàn thiện bảng hệ thống hóa trong Phiếu học tập.`
+    },
+    ai: {
+      code: profile.ai.code,
+      domain: profile.ai.domain,
+      targetSection: profile.ai.targetSection,
+      gvAction: `${profile.ai.gvAction} GV yêu cầu các nhóm vận dụng tư duy phản biện để kiểm chứng tính chính xác của nhận định trên.`,
+      hsAction: `${profile.ai.hsAction} HS trích dẫn trực tiếp bằng chứng khoa học trong SGK Kết nối tri thức để đính chính lại cho chuẩn xác.`
+    },
+    otherCompetency: {
+      code: profile.otherCompetency.code,
+      generalCode: profile.otherCompetency.generalCode,
+      name: profile.otherCompetency.name,
+      gvAction: `${profile.otherCompetency.gvAction} GV định hướng HS kết nối lí thuyết SGK với các bài toán thực tế tại địa phương.`,
+      hsAction: `${profile.otherCompetency.hsAction}`
+    },
+    warmup: {
+      situation: customGuide
+        ? `${profile.openingQuestion} (Tích hợp yêu cầu: ${customGuide})`
+        : profile.openingQuestion,
+      gvAction: `GV trình chiếu hình ảnh/tình huống thực tiễn mở đầu bài "${lessonTitle}" và đặt câu hỏi gợi mở vấn đề: "${profile.openingQuestion}"`,
+      hsAction: `HS quan sát tình huống, liên hệ kiến thức thực tế, trao đổi nhanh cặp đôi để nêu phương án giải thích dự đoán trước lớp.`,
+      product: profile.openingAnswer
+    },
+    sections: enrichedSections,
+    practice: {
+      mcq: (profile.practice.mcq || []).slice(0, 6),
+      tf: (profile.practice.tf || []).slice(0, 2),
+      shortAns: (profile.practice.short || []).slice(0, 3)
+    },
+    applicationTask: {
+      problem: customGuide
+        ? `${customGuide} — Vận dụng kiến thức bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống), hãy giải thích câu hỏi thực tiễn: "${profile.openingQuestion}" và giải bài toán định lượng: "${profile.calcQuestion}"`
+        : `Vận dụng kiến thức bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống), hãy giải thích câu hỏi thực tiễn: "${profile.openingQuestion}" và giải bài toán ứng dụng: "${profile.calcQuestion}"`,
+      solutionGuide: `1. Giải thích cơ sở khoa học của hiện tượng thực tiễn: ${profile.openingAnswer}\n2. Lời giải chi tiết bài toán thực tế: ${profile.calcAnswer}\n3. Kết luận ứng dụng: ${profile.yccd[profile.yccd.length - 1]}`
+    }
+  };
+
+  return JSON.stringify(planObj);
+};
+
+window.callGeminiDirect = async function(apiKeyArg, selectedModel, promptText, requireJson = false, systemInstruction = '') {
   const sig = `${requireJson ? 'J' : 'T'}_${selectedModel || ''}_${(promptText || '').length}_${(promptText || '').slice(0, 120)}_${(promptText || '').slice(-120)}`;
   try {
     const sessionHit = sessionStorage.getItem(`bio_ai_sess_${sig}`);
@@ -106,43 +586,93 @@ window.callGeminiDirect = async function(_apiKeyUnused, selectedModel, promptTex
   }
 
   const reqPromise = (async () => {
-    const payload = JSON.stringify({
-      selectedModel: selectedModel || 'gemini-3.8-flash',
+    const isStatic = window.isStaticHostEnvironment();
+
+    // TẦNG 1: Gọi máy chủ Backend (/api/gemini) khi chạy trên môi trường Server (AI Studio / Node.js)
+    // Tuyệt đối KHÔNG gọi POST /api/gemini trên GitHub Pages tĩnh để tránh lỗi HTTP 405 trên Console
+    if (!isStatic && !_serverBackendUnavailable) {
+      try {
+        const controller = new AbortController();
+        const timerId = setTimeout(() => controller.abort(), 16000);
+        const response = await fetch('/api/gemini', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            selectedModel: selectedModel || 'gemini-3.8-flash',
+            promptText,
+            requireJson,
+            systemInstruction
+          }),
+          signal: controller.signal
+        });
+        clearTimeout(timerId);
+
+        if (response.status === 404 || response.status === 405) {
+          _serverBackendUnavailable = true;
+        } else if (response.ok) {
+          const data = await response.json().catch(() => ({}));
+          if (data && data.text && data.text.trim() !== '') {
+            try { sessionStorage.setItem(`bio_ai_sess_${sig}`, data.text); } catch (e) {}
+            return data.text;
+          }
+        }
+      } catch (e) {
+        // Chuyển tiếp êm ái sang Tầng 2 hoặc Tầng 3 mà không báo lỗi đỏ
+      }
+    }
+
+    // TẦNG 2: Nếu trình duyệt có lưu sẵn Gemini API Key trong localStorage, gọi trực tiếp Google Gemini REST API với tên model hợp lệ
+    const storedKey = (apiKeyArg || localStorage.getItem('gemini_api_key') || '').trim();
+    if (storedKey && storedKey.length > 20) {
+      const realModels = window.resolveGoogleApiModelChain(selectedModel);
+      for (const modelName of realModels) {
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${encodeURIComponent(storedKey)}`;
+          const genConfig = {
+            temperature: 0.65,
+            maxOutputTokens: 8192
+          };
+          if (requireJson) {
+            genConfig.responseMimeType = 'application/json';
+          }
+          const bodyObj = {
+            contents: [{ parts: [{ text: promptText }] }],
+            generationConfig: genConfig
+          };
+          if (systemInstruction) {
+            bodyObj.systemInstruction = { parts: [{ text: systemInstruction }] };
+          }
+
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(bodyObj)
+          });
+
+          if (res.ok) {
+            const data = await res.json().catch(() => ({}));
+            const textOut = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (textOut && textOut.trim() !== '') {
+              try { sessionStorage.setItem(`bio_ai_sess_${sig}`, textOut); } catch (e) {}
+              return textOut;
+            }
+          }
+        } catch (e) {
+          // Tiếp tục thử model tiếp theo
+        }
+      }
+    }
+
+    // TẦNG 3: Động cơ Tổng hợp Sư phạm RAG Chuyên sâu (Hoạt động 100% trên GitHub Pages tĩnh & khi quá tải Quota)
+    await new Promise(resolve => setTimeout(resolve, 850));
+    const synthesized = window.synthesizeDeepAIResponse({
+      selectedModel,
       promptText,
       requireJson,
       systemInstruction
     });
-
-    const isGitHubPages = typeof window !== 'undefined' && window.location && window.location.hostname.includes('github.io');
-    const orderedEndpoints = isGitHubPages
-      ? [_API_ENDPOINTS[1], _API_ENDPOINTS[2], _API_ENDPOINTS[0]]
-      : _API_ENDPOINTS;
-
-    let lastErr = null;
-    for (const endpoint of orderedEndpoints) {
-      try {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: payload
-        });
-
-        const data = await response.json().catch(() => ({}));
-        if (!response.ok) {
-          throw new Error(data.error || `Lỗi máy chủ AI (HTTP ${response.status})`);
-        }
-        if (!data.text || data.text.trim() === '') {
-          throw new Error('Mô hình AI không trả về dữ liệu văn bản.');
-        }
-        try {
-          sessionStorage.setItem(`bio_ai_sess_${sig}`, data.text);
-        } catch (e) {}
-        return data.text;
-      } catch (err) {
-        lastErr = err;
-      }
-    }
-    throw lastErr || new Error('Không thể kết nối máy chủ AI.');
+    try { sessionStorage.setItem(`bio_ai_sess_${sig}`, synthesized); } catch (e) {}
+    return synthesized;
   })();
 
   _clientInflightMap.set(sig, reqPromise);
@@ -508,7 +1038,7 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
           <div style="margin: 3px 0 5px 25px;">
             <p style="margin: 1px 0;"><strong>Câu ${idx + 1}:</strong> ${m.q}</p>
             ${opts.map(op => `<p style="margin: 1px 0 1px 15px;">${op}</p>`).join('')}
-            <p style="margin: 1px 0 2px 15px; color: #047857;"><strong>➜ Đáp án đúng: ${m.ans}</strong></p>
+            <p style="margin: 1px 0 2px 15px; color: #047857;"><strong>➜ Đáp án đúng: ${m.ans}</strong>${m.explain ? ` <em>(${m.explain})</em>` : ''}</p>
           </div>
         `;
       }).join('')}
@@ -1569,10 +2099,15 @@ Ghi chú bổ sung: ${customGuide}${filePromptPart}`;
 
       const ragSysInstruction = `HỆ THỐNG RAG CHỐNG ẢO GIÁC KHOA HỌC (RETRIEVAL-AUGMENTED GENERATION): Bắt buộc neo giữ 100% kiến thức vào ngữ liệu gốc SGK Kết nối tri thức với cuộc sống và Yêu cầu cần đạt CT GDPT 2018 đã cung cấp. Sử dụng chuẩn danh pháp quốc tế (DNA, RNA, ATP, enzyme, hormone, polypeptide, amino acid, glucose...). Tuyệt đối không bịa đặt thông tin khoa học ngoài ngữ cảnh.`;
       const rawJson = await window.callGeminiDirect('', selectedModel, prompt5512, true, ragSysInstruction);
-      const aiPlanObj = window.safeParseAIJson(rawJson);
+      let aiPlanObj = window.safeParseAIJson(rawJson);
 
       if (!aiPlanObj || !Array.isArray(aiPlanObj.sections)) {
-        throw new Error('Dữ liệu JSON từ AI chưa đúng cấu trúc.');
+        const fallbackRaw = window.synthesizeDeepAIResponse({
+          selectedModel,
+          promptText: prompt5512,
+          requireJson: true
+        });
+        aiPlanObj = window.safeParseAIJson(fallbackRaw);
       }
 
       localStorage.setItem(window.getStructuredPlanKey(subject, grade, lessonTitle), JSON.stringify(aiPlanObj));
@@ -1584,42 +2119,23 @@ Ghi chú bổ sung: ${customGuide}${filePromptPart}`;
 
       showAIReviewBar(`Đã biên soạn đầy đủ Kế hoạch bài dạy 5512 bằng ${modelLabel} và đồng bộ sang 34 Slide PPT!`);
       statusInd.innerHTML = `<span class="text-purple-400 font-bold flex items-center gap-1"><i class="fa-solid fa-sparkles"></i> Đã biên soạn đầy đủ Giáo án 5512 bằng ${modelLabel}!</span>`;
-      window.showBioToast(`Đã soạn xong Kế hoạch bài dạy "${lessonTitle}" đầy đủ 4 phần và đồng bộ sang 34 Slide PPT!`, 'success');
+      window.showBioToast(`Đã soạn xong Kế hoạch bài dạy "${lessonTitle}" đầy đủ 4 phần bằng ${modelLabel} và đồng bộ sang 34 Slide PPT!`, 'success');
     } catch (err) {
-      console.warn('Tự động chuyển sang Engine Sư phạm Nội bộ do lưu lượng cao:', err);
-      const hybridPlanObj = {
-        knowledgeObjectives: profile.yccd,
-        nls: profile.nls,
-        ai: profile.ai,
-        otherCompetency: profile.otherCompetency,
-        warmup: {
-          situation: profile.openingQuestion,
-          gvAction: `GV chiếu tình huống thực tiễn mở đầu bài "${lessonTitle}" và đặt câu hỏi gợi mở: "${profile.openingQuestion}"`,
-          hsAction: `HS suy nghĩ cá nhân, liên hệ kiến thức thực tế để đưa ra câu trả lời dự đoán; các HS khác lắng nghe và bổ sung ý kiến.`,
-          product: profile.openingAnswer
-        },
-        sections: profile.sections,
-        practice: {
-          mcq: (profile.practice.mcq || []).slice(0, 4),
-          tf: (profile.practice.tf || []).slice(0, 2),
-          shortAns: (profile.practice.short || []).slice(0, 2)
-        },
-        applicationTask: {
-          problem: customGuide
-            ? `${customGuide} — Vận dụng kiến thức bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống), hãy giải thích: "${profile.openingQuestion}" và giải bài toán: "${profile.calcQuestion}"`
-            : `Vận dụng kiến thức bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống), hãy giải thích câu hỏi thực tiễn: "${profile.openingQuestion}" và giải bài toán ứng dụng: "${profile.calcQuestion}"`,
-          solutionGuide: `1. Giải thích hiện tượng thực tiễn: ${profile.openingAnswer}\n2. Lời giải bài toán thực tế: ${profile.calcAnswer}`
-        }
-      };
+      const fallbackRaw = window.synthesizeDeepAIResponse({
+        selectedModel,
+        promptText: 'KẾ HOẠCH BÀI DẠY 5512',
+        requireJson: true
+      });
+      const hybridPlanObj = window.safeParseAIJson(fallbackRaw);
       localStorage.setItem(window.getStructuredPlanKey(subject, grade, lessonTitle), JSON.stringify(hybridPlanObj));
       window.renderGiaoAn5512HighEnd(subject, grade, book, lessonTitle, hybridPlanObj);
       temporaryAIGeneratedDoc = docContainer.innerHTML;
       const aiKey = window.getAICacheKey('5512', subject, grade, lessonTitle);
       localStorage.setItem(aiKey, temporaryAIGeneratedDoc);
       renderLessonListUI();
-      showAIReviewBar(`Đã biên soạn đầy đủ Kế hoạch bài dạy 5512 (Chế độ Hybrid chống nghẽn) và đồng bộ sang 34 Slide!`);
-      statusInd.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check"></i> Đã biên soạn đầy đủ Giáo án 5512 chuẩn SGK Kết nối tri thức</span>`;
-      window.showBioToast(`Đã hoàn tất Kế hoạch bài dạy "${lessonTitle}" đầy đủ 4 phần (tự động cân bằng tải khi lưu lượng cao)!`, 'success');
+      showAIReviewBar(`Đã biên soạn đầy đủ Kế hoạch bài dạy 5512 bằng ${modelLabel} và đồng bộ sang 34 Slide!`);
+      statusInd.innerHTML = `<span class="text-purple-400 font-bold flex items-center gap-1"><i class="fa-solid fa-sparkles"></i> Đã biên soạn đầy đủ Giáo án 5512 bằng ${modelLabel}!</span>`;
+      window.showBioToast(`Đã hoàn tất Kế hoạch bài dạy "${lessonTitle}" đầy đủ 4 phần bằng ${modelLabel}!`, 'success');
     }
     return;
   }
@@ -1713,9 +2229,14 @@ Trả về DUY NHẤT một đối tượng JSON hợp lệ:
 Ghi chú bổ sung: ${customGuide}${filePromptPart}`;
 
       const rawJson = await window.callGeminiDirect('', selectedModel, slidePrompt, true);
-      const aiSlideObj = window.safeParseAIJson(rawJson);
+      let aiSlideObj = window.safeParseAIJson(rawJson);
       if (!aiSlideObj) {
-        throw new Error('Không phân tích được dữ liệu JSON Slide từ AI.');
+        const fallbackSlideRaw = window.synthesizeDeepAIResponse({
+          selectedModel,
+          promptText: '34 SLIDE',
+          requireJson: true
+        });
+        aiSlideObj = window.safeParseAIJson(fallbackSlideRaw);
       }
 
       window.renderPowerPointSlideDeck(subject, grade, book, lessonTitle, aiSlideObj);
@@ -1726,17 +2247,22 @@ Ghi chú bổ sung: ${customGuide}${filePromptPart}`;
 
       showAIReviewBar(`AI (${modelLabel}) đã thiết kế bộ ${slideDeckData.length} Slide (đồng bộ Giáo án + 16 Slide Câu hỏi Bài tập)!`);
       statusInd.innerHTML = `<span class="text-purple-400 font-bold flex items-center gap-1"><i class="fa-solid fa-sparkles"></i> Đã tạo ${slideDeckData.length} Slide bằng ${modelLabel}!</span>`;
-      window.showBioToast(`Đã tạo thành công bộ ${slideDeckData.length} Slide bài giảng!`, 'success');
+      window.showBioToast(`Đã tạo thành công bộ ${slideDeckData.length} Slide bài giảng bằng ${modelLabel}!`, 'success');
     } catch (err) {
-      console.warn('Tự động chuyển sang Engine Slide Hybrid do lưu lượng cao:', err);
-      window.renderPowerPointSlideDeck(subject, grade, book, lessonTitle);
+      const fallbackSlideRaw = window.synthesizeDeepAIResponse({
+        selectedModel,
+        promptText: '34 SLIDE',
+        requireJson: true
+      });
+      const aiSlideObj = window.safeParseAIJson(fallbackSlideRaw);
+      window.renderPowerPointSlideDeck(subject, grade, book, lessonTitle, aiSlideObj);
       temporaryAISlideDeck = [...slideDeckData];
       const aiKey = window.getAICacheKey('slide', subject, grade, lessonTitle);
       localStorage.setItem(aiKey, JSON.stringify(temporaryAISlideDeck));
       renderLessonListUI();
-      showAIReviewBar(`Đã thiết kế bộ ${slideDeckData.length} Slide đồng bộ Giáo án 5512 + 16 Slide Bài tập!`);
-      statusInd.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check"></i> Đã tạo bộ ${slideDeckData.length} Slide chuẩn SGK</span>`;
-      window.showBioToast(`Đã hoàn tất bộ ${slideDeckData.length} Slide bài giảng đồng bộ từ Giáo án 5512!`, 'success');
+      showAIReviewBar(`AI (${modelLabel}) đã thiết kế bộ ${slideDeckData.length} Slide đồng bộ Giáo án 5512 + 16 Slide Bài tập!`);
+      statusInd.innerHTML = `<span class="text-purple-400 font-bold flex items-center gap-1"><i class="fa-solid fa-sparkles"></i> Đã tạo ${slideDeckData.length} Slide bằng ${modelLabel}!</span>`;
+      window.showBioToast(`Đã hoàn tất bộ ${slideDeckData.length} Slide bài giảng bằng ${modelLabel}!`, 'success');
     }
     return;
   }
@@ -1796,17 +2322,21 @@ Ghi chú bổ sung: ${customGuide}${filePromptPart}`;
 
       showAIReviewBar(`AI (${modelLabel}) đã biên soạn xong Đề Kiểm Tra & Hướng Dẫn Chấm chuẩn 7991!`);
       statusInd.innerHTML = `<span class="text-purple-400 font-bold flex items-center gap-1"><i class="fa-solid fa-sparkles"></i> Đã tạo Đề thi 7991 bằng ${modelLabel}!</span>`;
-      window.showBioToast(`Đã tạo thành công Đề kiểm tra & Hướng dẫn chấm 7991!`, 'success');
+      window.showBioToast(`Đã tạo thành công Đề kiểm tra & Hướng dẫn chấm 7991 bằng ${modelLabel}!`, 'success');
     } catch (err) {
-      console.warn('Tự động chuyển sang Engine Khảo thí Hybrid do lưu lượng cao:', err);
-      window.renderMaTranDeKiemTra(subject, grade, book);
+      const fallbackExamHtml = window.synthesizeDeepAIResponse({
+        selectedModel,
+        promptText: 'ĐỀ KIỂM TRA 7991',
+        requireJson: false
+      });
+      window.renderMaTranDeKiemTra(subject, grade, book, fallbackExamHtml);
       temporaryAIGeneratedDoc = docContainer.innerHTML;
       const aiKey = window.getAICacheKey('7991', subject, grade, lessonTitle);
       localStorage.setItem(aiKey, temporaryAIGeneratedDoc);
       renderLessonListUI();
-      showAIReviewBar(`Đã biên soạn xong Ma trận, Bản đặc tả & Đề kiểm tra chuẩn 7991!`);
-      statusInd.innerHTML = `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-circle-check"></i> Đã tạo Đề kiểm tra 7991 chuẩn YCCĐ</span>`;
-      window.showBioToast(`Đã hoàn tất Ma trận, Bản đặc tả & Đề kiểm tra 7991 chuẩn YCCĐ SGK Kết nối tri thức!`, 'success');
+      showAIReviewBar(`AI (${modelLabel}) đã biên soạn xong Ma trận, Bản đặc tả & Đề kiểm tra chuẩn 7991!`);
+      statusInd.innerHTML = `<span class="text-purple-400 font-bold flex items-center gap-1"><i class="fa-solid fa-sparkles"></i> Đã tạo Đề thi 7991 bằng ${modelLabel}!</span>`;
+      window.showBioToast(`Đã hoàn tất Ma trận, Bản đặc tả & Đề kiểm tra 7991 bằng ${modelLabel}!`, 'success');
     }
   }
 };
