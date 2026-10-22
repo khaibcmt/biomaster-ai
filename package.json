@@ -1,0 +1,16 @@
+{
+  "name": "biomaster-ai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "echo 'Static build complete'",
+    "start": "node server.js",
+    "lint": "node --check server.js && node --check curriculum-data.js && node --check biomaster-ai-upgrade.js && node --check update.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.30.0",
+    "express": "^4.21.2"
+  }
+}
