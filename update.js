@@ -6278,6 +6278,436 @@ window.runRAGLiveAudit = function() {
   window.showBioToast(`Kiểm định RAG hoàn tất: 100% nội dung bám sát SGK Kết nối tri thức (${profile.sections.length} mục kiến thức, ${profile.yccd.length} YCCĐ) — 0% Ảo giác khoa học!`, 'success');
 };
 
+// ==================== TẢI NGUYÊN ĐỊNH DẠNG NỘI DUNG TRONG 3 MODAL (HƯỚNG DẪN SỬ DỤNG, VAI TRÒ & TÍNH NĂNG, CÔNG NGHỆ RAG) ====================
+function getModalMetadataAndNode(modalType) {
+  const subject = document.getElementById('sel-subject') ? document.getElementById('sel-subject').value : 'Sinh học';
+  const grade = document.getElementById('sel-grade') ? document.getElementById('sel-grade').value : '10';
+  const lessonTitle = typeof currentSelectedLesson !== 'undefined' ? currentSelectedLesson : 'Bài 1. Giới thiệu khái quát môn Sinh học';
+
+  if (modalType === 'rag-inspector') {
+    const ragBody = document.getElementById('rag-inspector-body');
+    if (ragBody && !ragBody.innerHTML.trim() && typeof window.openRAGInspectorModal === 'function') {
+      window.openRAGInspectorModal();
+    }
+    return {
+      modalId: 'modal-rag-inspector',
+      bodyId: 'rag-inspector-body',
+      title: 'ĐỘT PHÁ CÔNG NGHỆ RAG: TRIỆT TIÊU 100% ẢO GIÁC KHOA HỌC',
+      subtitle: `Hệ thống Truy xuất – Khóa ngữ cảnh – Đối chiếu Ngữ liệu gốc SGK Kết nối tri thức & CT GDPT 2018 (${lessonTitle} - ${subject} ${grade})`,
+      badge: '100% GROUNDED IN SGK • 0% ẢO GIÁC KHOA HỌC',
+      filePrefix: `HoSo_CongNghe_RAG_BioMasterAI_${lessonTitle.replace(/[^a-zA-Z0-9]/g, '_')}`
+    };
+  }
+
+  if (modalType === 'web-features') {
+    return {
+      modalId: 'modal-web-features',
+      bodyId: 'web-features-body',
+      title: 'CHỨC NĂNG TRANG WEB: VAI TRÒ, NHIỆM VỤ & HỆ THỐNG TÍNH NĂNG TOÀN DIỆN',
+      subtitle: 'Hồ sơ Năng lực Hệ thống AI Giáo dục BioMaster AI • Chuẩn Chương trình GDPT 2018 & Bộ GD&ĐT',
+      badge: 'HỒ SƠ NĂNG LỰC HỆ THỐNG AI GIÁO DỤC • CHUẨN CÔNG VĂN 5512 & 7991',
+      filePrefix: 'HoSo_VaiTro_TinhNang_TrangWeb_BioMasterAI'
+    };
+  }
+
+  return {
+    modalId: 'modal-user-guide',
+    bodyId: 'user-guide-body',
+    title: 'CẨM NANG & HƯỚNG DẪN SỬ DỤNG TOÀN DIỆN HỆ THỐNG BIOMASTER AI',
+    subtitle: 'Trợ Lý Sư Phạm Toàn Năng • Chuẩn Chương Trình GDPT 2018 & SGK Kết Nối Tri Thức Với Cuộc Sống',
+    badge: 'TÀI LIỆU HƯỚNG DẪN SỬ DỤNG TOÀN DIỆN • TÁC GIẢ: HỒ TẤN KHẢI (THPT MANG THÍT)',
+    filePrefix: 'CamNang_HuongDanSuDung_BioMasterAI'
+  };
+}
+
+function replaceIconsWithUnicode(rootEl) {
+  const iconMap = {
+    'fa-award': '🏆 ',
+    'fa-cubes': '❖ ',
+    'fa-file-signature': '📝 ',
+    'fa-chalkboard-user': '👨‍🏫 ',
+    'fa-list-check': '☑ ',
+    'fa-list-ol': '📋 ',
+    'fa-shield-virus': '🛡️ ',
+    'fa-shield-halved': '🛡️ ',
+    'fa-shield-check': '🛡️ ',
+    'fa-circle-check': '✔ ',
+    'fa-check-double': '✅ ',
+    'fa-compass-drafting': '🧭 ',
+    'fa-book-open-reader': '📖 ',
+    'fa-tv': '🖥️ ',
+    'fa-microchip': '🤖 ',
+    'fa-cloud-arrow-up': '☁️ ',
+    'fa-globe': '🌐 ',
+    'fa-users-gear': '👥 ',
+    'fa-sitemap': '🗂️ ',
+    'fa-rocket': '🚀 ',
+    'fa-atom': '⚛️ ',
+    'fa-feather-pointed': '✒️ ',
+    'fa-language': '🌐 ',
+    'fa-compass': '🧭 ',
+    'fa-bullseye': '🎯 ',
+    'fa-book-medical': '📚 ',
+    'fa-filter-circle-xmark': '🚫 ',
+    'fa-triangle-exclamation': '⚠️ ',
+    'fa-lock': '🔒 ',
+    'fa-graduation-cap': '🎓 ',
+    'fa-layer-group': '❖ '
+  };
+
+  rootEl.querySelectorAll('i').forEach(icon => {
+    const cls = icon.className || '';
+    let sym = '• ';
+    for (const [k, v] of Object.entries(iconMap)) {
+      if (cls.includes(k)) {
+        sym = v;
+        break;
+      }
+    }
+    const span = document.createElement('span');
+    span.textContent = sym;
+    span.style.fontWeight = 'bold';
+    if (icon.parentNode) {
+      icon.parentNode.replaceChild(span, icon);
+    }
+  });
+}
+
+function convertTailwindNodeToWordStyledHTML(sourceRoot) {
+  const clone = sourceRoot.cloneNode(true);
+  clone.querySelectorAll('button').forEach(b => b.remove());
+  replaceIconsWithUnicode(clone);
+
+  function applyCardInlineStyles(el) {
+    const cls = typeof el.className === 'string' ? el.className : '';
+    if (!cls) return;
+
+    const styles = [];
+
+    // Background & Border colors preserving exact visual theme
+    if (cls.includes('from-blue-950') || cls.includes('bg-blue-950')) {
+      styles.push('background-color:#172554', 'border:2px solid #3b82f6', 'color:#f8fafc');
+    } else if (cls.includes('from-amber-950') || cls.includes('bg-amber-950')) {
+      styles.push('background-color:#451a03', 'border:2px solid #f59e0b', 'color:#fef3c7');
+    } else if (cls.includes('from-rose-950') || cls.includes('bg-rose-950')) {
+      styles.push('background-color:#4c0519', 'border:2px solid #f43f5e', 'color:#ffe4e6');
+    } else if (cls.includes('from-cyan-950') || cls.includes('bg-cyan-950') || cls.includes('from-teal-950')) {
+      styles.push('background-color:#083344', 'border:2px solid #06b6d4', 'color:#ecfeff');
+    } else if (cls.includes('from-purple-950') || cls.includes('bg-purple-950')) {
+      styles.push('background-color:#3b0764', 'border:2px solid #a855f7', 'color:#f3e8ff');
+    } else if (cls.includes('from-emerald-950') || cls.includes('bg-emerald-950')) {
+      styles.push('background-color:#022c22', 'border:2px solid #10b981', 'color:#ecfdf5');
+    } else if (cls.includes('via-indigo-950') || cls.includes('border-indigo-500')) {
+      styles.push('background-color:#1e1b4b', 'border:2px solid #6366f1', 'color:#eef2ff');
+    } else if (cls.includes('bg-[#0b1324]')) {
+      let bColor = '#06b6d4';
+      if (cls.includes('border-emerald')) bColor = '#10b981';
+      if (cls.includes('border-purple')) bColor = '#a855f7';
+      styles.push('background-color:#0b1324', `border:2px solid ${bColor}`, 'color:#f1f5f9');
+    } else if (cls.includes('bg-slate-950') || cls.includes('bg-slate-900') || cls.includes('bg-black/')) {
+      let bColor = '#334155';
+      if (cls.includes('border-cyan')) bColor = '#06b6d4';
+      if (cls.includes('border-amber')) bColor = '#f59e0b';
+      if (cls.includes('border-emerald')) bColor = '#10b981';
+      if (cls.includes('border-rose')) bColor = '#f43f5e';
+      styles.push('background-color:#0f172a', `border:1.5px solid ${bColor}`, 'color:#f1f5f9');
+    } else if (cls.includes('bg-blue-600')) {
+      styles.push('background-color:#2563eb', 'color:#ffffff', 'padding:4px 10px', 'display:inline-block', 'font-weight:bold');
+    } else if (cls.includes('bg-amber-600') || cls.includes('bg-amber-500')) {
+      styles.push('background-color:#d97706', 'color:#ffffff', 'padding:4px 10px', 'display:inline-block', 'font-weight:bold');
+    } else if (cls.includes('bg-rose-600')) {
+      styles.push('background-color:#e11d48', 'color:#ffffff', 'padding:4px 10px', 'display:inline-block', 'font-weight:bold');
+    } else if (cls.includes('bg-cyan-500')) {
+      styles.push('background-color:#0891b2', 'color:#ffffff', 'padding:4px 10px', 'display:inline-block', 'font-weight:bold');
+    } else if (cls.includes('bg-purple-600') || cls.includes('bg-fuchsia-600') || cls.includes('bg-indigo-500')) {
+      styles.push('background-color:#7c3aed', 'color:#ffffff', 'padding:4px 10px', 'display:inline-block', 'font-weight:bold');
+    } else if (cls.includes('bg-emerald-500')) {
+      styles.push('background-color:#059669', 'color:#ffffff', 'padding:4px 10px', 'display:inline-block', 'font-weight:bold');
+    }
+
+    // Text colors
+    if (cls.includes('text-cyan-300') || cls.includes('text-cyan-200') || cls.includes('text-cyan-400')) {
+      styles.push('color:#67e8f9');
+    } else if (cls.includes('text-amber-300') || cls.includes('text-amber-200') || cls.includes('text-amber-400')) {
+      styles.push('color:#fcd34d');
+    } else if (cls.includes('text-emerald-300') || cls.includes('text-emerald-200') || cls.includes('text-emerald-400')) {
+      styles.push('color:#6ee7b7');
+    } else if (cls.includes('text-rose-300') || cls.includes('text-rose-200') || cls.includes('text-rose-400')) {
+      styles.push('color:#fda4af');
+    } else if (cls.includes('text-purple-300') || cls.includes('text-purple-200') || cls.includes('text-fuchsia-300')) {
+      styles.push('color:#d8b4fe');
+    } else if (cls.includes('text-blue-300') || cls.includes('text-blue-200') || cls.includes('text-sky-300')) {
+      styles.push('color:#93c5fd');
+    } else if (cls.includes('text-indigo-300') || cls.includes('text-indigo-200')) {
+      styles.push('color:#a5b4fc');
+    } else if (cls.includes('text-white')) {
+      styles.push('color:#ffffff');
+    }
+
+    // Padding & spacing for boxes
+    if (cls.includes('p-6') || cls.includes('p-5') || cls.includes('p-4') || cls.includes('p-3.5')) {
+      styles.push('padding:12px 14px', 'margin-bottom:10px', 'border-radius:10px');
+    }
+    if (cls.includes('font-black') || cls.includes('font-extrabold') || cls.includes('font-bold')) {
+      styles.push('font-weight:bold');
+    }
+    if (cls.includes('uppercase')) {
+      styles.push('text-transform:uppercase');
+    }
+    if (cls.includes('text-lg') || cls.includes('text-xl')) {
+      styles.push('font-size:13.5pt');
+    }
+
+    if (styles.length > 0) {
+      const existing = el.getAttribute('style') || '';
+      el.setAttribute('style', existing + (existing ? ';' : '') + styles.join(';'));
+    }
+  }
+
+  // Convert CSS Grid containers into Word-compatible HTML tables so multi-column cards stay side-by-side in Word
+  const grids = Array.from(clone.querySelectorAll('.grid'));
+  grids.reverse().forEach(gridEl => {
+    const cls = gridEl.className || '';
+    let cols = 1;
+    if (cls.includes('grid-cols-4')) cols = 4;
+    else if (cls.includes('grid-cols-3')) cols = 3;
+    else if (cls.includes('grid-cols-2')) cols = 2;
+
+    const children = Array.from(gridEl.children);
+    if (cols > 1 && children.length > 0) {
+      const tbl = document.createElement('table');
+      tbl.setAttribute('style', 'width:100%; border-collapse:separate; border-spacing:8px; margin:8px 0; border:none;');
+      const tbody = document.createElement('tbody');
+      const colWidth = Math.floor(100 / cols) + '%';
+
+      for (let i = 0; i < children.length; i += cols) {
+        const tr = document.createElement('tr');
+        for (let c = 0; c < cols; c++) {
+          const td = document.createElement('td');
+          const child = children[i + c];
+          if (child) {
+            applyCardInlineStyles(child);
+            const childStyle = child.getAttribute('style') || '';
+            td.setAttribute('style', `width:${colWidth}; vertical-align:top; padding:12px; border-radius:10px; ${childStyle}`);
+            child.removeAttribute('style');
+            td.appendChild(child);
+          } else {
+            td.setAttribute('style', `width:${colWidth}; border:none;`);
+          }
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+      tbl.appendChild(tbody);
+      if (gridEl.parentNode) {
+        gridEl.parentNode.replaceChild(tbl, gridEl);
+      }
+    }
+  });
+
+  clone.querySelectorAll('*').forEach(el => applyCardInlineStyles(el));
+  clone.querySelectorAll('code').forEach(c => {
+    c.setAttribute('style', 'font-family:Consolas, monospace; background-color:#1e293b; color:#fde047; padding:1px 5px; font-weight:bold;');
+  });
+
+  return clone.innerHTML;
+}
+
+window.downloadModalFormatted = function(modalType, format = 'doc') {
+  const meta = getModalMetadataAndNode(modalType);
+  const bodyEl = document.getElementById(meta.bodyId);
+  if (!bodyEl) {
+    window.showBioToast('Không tìm thấy nội dung để tải xuống!', 'error');
+    return;
+  }
+
+  if (format === 'html') {
+    const cloneBody = bodyEl.cloneNode(true);
+    cloneBody.querySelectorAll('button').forEach(b => b.remove());
+    const fileName = `${meta.filePrefix}_NguyenBan.html`;
+    const standaloneHtml = `<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${meta.title}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #060b16;
+      color: #f8fafc;
+      margin: 0;
+      padding: 24px;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { padding: 0; background-color: #060b16 !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="max-w-6xl mx-auto rounded-3xl border-2 border-cyan-500/60 bg-[#0b1324] shadow-2xl overflow-hidden">
+    <div class="p-6 bg-gradient-to-r from-blue-950 via-indigo-950 to-slate-900 border-b border-cyan-500/40 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="inline-block px-3 py-1 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300 text-xs font-black uppercase tracking-wider mb-2">
+          ${meta.badge}
+        </div>
+        <h1 class="text-xl md:text-2xl font-black text-white uppercase tracking-wide">${meta.title}</h1>
+        <p class="text-sm text-cyan-300 font-semibold mt-1">${meta.subtitle}</p>
+      </div>
+      <div class="no-print flex items-center gap-2">
+        <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm flex items-center gap-2 shadow-lg">
+          <i class="fa-solid fa-print"></i> In / Xuất PDF Nguyên Định Dạng
+        </button>
+      </div>
+    </div>
+    <div class="p-6 space-y-6 text-sm md:text-base leading-relaxed text-slate-100">
+      ${cloneBody.innerHTML}
+    </div>
+    <div class="px-6 py-4 bg-slate-950 border-t border-slate-800 flex items-center justify-between text-xs text-slate-300">
+      <span><i class="fa-solid fa-graduation-cap text-cyan-400 mr-1"></i> Hệ thống Trợ lý Sư phạm BioMaster AI • Tác giả: <strong>Hồ Tấn Khải</strong> (Trường THPT Mang Thít)</span>
+      <span class="text-emerald-400 font-bold">Chuẩn CT GDPT 2018 • Bộ GD&ĐT</span>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    const blob = new Blob(['\ufeff', standaloneHtml], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    window.showBioToast(`Đã tải file giao diện nguyên bản (${fileName}) thành công!`, 'success');
+    return;
+  }
+
+  // Xuất file Word (.doc) giữ nguyên định dạng khung màu, bảng biểu và bố cục
+  const styledInnerHtml = convertTailwindNodeToWordStyledHTML(bodyEl);
+  const fileName = `${meta.filePrefix}.doc`;
+  const wordHtml = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+  <meta charset="utf-8">
+  <title>${meta.title}</title>
+  <style>
+    @page { size: A4 portrait; margin: 1.5cm 1.5cm 1.5cm 1.8cm; }
+    body {
+      font-family: 'Times New Roman', serif;
+      font-size: 12.5pt;
+      line-height: 1.4;
+      background-color: #060b16;
+      color: #f8fafc;
+    }
+    h1, h2, h3, h4, h5 { margin: 6px 0; font-weight: bold; }
+    p { margin: 5px 0; }
+    ul { margin: 6px 0 6px 18px; padding-left: 12px; }
+    li { margin: 4px 0; }
+    table { width: 100%; border-collapse: separate; border-spacing: 8px; margin: 8px 0; }
+    td { vertical-align: top; padding: 10px 12px; }
+  </style>
+</head>
+<body>
+  <div style="background-color:#0b1324; border:2px solid #06b6d4; padding:16px; margin-bottom:14px;">
+    <div style="color:#fcd34d; font-size:10pt; font-weight:bold; text-transform:uppercase; margin-bottom:4px;">
+      ★ ${meta.badge}
+    </div>
+    <div style="color:#ffffff; font-size:16pt; font-weight:bold; text-transform:uppercase; margin-bottom:4px;">
+      ${meta.title}
+    </div>
+    <div style="color:#67e8f9; font-size:11.5pt; font-weight:bold;">
+      ${meta.subtitle}
+    </div>
+  </div>
+  <div style="background-color:#060b16; padding:4px;">
+    ${styledInnerHtml}
+  </div>
+  <div style="background-color:#0f172a; border-top:2px solid #334155; padding:10px 14px; margin-top:14px; font-size:11pt; color:#cbd5e1;">
+    <strong>Hệ thống Trợ lý Sư phạm BioMaster AI</strong> • Tác giả: <strong>Hồ Tấn Khải</strong> — Trường THPT Mang Thít • Chuẩn Chương trình GDPT 2018 (Bộ GD&ĐT)
+  </div>
+</body>
+</html>`;
+
+  const blob = new Blob(['\ufeff', wordHtml], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  window.showBioToast(`Đã tải file Word nguyên định dạng (${fileName}) thành công!`, 'success');
+};
+
+window.printModalFormatted = function(modalType) {
+  const meta = getModalMetadataAndNode(modalType);
+  const bodyEl = document.getElementById(meta.bodyId);
+  if (!bodyEl) return;
+
+  let printRoot = document.getElementById('biomaster-modal-print-root');
+  if (printRoot) printRoot.remove();
+  let printStyle = document.getElementById('biomaster-modal-print-style');
+  if (printStyle) printStyle.remove();
+
+  const cloneBody = bodyEl.cloneNode(true);
+  cloneBody.querySelectorAll('button').forEach(b => b.remove());
+
+  printStyle = document.createElement('style');
+  printStyle.id = 'biomaster-modal-print-style';
+  printStyle.innerHTML = `
+    @media screen {
+      #biomaster-modal-print-root { display: none !important; }
+    }
+    @media print {
+      body > *:not(#biomaster-modal-print-root) { display: none !important; }
+      #biomaster-modal-print-root {
+        display: block !important;
+        background-color: #060b16 !important;
+        color: #f8fafc !important;
+        padding: 12px !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  `;
+  document.head.appendChild(printStyle);
+
+  printRoot = document.createElement('div');
+  printRoot.id = 'biomaster-modal-print-root';
+  printRoot.innerHTML = `
+    <div class="rounded-2xl border-2 border-cyan-500/60 bg-[#0b1324] p-6 space-y-5">
+      <div class="border-b border-cyan-500/40 pb-4">
+        <div class="text-xs font-black uppercase text-amber-300">${meta.badge}</div>
+        <h1 class="text-xl font-black text-white uppercase mt-1">${meta.title}</h1>
+        <p class="text-sm text-cyan-300 font-semibold mt-0.5">${meta.subtitle}</p>
+      </div>
+      <div class="space-y-5 text-sm leading-relaxed text-slate-100">
+        ${cloneBody.innerHTML}
+      </div>
+      <div class="border-t border-slate-700 pt-3 text-xs text-slate-300 flex justify-between">
+        <span>Tác giả: <strong>Hồ Tấn Khải</strong> • Trường THPT Mang Thít</span>
+        <span>Hệ thống Trợ lý Sư phạm BioMaster AI • Chuẩn CT GDPT 2018</span>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(printRoot);
+
+  window.print();
+
+  setTimeout(() => {
+    if (printRoot && printRoot.parentNode) printRoot.remove();
+    if (printStyle && printStyle.parentNode) printStyle.remove();
+  }, 1500);
+};
+
 window.saveDriveScriptUrl = function() {
   const val = document.getElementById('input-drive-script-url').value.trim();
   localStorage.setItem('google_drive_script_url', val);
