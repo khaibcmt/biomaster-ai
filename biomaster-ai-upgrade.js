@@ -3,6 +3,9 @@
 // Chuẩn Chương trình GDPT 2018 & SGK Kết nối tri thức với cuộc sống
 // ============================================================================
 
+if (!window.__BIOMASTER_UPGRADE_LOADED__) {
+window.__BIOMASTER_UPGRADE_LOADED__ = true;
+
 // Hệ thống thông báo Toast mượt mà thay thế window.alert()
 window.showBioToast = function(message, type = 'info') {
   let container = document.getElementById('biomaster-toast-container');
@@ -83,8 +86,14 @@ window.cleanUnwantedMetaPhrases = function(htmlOrText) {
     .replace(/undefined/g, '');
 };
 
-// Ghi đè hàm gọi AI qua máy chủ /api/gemini sử dụng cơ chế điều phối chống nghẽn & lưu đệm đa tầng
+// Ghi đè hàm gọi AI qua máy chủ /api/gemini (tự động định tuyến sang Cloud Run khi chạy trên GitHub Pages tĩnh)
 const _clientInflightMap = new Map();
+const _API_ENDPOINTS = [
+  '/api/gemini',
+  'https://ais-pre-ckxrihplyt3nra2ljzzsft-799945497821.asia-southeast1.run.app/api/gemini',
+  'https://ais-dev-ckxrihplyt3nra2ljzzsft-799945497821.asia-southeast1.run.app/api/gemini'
+];
+
 window.callGeminiDirect = async function(_apiKeyUnused, selectedModel, promptText, requireJson = false, systemInstruction = '') {
   const sig = `${requireJson ? 'J' : 'T'}_${selectedModel || ''}_${(promptText || '').length}_${(promptText || '').slice(0, 120)}_${(promptText || '').slice(-120)}`;
   try {
@@ -97,28 +106,43 @@ window.callGeminiDirect = async function(_apiKeyUnused, selectedModel, promptTex
   }
 
   const reqPromise = (async () => {
-    const response = await fetch('/api/gemini', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        selectedModel: selectedModel || 'gemini-3.8-flash',
-        promptText,
-        requireJson,
-        systemInstruction
-      })
+    const payload = JSON.stringify({
+      selectedModel: selectedModel || 'gemini-3.8-flash',
+      promptText,
+      requireJson,
+      systemInstruction
     });
 
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      throw new Error(data.error || `Lỗi máy chủ AI (HTTP ${response.status})`);
+    const isGitHubPages = typeof window !== 'undefined' && window.location && window.location.hostname.includes('github.io');
+    const orderedEndpoints = isGitHubPages
+      ? [_API_ENDPOINTS[1], _API_ENDPOINTS[2], _API_ENDPOINTS[0]]
+      : _API_ENDPOINTS;
+
+    let lastErr = null;
+    for (const endpoint of orderedEndpoints) {
+      try {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: payload
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data.error || `Lỗi máy chủ AI (HTTP ${response.status})`);
+        }
+        if (!data.text || data.text.trim() === '') {
+          throw new Error('Mô hình AI không trả về dữ liệu văn bản.');
+        }
+        try {
+          sessionStorage.setItem(`bio_ai_sess_${sig}`, data.text);
+        } catch (e) {}
+        return data.text;
+      } catch (err) {
+        lastErr = err;
+      }
     }
-    if (!data.text || data.text.trim() === '') {
-      throw new Error('Mô hình AI không trả về dữ liệu văn bản.');
-    }
-    try {
-      sessionStorage.setItem(`bio_ai_sess_${sig}`, data.text);
-    } catch (e) {}
-    return data.text;
+    throw lastErr || new Error('Không thể kết nối máy chủ AI.');
   })();
 
   _clientInflightMap.set(sig, reqPromise);
@@ -2102,10 +2126,30 @@ window.saveDriveScriptUrl = function() {
   window.showBioToast('Đã lưu cấu hình Google Apps Script thành công!', 'success');
 };
 
-window.addEventListener('DOMContentLoaded', () => {
-  updateButtonLabels();
-  window.displayContentForCurrentLesson();
+window.initBioMasterUpgrade = function() {
+  if (typeof window.updateActiveAIRunningUI === 'function') {
+    window.updateActiveAIRunningUI();
+  }
+  if (typeof window.updateButtonLabels === 'function') {
+    window.updateButtonLabels();
+  }
+  if (typeof window.renderLessonListUI === 'function') {
+    window.renderLessonListUI();
+  }
+  if (typeof window.displayContentForCurrentLesson === 'function') {
+    window.displayContentForCurrentLesson();
+  }
   if (typeof window.updateRAGSidebarStatus === 'function') {
     window.updateRAGSidebarStatus();
   }
-});
+};
+
+if (document.readyState === 'loading') {
+  window.addEventListener('DOMContentLoaded', window.initBioMasterUpgrade);
+} else {
+  window.initBioMasterUpgrade();
+}
+window.addEventListener('DOMContentLoaded', window.initBioMasterUpgrade);
+}
+
+

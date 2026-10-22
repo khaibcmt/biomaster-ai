@@ -8,6 +8,9 @@
 // Gồm: [Mục I, Nội dung Mục I, Mục II, Nội dung Mục II, Mục III, Nội dung Mục III,
 //       YCCĐ Nhận biết, YCCĐ Thông hiểu, YCCĐ Vận dụng,
 //       Tình huống Mở đầu SGK, Nhận định AI cần phản biện, Số liệu bài toán đặc trưng]
+if (!window.__BIOMASTER_CURRICULUM_LOADED__) {
+window.__BIOMASTER_CURRICULUM_LOADED__ = true;
+
 window.SGK_KNTT_LESSON_CATALOG = {
   // ==========================================================================
   // PHẦN 1: MÔN SINH HỌC LỚP 10 (26 BÀI - KẾT NỐI TRI THỨC VỚI CUỘC SỐNG)
@@ -2541,4 +2544,6 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
     };
   };
 })();
+}
+
 
