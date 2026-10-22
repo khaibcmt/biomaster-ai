@@ -2225,13 +2225,33 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
       const yArr = Array.isArray(matched.yccd) ? matched.yccd : [];
       matched = {
         yccd: yArr,
-        sections: [matched.s1, matched.s2, matched.s3].filter(Boolean).map((sArr, idx) => ({
-          title: sArr[0],
-          sgkContent: Array.isArray(sArr[1]) ? sArr[1] : [String(sArr[1] || "")],
-          yccd_nb: yArr[0] || `Nêu được kiến thức trọng tâm mục ${sArr[0]}.`,
-          yccd_th: yArr[1] || yArr[0] || `Giải thích được cơ chế khoa học mục ${sArr[0]}.`,
-          yccd_vd: yArr[idx] || yArr[yArr.length - 1] || `Vận dụng được kiến thức mục ${sArr[0]} vào thực tiễn.`
-        })),
+        sections: [matched.s1, matched.s2, matched.s3].filter(Boolean).map((sArr, idx) => {
+          const secTitle = sArr[0] || `Mục ${idx + 1}`;
+          const secCore = secTitle.replace(/^(I|II|III|IV|V|\d+)[\.\:]\s*/i, "").trim().toLowerCase();
+          const sgkArr = Array.isArray(sArr[1]) ? sArr[1] : [String(sArr[1] || "")];
+          const nbText = idx === 0
+            ? (yArr[0] || `Nhận biết và trình bày được các khái niệm, thành phần cơ bản về ${secCore}.`)
+            : (idx === 1
+                ? `Trình bày được các đặc điểm, cấu trúc và giai đoạn cốt lõi thuộc nội dung ${secCore}.`
+                : (yArr[3] || `Nêu được các nguyên tắc, vai trò và thông tin trọng tâm về ${secCore}.`));
+          const thText = idx === 0
+            ? `Phân tích và phân biệt được các đặc điểm, thành phần nền tảng trong nội dung ${secCore}.`
+            : (idx === 1
+                ? (yArr[1] || yArr[0] || `Giải thích được bản chất và cơ chế khoa học của ${secCore}.`)
+                : (yArr[2] || `Phân tích được mối quan hệ giữa cơ sở khoa học và ý nghĩa thực tiễn của ${secCore}.`));
+          const vdText = idx === 0
+            ? `Lấy được ví dụ thực tế minh họa cho các khái niệm và đặc điểm thuộc nội dung ${secCore}.`
+            : (idx === 1
+                ? `Vận dụng cơ chế khoa học của ${secCore} để giải thích các hiện tượng sinh học - kĩ thuật liên quan.`
+                : (yArr[yArr.length - 1] || `Vận dụng kiến thức về ${secCore} vào giải quyết vấn đề thực tiễn đời sống và sản xuất.`));
+          return {
+            title: secTitle,
+            sgkContent: sgkArr,
+            yccd_nb: nbText,
+            yccd_th: thText,
+            yccd_vd: vdText
+          };
+        }),
         openingQuestion: matched.warmup,
         openingAnswer: matched.warmupAns,
         nlsIntegration: {
@@ -2257,7 +2277,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
       matched = {
         yccd: [
           `Nêu được khái niệm, đặc điểm cơ bản và vai trò cốt lõi của ${topicCore.toLowerCase()} theo Chương trình GDPT 2018.`,
-          `Trình bày và phân tích được cơ chế khoa học, quy trình kĩ thuật và mối liên hệ giữa cấu tạo với chức năng trong bài ${topicCore}.`,
+          `Trình bày và phân tích được cơ chế khoa học, quy trình kĩ thuật và mối liên hệ giữa cấu tạo với chức năng của ${topicCore.toLowerCase()}.`,
           `Vận dụng được kiến thức về ${topicCore.toLowerCase()} để giải thích các hiện tượng thực tiễn trong đời sống, sản xuất nông - y - sinh học tại địa phương.`
         ],
         sections: [
@@ -2294,21 +2314,21 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
             ]
           }
         ],
-        openingQuestion: `Trong thực tiễn đời sống và sản xuất tại địa phương hiện nay, vì sao việc nắm vững cơ sở khoa học của "${topicCore}" lại giúp người dân nâng cao năng suất và bảo vệ sức khỏe hiệu quả hơn cách làm truyền thống?`,
+        openingQuestion: `Trong thực tiễn đời sống và sản xuất tại địa phương hiện nay, vì sao việc nắm vững cơ sở khoa học về ${topicCore.toLowerCase()} lại giúp người dân nâng cao năng suất và bảo vệ sức khỏe hiệu quả hơn cách làm truyền thống?`,
         openingAnswer: `Vì hiểu rõ bản chất và cơ chế khoa học của ${topicCore.toLowerCase()} giúp tác động đúng thời điểm, đúng liều lượng và đúng quy trình kĩ thuật thay vì làm theo cảm tính.`,
         nlsIntegration: {
           code: "2.1.TC1a",
           targetSection: `Mục I. Khái niệm, đặc điểm và cơ sở khoa học của ${topicCore}`,
-          gvActivity: `GV trình chiếu sơ đồ số hóa cấu trúc và cơ chế của ${topicCore} trong SGK Kết nối tri thức với cuộc sống.`,
+          gvActivity: `GV trình chiếu sơ đồ số hóa cấu trúc và cơ chế của ${topicCore.toLowerCase()} trong SGK Kết nối tri thức với cuộc sống.`,
           hsActivity: `HS quan sát sơ đồ số hóa, phân tích thông tin đối chiếu với SGK để hoàn thành Phiếu học tập số 1.`
         },
         aiIntegration: {
           code: "10.A1.2",
           targetSection: `Mục II. Cơ chế, quy trình hoạt động và các yếu tố ảnh hưởng đến ${topicCore}`,
-          gvActivity: `GV chiếu nhận định để HS kiểm chứng: "Các yếu tố môi trường như nhiệt độ và độ pH hoàn toàn không ảnh hưởng gì đến hiệu suất của quá trình trong bài ${topicCore}".`,
+          gvActivity: `GV chiếu nhận định để HS kiểm chứng: "Các yếu tố môi trường như nhiệt độ và độ pH hoàn toàn không ảnh hưởng gì đến hiệu suất của quá trình ${topicCore.toLowerCase()}".`,
           hsActivity: `HS đối chiếu nội dung SGK để phản biện: Nhiệt độ và độ pH ảnh hưởng trực tiếp đến hoạt tính sinh học và tốc độ phản ứng; vượt ngoài giới hạn sinh thái quá trình sẽ bị ức chế hoặc ngừng trệ.`
         },
-        calcQuestion: `Một mô hình ứng dụng quy trình kĩ thuật mới của bài "${topicCore}" giúp nâng sản lượng thu hoạch từ 120 kg lên 150 kg trên cùng một đơn vị diện tích. Sản lượng đã tăng thêm bao nhiêu phần trăm so với ban đầu?`,
+        calcQuestion: `Một mô hình ứng dụng quy trình kĩ thuật mới về ${topicCore.toLowerCase()} giúp nâng sản lượng thu hoạch từ 120 kg lên 150 kg trên cùng một đơn vị diện tích. Sản lượng đã tăng thêm bao nhiêu phần trăm so với ban đầu?`,
         calcAnswer: `25% ((150 - 120) / 120 × 100% = 25%).`
       };
     }
@@ -2357,7 +2377,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
       mcq: [
         {
           level: "Nhận biết",
-          q: `Theo SGK Kết nối tri thức với cuộc sống (${cleanTitle}), phát biểu nào sau đây là ĐÚNG khi nói về nội dung của mục "${s1.title}"?`,
+          q: `Theo SGK Kết nối tri thức với cuộc sống, phát biểu nào sau đây là ĐÚNG khi tìm hiểu nội dung mục "${s1.title}"?`,
           options: [
             `A. ${shortSent(p1, 175)}`,
             `B. Quá trình này diễn ra hoàn toàn tách biệt, không cần năng lượng hay vật chất từ môi trường.`,
@@ -2369,7 +2389,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Nhận biết",
-          q: `Trong nội dung "${s1.title}" (${cleanTitle}), đặc điểm nào sau đây phản ánh chính xác kiến thức chuẩn SGK?`,
+          q: `Khi nghiên cứu nội dung "${s1.title}", đặc điểm nào sau đây phản ánh chính xác kiến thức chuẩn SGK?`,
           options: [
             `A. Không có sự tham gia của bất kì phân tử sinh học hay cấu trúc tế bào nào.`,
             `B. ${shortSent(p2, 175)}`,
@@ -2381,7 +2401,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Nhận biết",
-          q: `Khi tìm hiểu về "${s2.title}" trong ${cleanTitle}, nhận định nào sau đây là chính xác?`,
+          q: `Khi tìm hiểu về "${s2.title}", nhận định nào sau đây là chính xác theo Chương trình GDPT 2018?`,
           options: [
             `A. Quá trình diễn ra ngẫu nhiên và không tuân theo bất kì quy luật sinh học nào.`,
             `B. Các yếu tố nhiệt độ, độ pH và ánh sáng không có bất kì ảnh hưởng nào đến quá trình.`,
@@ -2393,7 +2413,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Thông hiểu",
-          q: `Dựa vào kiến thức mục "${s2.title}" (${cleanTitle}), giải thích nào sau đây là ĐÚNG về cơ chế hoạt động của quá trình?`,
+          q: `Dựa vào kiến thức mục "${s2.title}", giải thích nào sau đây là ĐÚNG về bản chất và cơ chế hoạt động của quá trình?`,
           options: [
             `A. Không có mối liên hệ nào giữa cấu tạo và chức năng sinh lí của cơ quan.`,
             `B. Khi vượt ra ngoài giới hạn sinh thái tối đa, tốc độ quá trình vẫn tăng tuyến tính vô hạn.`,
@@ -2405,11 +2425,11 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Thông hiểu",
-          q: `Trong bài học "${cleanTitle}", nội dung mục "${s3.title}" khẳng định điều nào sau đây?`,
+          q: `Khi phân tích nội dung mục "${s3.title}", kết luận khoa học nào sau đây là phù hợp nhất?`,
           options: [
             `A. ${shortSent(p5, 175)}`,
-            `B. Kiến thức của bài học chỉ mang tính lí thuyết thuần túy và không có ứng dụng thực tiễn.`,
-            `C. Các quá trình sinh học trong bài diễn ra ngược lại với định luật bảo toàn năng lượng.`,
+            `B. Kiến thức của mục này chỉ mang tính lí thuyết thuần túy và không có ứng dụng thực tiễn.`,
+            `C. Các quá trình sinh học diễn ra ngược lại với định luật bảo toàn năng lượng.`,
             `D. Mọi tác nhân hóa học độc hại đều kích thích cơ thể sinh trưởng khỏe mạnh hơn.`
           ],
           ans: "A",
@@ -2417,7 +2437,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Thông hiểu",
-          q: `Khi kiểm chứng các nhận định khoa học liên quan đến "${cleanTitle}", kết luận nào sau đây là ĐÚNG theo SGK Kết nối tri thức?`,
+          q: `Khi kiểm chứng các nhận định khoa học liên quan đến nội dung "${s2.title}", kết luận nào sau đây là ĐÚNG theo SGK Kết nối tri thức?`,
           options: [
             `A. ${shortSent(aiWrongRaw || "Quá trình diễn ra không phụ thuộc vào điều kiện môi trường.", 170)}`,
             `B. ${shortSent(aiFixRaw || p6, 175)}`,
@@ -2429,7 +2449,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Vận dụng",
-          q: `${matched.openingQuestion || `Ứng dụng nào sau đây vận dụng đúng kiến thức của ${cleanTitle} vào thực tiễn?`}`,
+          q: `${matched.openingQuestion || "Ứng dụng nào sau đây vận dụng đúng cơ sở khoa học của bài học vào thực tiễn?"}`,
           options: [
             `A. Do sự biến đổi ngẫu nhiên không liên quan đến cơ chế sinh học của cơ thể.`,
             `B. Do tế bào ngừng hoàn toàn hoạt động hô hấp và tổng hợp protein.`,
@@ -2441,7 +2461,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Vận dụng",
-          q: `Xét bài toán thực tiễn thuộc nội dung "${cleanTitle}": ${matched.calcQuestion} Kết quả đúng là:`,
+          q: `Xét bài toán vận dụng thực tiễn: ${matched.calcQuestion} Kết quả tính toán đúng là:`,
           options: [
             `A. Bằng một nửa giá trị ban đầu và giảm dần về 0.`,
             `B. Không xác định được vì các đại lượng sinh học không tuân theo quy luật toán học.`,
@@ -2454,7 +2474,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
       ],
       tf: [
         {
-          stem: `Khi nghiên cứu nội dung mục "${s1.title}" của ${cleanTitle} (SGK Kết nối tri thức với cuộc sống), một nhóm học sinh đưa ra các nhận định sau:`,
+          stem: `Khi nghiên cứu nội dung mục "${s1.title}" trong SGK Kết nối tri thức với cuộc sống, một nhóm học sinh đưa ra các nhận định sau:`,
           statements: [
             { label: "a)", text: shortSent(p1, 210), ans: "Đúng" },
             { label: "b)", text: shortSent(p2, 210), ans: "Đúng" },
@@ -2463,7 +2483,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
           ]
         },
         {
-          stem: `Khi phân tích cơ chế tại mục "${s2.title}" của ${cleanTitle}, các phát biểu sau đây là đúng hay sai?`,
+          stem: `Khi phân tích cơ chế khoa học tại mục "${s2.title}", các phát biểu sau đây là Đúng hay Sai?`,
           statements: [
             { label: "a)", text: shortSent(p3, 210), ans: "Đúng" },
             { label: "b)", text: aiWrongRaw || `Quá trình tại mục "${s2.title}" diễn ra hoàn toàn độc lập với nhiệt độ và độ pH của môi trường.`, ans: "Sai" },
@@ -2472,7 +2492,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
           ]
         },
         {
-          stem: `Tìm hiểu về "${s3.title}" và ý nghĩa thực tiễn của ${cleanTitle}, mỗi nhận định sau đây là Đúng hay Sai?`,
+          stem: `Tìm hiểu về "${s3.title}" và ý nghĩa ứng dụng trong thực tiễn đời sống, sản xuất, mỗi nhận định sau đây là Đúng hay Sai?`,
           statements: [
             { label: "a)", text: shortSent(p5, 210), ans: "Đúng" },
             { label: "b)", text: shortSent(p6, 210), ans: "Đúng" },
@@ -2481,7 +2501,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
           ]
         },
         {
-          stem: `Vận dụng tổng hợp kiến thức của ${cleanTitle} để giải thích tình huống thực nghiệm và bài toán thực tiễn:`,
+          stem: `Vận dụng tổng hợp kiến thức đã học để phân tích tình huống thực nghiệm và bài toán thực tiễn sau đây:`,
           statements: [
             { label: "a)", text: `Tình huống thực tiễn: "${shortSent(matched.openingQuestion, 150)}" được giải thích là: ${shortSent(matched.openingAnswer, 140)}`, ans: "Đúng" },
             { label: "b)", text: `Với bài toán: "${matched.calcQuestion}", kết quả tính toán chính xác là: ${matched.calcAnswer}`, ans: "Đúng" },
@@ -2499,19 +2519,19 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Nhận biết",
-          q: `Bài học "${cleanTitle}" trong cấu trúc SGK Kết nối tri thức với cuộc sống gồm bao nhiêu mục nội dung kiến thức trọng tâm chính đã được tìm hiểu?`,
+          q: `Theo cấu trúc bài học trong SGK Kết nối tri thức với cuộc sống, nội dung kiến thức trọng tâm được triển khai qua bao nhiêu mục lớn?`,
           ans: `${normalizedSections.length} mục nội dung chính`,
           explain: `Gồm ${normalizedSections.length} mục: ${normalizedSections.map(s => s.title).join("; ")}.`
         },
         {
           level: "Thông hiểu",
-          q: `Giải thích ngắn gọn câu hỏi thực tiễn khởi động của bài "${cleanTitle}": ${matched.openingQuestion}`,
+          q: `Giải thích ngắn gọn cơ sở khoa học cho tình huống thực tiễn mở đầu: ${matched.openingQuestion}`,
           ans: shortSent(matched.openingAnswer, 140),
           explain: matched.openingAnswer
         },
         {
           level: "Vận dụng",
-          q: `Phản biện khoa học đối với nhận định sai lầm sau đây trong bài "${cleanTitle}": "${aiWrongRaw}"`,
+          q: `Phản biện và đính chính lỗi sai khoa học trong nhận định giả định sau: "${aiWrongRaw}"`,
           ans: shortSent(aiFixRaw, 150),
           explain: aiFixRaw
         }

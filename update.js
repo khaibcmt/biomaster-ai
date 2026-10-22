@@ -2225,13 +2225,33 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
       const yArr = Array.isArray(matched.yccd) ? matched.yccd : [];
       matched = {
         yccd: yArr,
-        sections: [matched.s1, matched.s2, matched.s3].filter(Boolean).map((sArr, idx) => ({
-          title: sArr[0],
-          sgkContent: Array.isArray(sArr[1]) ? sArr[1] : [String(sArr[1] || "")],
-          yccd_nb: yArr[0] || `Nêu được kiến thức trọng tâm mục ${sArr[0]}.`,
-          yccd_th: yArr[1] || yArr[0] || `Giải thích được cơ chế khoa học mục ${sArr[0]}.`,
-          yccd_vd: yArr[idx] || yArr[yArr.length - 1] || `Vận dụng được kiến thức mục ${sArr[0]} vào thực tiễn.`
-        })),
+        sections: [matched.s1, matched.s2, matched.s3].filter(Boolean).map((sArr, idx) => {
+          const secTitle = sArr[0] || `Mục ${idx + 1}`;
+          const secCore = secTitle.replace(/^(I|II|III|IV|V|\d+)[\.\:]\s*/i, "").trim().toLowerCase();
+          const sgkArr = Array.isArray(sArr[1]) ? sArr[1] : [String(sArr[1] || "")];
+          const nbText = idx === 0
+            ? (yArr[0] || `Nhận biết và trình bày được các khái niệm, thành phần cơ bản về ${secCore}.`)
+            : (idx === 1
+                ? `Trình bày được các đặc điểm, cấu trúc và giai đoạn cốt lõi thuộc nội dung ${secCore}.`
+                : (yArr[3] || `Nêu được các nguyên tắc, vai trò và thông tin trọng tâm về ${secCore}.`));
+          const thText = idx === 0
+            ? `Phân tích và phân biệt được các đặc điểm, thành phần nền tảng trong nội dung ${secCore}.`
+            : (idx === 1
+                ? (yArr[1] || yArr[0] || `Giải thích được bản chất và cơ chế khoa học của ${secCore}.`)
+                : (yArr[2] || `Phân tích được mối quan hệ giữa cơ sở khoa học và ý nghĩa thực tiễn của ${secCore}.`));
+          const vdText = idx === 0
+            ? `Lấy được ví dụ thực tế minh họa cho các khái niệm và đặc điểm thuộc nội dung ${secCore}.`
+            : (idx === 1
+                ? `Vận dụng cơ chế khoa học của ${secCore} để giải thích các hiện tượng sinh học - kĩ thuật liên quan.`
+                : (yArr[yArr.length - 1] || `Vận dụng kiến thức về ${secCore} vào giải quyết vấn đề thực tiễn đời sống và sản xuất.`));
+          return {
+            title: secTitle,
+            sgkContent: sgkArr,
+            yccd_nb: nbText,
+            yccd_th: thText,
+            yccd_vd: vdText
+          };
+        }),
         openingQuestion: matched.warmup,
         openingAnswer: matched.warmupAns,
         nlsIntegration: {
@@ -2257,7 +2277,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
       matched = {
         yccd: [
           `Nêu được khái niệm, đặc điểm cơ bản và vai trò cốt lõi của ${topicCore.toLowerCase()} theo Chương trình GDPT 2018.`,
-          `Trình bày và phân tích được cơ chế khoa học, quy trình kĩ thuật và mối liên hệ giữa cấu tạo với chức năng trong bài ${topicCore}.`,
+          `Trình bày và phân tích được cơ chế khoa học, quy trình kĩ thuật và mối liên hệ giữa cấu tạo với chức năng của ${topicCore.toLowerCase()}.`,
           `Vận dụng được kiến thức về ${topicCore.toLowerCase()} để giải thích các hiện tượng thực tiễn trong đời sống, sản xuất nông - y - sinh học tại địa phương.`
         ],
         sections: [
@@ -2294,21 +2314,21 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
             ]
           }
         ],
-        openingQuestion: `Trong thực tiễn đời sống và sản xuất tại địa phương hiện nay, vì sao việc nắm vững cơ sở khoa học của "${topicCore}" lại giúp người dân nâng cao năng suất và bảo vệ sức khỏe hiệu quả hơn cách làm truyền thống?`,
+        openingQuestion: `Trong thực tiễn đời sống và sản xuất tại địa phương hiện nay, vì sao việc nắm vững cơ sở khoa học về ${topicCore.toLowerCase()} lại giúp người dân nâng cao năng suất và bảo vệ sức khỏe hiệu quả hơn cách làm truyền thống?`,
         openingAnswer: `Vì hiểu rõ bản chất và cơ chế khoa học của ${topicCore.toLowerCase()} giúp tác động đúng thời điểm, đúng liều lượng và đúng quy trình kĩ thuật thay vì làm theo cảm tính.`,
         nlsIntegration: {
           code: "2.1.TC1a",
           targetSection: `Mục I. Khái niệm, đặc điểm và cơ sở khoa học của ${topicCore}`,
-          gvActivity: `GV trình chiếu sơ đồ số hóa cấu trúc và cơ chế của ${topicCore} trong SGK Kết nối tri thức với cuộc sống.`,
+          gvActivity: `GV trình chiếu sơ đồ số hóa cấu trúc và cơ chế của ${topicCore.toLowerCase()} trong SGK Kết nối tri thức với cuộc sống.`,
           hsActivity: `HS quan sát sơ đồ số hóa, phân tích thông tin đối chiếu với SGK để hoàn thành Phiếu học tập số 1.`
         },
         aiIntegration: {
           code: "10.A1.2",
           targetSection: `Mục II. Cơ chế, quy trình hoạt động và các yếu tố ảnh hưởng đến ${topicCore}`,
-          gvActivity: `GV chiếu nhận định để HS kiểm chứng: "Các yếu tố môi trường như nhiệt độ và độ pH hoàn toàn không ảnh hưởng gì đến hiệu suất của quá trình trong bài ${topicCore}".`,
+          gvActivity: `GV chiếu nhận định để HS kiểm chứng: "Các yếu tố môi trường như nhiệt độ và độ pH hoàn toàn không ảnh hưởng gì đến hiệu suất của quá trình ${topicCore.toLowerCase()}".`,
           hsActivity: `HS đối chiếu nội dung SGK để phản biện: Nhiệt độ và độ pH ảnh hưởng trực tiếp đến hoạt tính sinh học và tốc độ phản ứng; vượt ngoài giới hạn sinh thái quá trình sẽ bị ức chế hoặc ngừng trệ.`
         },
-        calcQuestion: `Một mô hình ứng dụng quy trình kĩ thuật mới của bài "${topicCore}" giúp nâng sản lượng thu hoạch từ 120 kg lên 150 kg trên cùng một đơn vị diện tích. Sản lượng đã tăng thêm bao nhiêu phần trăm so với ban đầu?`,
+        calcQuestion: `Một mô hình ứng dụng quy trình kĩ thuật mới về ${topicCore.toLowerCase()} giúp nâng sản lượng thu hoạch từ 120 kg lên 150 kg trên cùng một đơn vị diện tích. Sản lượng đã tăng thêm bao nhiêu phần trăm so với ban đầu?`,
         calcAnswer: `25% ((150 - 120) / 120 × 100% = 25%).`
       };
     }
@@ -2357,7 +2377,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
       mcq: [
         {
           level: "Nhận biết",
-          q: `Theo SGK Kết nối tri thức với cuộc sống (${cleanTitle}), phát biểu nào sau đây là ĐÚNG khi nói về nội dung của mục "${s1.title}"?`,
+          q: `Theo SGK Kết nối tri thức với cuộc sống, phát biểu nào sau đây là ĐÚNG khi tìm hiểu nội dung mục "${s1.title}"?`,
           options: [
             `A. ${shortSent(p1, 175)}`,
             `B. Quá trình này diễn ra hoàn toàn tách biệt, không cần năng lượng hay vật chất từ môi trường.`,
@@ -2369,7 +2389,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Nhận biết",
-          q: `Trong nội dung "${s1.title}" (${cleanTitle}), đặc điểm nào sau đây phản ánh chính xác kiến thức chuẩn SGK?`,
+          q: `Khi nghiên cứu nội dung "${s1.title}", đặc điểm nào sau đây phản ánh chính xác kiến thức chuẩn SGK?`,
           options: [
             `A. Không có sự tham gia của bất kì phân tử sinh học hay cấu trúc tế bào nào.`,
             `B. ${shortSent(p2, 175)}`,
@@ -2381,7 +2401,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Nhận biết",
-          q: `Khi tìm hiểu về "${s2.title}" trong ${cleanTitle}, nhận định nào sau đây là chính xác?`,
+          q: `Khi tìm hiểu về "${s2.title}", nhận định nào sau đây là chính xác theo Chương trình GDPT 2018?`,
           options: [
             `A. Quá trình diễn ra ngẫu nhiên và không tuân theo bất kì quy luật sinh học nào.`,
             `B. Các yếu tố nhiệt độ, độ pH và ánh sáng không có bất kì ảnh hưởng nào đến quá trình.`,
@@ -2393,7 +2413,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Thông hiểu",
-          q: `Dựa vào kiến thức mục "${s2.title}" (${cleanTitle}), giải thích nào sau đây là ĐÚNG về cơ chế hoạt động của quá trình?`,
+          q: `Dựa vào kiến thức mục "${s2.title}", giải thích nào sau đây là ĐÚNG về bản chất và cơ chế hoạt động của quá trình?`,
           options: [
             `A. Không có mối liên hệ nào giữa cấu tạo và chức năng sinh lí của cơ quan.`,
             `B. Khi vượt ra ngoài giới hạn sinh thái tối đa, tốc độ quá trình vẫn tăng tuyến tính vô hạn.`,
@@ -2405,11 +2425,11 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Thông hiểu",
-          q: `Trong bài học "${cleanTitle}", nội dung mục "${s3.title}" khẳng định điều nào sau đây?`,
+          q: `Khi phân tích nội dung mục "${s3.title}", kết luận khoa học nào sau đây là phù hợp nhất?`,
           options: [
             `A. ${shortSent(p5, 175)}`,
-            `B. Kiến thức của bài học chỉ mang tính lí thuyết thuần túy và không có ứng dụng thực tiễn.`,
-            `C. Các quá trình sinh học trong bài diễn ra ngược lại với định luật bảo toàn năng lượng.`,
+            `B. Kiến thức của mục này chỉ mang tính lí thuyết thuần túy và không có ứng dụng thực tiễn.`,
+            `C. Các quá trình sinh học diễn ra ngược lại với định luật bảo toàn năng lượng.`,
             `D. Mọi tác nhân hóa học độc hại đều kích thích cơ thể sinh trưởng khỏe mạnh hơn.`
           ],
           ans: "A",
@@ -2417,7 +2437,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Thông hiểu",
-          q: `Khi kiểm chứng các nhận định khoa học liên quan đến "${cleanTitle}", kết luận nào sau đây là ĐÚNG theo SGK Kết nối tri thức?`,
+          q: `Khi kiểm chứng các nhận định khoa học liên quan đến nội dung "${s2.title}", kết luận nào sau đây là ĐÚNG theo SGK Kết nối tri thức?`,
           options: [
             `A. ${shortSent(aiWrongRaw || "Quá trình diễn ra không phụ thuộc vào điều kiện môi trường.", 170)}`,
             `B. ${shortSent(aiFixRaw || p6, 175)}`,
@@ -2429,7 +2449,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Vận dụng",
-          q: `${matched.openingQuestion || `Ứng dụng nào sau đây vận dụng đúng kiến thức của ${cleanTitle} vào thực tiễn?`}`,
+          q: `${matched.openingQuestion || "Ứng dụng nào sau đây vận dụng đúng cơ sở khoa học của bài học vào thực tiễn?"}`,
           options: [
             `A. Do sự biến đổi ngẫu nhiên không liên quan đến cơ chế sinh học của cơ thể.`,
             `B. Do tế bào ngừng hoàn toàn hoạt động hô hấp và tổng hợp protein.`,
@@ -2441,7 +2461,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Vận dụng",
-          q: `Xét bài toán thực tiễn thuộc nội dung "${cleanTitle}": ${matched.calcQuestion} Kết quả đúng là:`,
+          q: `Xét bài toán vận dụng thực tiễn: ${matched.calcQuestion} Kết quả tính toán đúng là:`,
           options: [
             `A. Bằng một nửa giá trị ban đầu và giảm dần về 0.`,
             `B. Không xác định được vì các đại lượng sinh học không tuân theo quy luật toán học.`,
@@ -2454,7 +2474,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
       ],
       tf: [
         {
-          stem: `Khi nghiên cứu nội dung mục "${s1.title}" của ${cleanTitle} (SGK Kết nối tri thức với cuộc sống), một nhóm học sinh đưa ra các nhận định sau:`,
+          stem: `Khi nghiên cứu nội dung mục "${s1.title}" trong SGK Kết nối tri thức với cuộc sống, một nhóm học sinh đưa ra các nhận định sau:`,
           statements: [
             { label: "a)", text: shortSent(p1, 210), ans: "Đúng" },
             { label: "b)", text: shortSent(p2, 210), ans: "Đúng" },
@@ -2463,7 +2483,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
           ]
         },
         {
-          stem: `Khi phân tích cơ chế tại mục "${s2.title}" của ${cleanTitle}, các phát biểu sau đây là đúng hay sai?`,
+          stem: `Khi phân tích cơ chế khoa học tại mục "${s2.title}", các phát biểu sau đây là Đúng hay Sai?`,
           statements: [
             { label: "a)", text: shortSent(p3, 210), ans: "Đúng" },
             { label: "b)", text: aiWrongRaw || `Quá trình tại mục "${s2.title}" diễn ra hoàn toàn độc lập với nhiệt độ và độ pH của môi trường.`, ans: "Sai" },
@@ -2472,7 +2492,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
           ]
         },
         {
-          stem: `Tìm hiểu về "${s3.title}" và ý nghĩa thực tiễn của ${cleanTitle}, mỗi nhận định sau đây là Đúng hay Sai?`,
+          stem: `Tìm hiểu về "${s3.title}" và ý nghĩa ứng dụng trong thực tiễn đời sống, sản xuất, mỗi nhận định sau đây là Đúng hay Sai?`,
           statements: [
             { label: "a)", text: shortSent(p5, 210), ans: "Đúng" },
             { label: "b)", text: shortSent(p6, 210), ans: "Đúng" },
@@ -2481,7 +2501,7 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
           ]
         },
         {
-          stem: `Vận dụng tổng hợp kiến thức của ${cleanTitle} để giải thích tình huống thực nghiệm và bài toán thực tiễn:`,
+          stem: `Vận dụng tổng hợp kiến thức đã học để phân tích tình huống thực nghiệm và bài toán thực tiễn sau đây:`,
           statements: [
             { label: "a)", text: `Tình huống thực tiễn: "${shortSent(matched.openingQuestion, 150)}" được giải thích là: ${shortSent(matched.openingAnswer, 140)}`, ans: "Đúng" },
             { label: "b)", text: `Với bài toán: "${matched.calcQuestion}", kết quả tính toán chính xác là: ${matched.calcAnswer}`, ans: "Đúng" },
@@ -2499,19 +2519,19 @@ Object.assign(window.SGK_KNTT_LESSON_CATALOG, {
         },
         {
           level: "Nhận biết",
-          q: `Bài học "${cleanTitle}" trong cấu trúc SGK Kết nối tri thức với cuộc sống gồm bao nhiêu mục nội dung kiến thức trọng tâm chính đã được tìm hiểu?`,
+          q: `Theo cấu trúc bài học trong SGK Kết nối tri thức với cuộc sống, nội dung kiến thức trọng tâm được triển khai qua bao nhiêu mục lớn?`,
           ans: `${normalizedSections.length} mục nội dung chính`,
           explain: `Gồm ${normalizedSections.length} mục: ${normalizedSections.map(s => s.title).join("; ")}.`
         },
         {
           level: "Thông hiểu",
-          q: `Giải thích ngắn gọn câu hỏi thực tiễn khởi động của bài "${cleanTitle}": ${matched.openingQuestion}`,
+          q: `Giải thích ngắn gọn cơ sở khoa học cho tình huống thực tiễn mở đầu: ${matched.openingQuestion}`,
           ans: shortSent(matched.openingAnswer, 140),
           explain: matched.openingAnswer
         },
         {
           level: "Vận dụng",
-          q: `Phản biện khoa học đối với nhận định sai lầm sau đây trong bài "${cleanTitle}": "${aiWrongRaw}"`,
+          q: `Phản biện và đính chính lỗi sai khoa học trong nhận định giả định sau: "${aiWrongRaw}"`,
           ans: shortSent(aiFixRaw, 150),
           explain: aiFixRaw
         }
@@ -2595,7 +2615,7 @@ window.showBioToast = function(message, type = 'info') {
   }, 4500);
 };
 
-// Ghi đè khóa lưu trữ cache sang phiên bản v9_pro
+// Ghi đè khóa lưu trữ cache sang phiên bản v10_pro
 window.getAICacheKey = function(mode, subject, grade, lessonTitle) {
   if (mode === '7991') {
     const lessonsKey = (typeof selectedLessonsForExam !== 'undefined' && selectedLessonsForExam.length > 0)
@@ -2604,13 +2624,13 @@ window.getAICacheKey = function(mode, subject, grade, lessonTitle) {
     const totalsKey = (typeof matrixGlobalTotals !== 'undefined' && matrixGlobalTotals)
       ? Object.values(matrixGlobalTotals).join('_')
       : 'default';
-    return `biomaster_v9_pro_${mode}_${subject}_${grade}_${lessonsKey}_${totalsKey}`.replace(/[^a-zA-Z0-9_]/g, '_');
+    return `biomaster_v10_pro_${mode}_${subject}_${grade}_${lessonsKey}_${totalsKey}`.replace(/[^a-zA-Z0-9_]/g, '_');
   }
-  return `biomaster_v9_pro_${mode}_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
+  return `biomaster_v10_pro_${mode}_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
 };
 
 window.getStructuredPlanKey = function(subject, grade, lessonTitle) {
-  return `structured_plan_v9_pro_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
+  return `structured_plan_v10_pro_${subject}_${grade}_${lessonTitle}`.replace(/[^a-zA-Z0-9_]/g, '_');
 };
 
 // ============================================================================
@@ -2705,7 +2725,7 @@ window.rebalanceMatrixEvenly = function() {
   window.showBioToast('Đã cân bằng tự động số lượng câu hỏi đều vào tất cả các bài học theo đúng chuẩn Công văn 7991!', 'success');
 };
 
-// Hàm làm sạch các cụm từ hướng dẫn thừa nếu AI vô tình sinh ra
+// Hàm làm sạch các cụm từ hướng dẫn thừa và loại bỏ triệt để sự trùng lặp tên bài học ("Bài X...") trong thân giáo án
 window.cleanUnwantedMetaPhrases = function(htmlOrText) {
   if (!htmlOrText || typeof htmlOrText !== 'string') return htmlOrText;
   return htmlOrText
@@ -2735,13 +2755,26 @@ window.cleanUnwantedMetaPhrases = function(htmlOrText) {
     .replace(/\(KHỞI ĐỘNG\s*-\s*Thời gian:\s*\d+\s*phút\)/gi, '(KHỞI ĐỘNG)')
     .replace(/\s*\(Thời gian:\s*\d+\s*phút\)/gi, '')
     .replace(/DỰ KIẾN SẢN PHẨM\s*\(NỘI DUNG KIẾN THỨC TRỌNG TÂM\)/gi, 'DỰ KIẾN SẢN PHẨM')
+    .replace(/của\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'của bài học')
+    .replace(/trong\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'trong bài học')
+    .replace(/về\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'về nội dung bài học')
+    .replace(/đối\s+với\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'đối với bài học')
+    .replace(/phục\s+vụ\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'phục vụ tiết dạy')
+    .replace(/mở\s+đầu\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'mở đầu bài học')
+    .replace(/kiến\s+thức\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'kiến thức bài học')
+    .replace(/nghiên\s+cứu\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'nghiên cứu bài học')
+    .replace(/nội\s+dung\s+bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'nội dung bài học')
+    .replace(/chủ\s+đề\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'chủ đề bài học')
+    .replace(/bài\s+mới\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'bài học mới')
+    .replace(/bài\s+học\s+hôm\s+nay\s*:\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'bài học hôm nay')
+    .replace(/bài\s*(?:học)?\s*["“']Bài\s*\d+[^"”'<:\n]*["”']/gi, 'bài học')
     .replace(/undefined/g, '');
 };
 
 // ============================================================================
 // HỆ THỐNG ĐỊNH TUYẾN AI ĐA TẦNG & QUẢN LÝ GEMINI API KEY CHỐNG QUÁ TẢI SERVER
 // Hỗ trợ 4 Mô hình Thế hệ mới:
-// - gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao)
+// - gemini-3.8-flash (Gemini 3.8 Flash — Tốc độ cao)
 // - gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt)
 // - gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu)
 // - gemini-4-argon (Gemini 4 Argon — Thế hệ mới)
@@ -2753,30 +2786,31 @@ let _clientKeyRotationIdx = 0;
 window.__aiGenerationCounter = (window.__aiGenerationCounter || 0);
 
 window.BIOMASTER_AI_MODELS = {
-  'gemini-3.5-flash': 'gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao)',
+  'gemini-3.8-flash': 'gemini-3.8-flash (Gemini 3.8 Flash — Tốc độ cao)',
   'gemini-3.5-flash-lite': 'gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt)',
   'gemini-3.1-pro': 'gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu)',
   'gemini-4-argon': 'gemini-4-argon (Gemini 4 Argon — Thế hệ mới)'
 };
 
 window.getFormattedModelDisplayName = function(selectedModel) {
-  const m = String(selectedModel || 'gemini-3.5-flash').toLowerCase();
+  const m = String(selectedModel || 'gemini-3.8-flash').toLowerCase();
   if (m.includes('lite')) return 'Gemini 3.5 Flash-Lite — Siêu mượt';
   if (m.includes('3.1') || m.includes('pro')) return 'Gemini 3.1 Pro — Chuyên sâu';
   if (m.includes('argon') || m.includes('agon') || m.includes('4')) return 'Gemini 4 Argon — Thế hệ mới';
-  return 'Gemini 3.5 Flash — Tốc độ cao';
+  return 'Gemini 3.8 Flash — Tốc độ cao';
 };
 
 window.getFullModelSpecLabel = function(selectedModel) {
-  const m = String(selectedModel || 'gemini-3.5-flash').toLowerCase();
+  const m = String(selectedModel || 'gemini-3.8-flash').toLowerCase();
   if (m.includes('lite')) return 'gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt)';
   if (m.includes('3.1') || m.includes('pro')) return 'gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu)';
   if (m.includes('argon') || m.includes('agon') || m.includes('4')) return 'gemini-4-argon (Gemini 4 Argon — Thế hệ mới)';
-  return 'gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao)';
+  return 'gemini-3.8-flash (Gemini 3.8 Flash — Tốc độ cao)';
 };
 
 window.selectAIModelFromMenu = selectAIModelFromMenu = function(modelVal) {
-  const normalized = (modelVal === 'gemini-4-agon') ? 'gemini-4-argon' : modelVal;
+  let normalized = (modelVal === 'gemini-4-agon') ? 'gemini-4-argon' : modelVal;
+  if (normalized === 'gemini-3.5-flash') normalized = 'gemini-3.8-flash';
   const sel = document.getElementById('sel-gemini-model');
   if (sel) sel.value = normalized;
   localStorage.setItem('selected_gemini_model', normalized);
@@ -2789,12 +2823,13 @@ window.selectAIModelFromMenu = selectAIModelFromMenu = function(modelVal) {
 };
 
 window.updateActiveAIRunningUI = updateActiveAIRunningUI = function() {
-  const rawModelVal = document.getElementById('sel-gemini-model') ? document.getElementById('sel-gemini-model').value : 'gemini-3.5-flash';
-  const modelVal = (rawModelVal === 'gemini-4-agon') ? 'gemini-4-argon' : rawModelVal;
+  const rawModelVal = document.getElementById('sel-gemini-model') ? document.getElementById('sel-gemini-model').value : 'gemini-3.8-flash';
+  let modelVal = (rawModelVal === 'gemini-4-agon') ? 'gemini-4-argon' : rawModelVal;
+  if (modelVal === 'gemini-3.5-flash') modelVal = 'gemini-3.8-flash';
   const thinkVal = document.getElementById('sel-thinking-level') ? document.getElementById('sel-thinking-level').value : 'high';
 
   const shortNames = {
-    'gemini-3.5-flash': 'Gemini 3.5 Flash — Tốc độ cao',
+    'gemini-3.8-flash': 'Gemini 3.8 Flash — Tốc độ cao',
     'gemini-3.5-flash-lite': 'Gemini 3.5 Flash-Lite — Siêu mượt',
     'gemini-3.1-pro': 'Gemini 3.1 Pro — Chuyên sâu',
     'gemini-4-argon': 'Gemini 4 Argon — Thế hệ mới'
@@ -2805,7 +2840,7 @@ window.updateActiveAIRunningUI = updateActiveAIRunningUI = function() {
     'high': 'Cao'
   };
 
-  const sName = shortNames[modelVal] || 'Gemini 3.5 Flash — Tốc độ cao';
+  const sName = shortNames[modelVal] || 'Gemini 3.8 Flash — Tốc độ cao';
   const tName = thinkNames[thinkVal] || 'Cao';
 
   const headerLbl = document.getElementById('active-ai-running-label');
@@ -2817,7 +2852,7 @@ window.updateActiveAIRunningUI = updateActiveAIRunningUI = function() {
   const thinkBadge = document.getElementById('thinking-level-badge');
   if (thinkBadge) thinkBadge.innerText = tName;
 
-  ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-pro', 'gemini-4-argon'].forEach(m => {
+  ['gemini-3.8-flash', 'gemini-3.5-flash-lite', 'gemini-3.1-pro', 'gemini-4-argon'].forEach(m => {
     const ck = document.getElementById('check-model-' + m);
     if (ck) {
       if (m === modelVal) ck.classList.remove('hidden');
@@ -2901,6 +2936,7 @@ window.discoverValidGeminiModelForKey = async function(apiKey) {
       .map(m => m.name.replace(/^models\//, ''));
 
     const preferredCandidates = [
+      'gemini-3.8-flash',
       'gemini-3.5-flash',
       'gemini-3.5-flash-lite',
       'gemini-3.1-pro',
@@ -2956,7 +2992,7 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
     for (let i = 0; i < 8; i++) {
       const item = mcqPool[i % Math.max(1, mcqPool.length)] || {
         level: i < 3 ? 'Nhận biết' : (i < 6 ? 'Thông hiểu' : 'Vận dụng'),
-        q: `Theo SGK Kết nối tri thức với cuộc sống, phát biểu nào sau đây phản ánh đúng bản chất khoa học của bài "${lessonTitle}"?`,
+        q: `Theo SGK Kết nối tri thức với cuộc sống, phát biểu nào sau đây phản ánh đúng bản chất khoa học của nội dung đang tìm hiểu?`,
         options: [`A. ${profile.yccd[0]}`, 'B. Quá trình diễn ra ngẫu nhiên không cần năng lượng', 'C. Không phụ thuộc vào điều kiện môi trường', 'D. Không liên quan đến cấu trúc tế bào'],
         ans: 'A',
         explain: profile.yccd[0]
@@ -2981,7 +3017,7 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
         });
       } else {
         tf4.push({
-          stem: `Phân tích các nhận định khoa học về bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức):`,
+          stem: `Phân tích các nhận định khoa học sau theo nội dung SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống:`,
           items: [
             `a) ${profile.sections[0]?.yccd_nb || profile.yccd[0]}`,
             `b) ${profile.sections[1]?.yccd_th || profile.yccd[1] || profile.yccd[0]}`,
@@ -3042,7 +3078,7 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
       shortAns: short4,
       homework: {
         tasks: [
-          `Thiết kế Infographic / Sơ đồ tư duy hệ thống hóa toàn bộ cơ chế trọng tâm của bài "${lessonTitle}".`,
+          `Thiết kế Infographic / Sơ đồ tư duy hệ thống hóa toàn bộ các mục kiến thức và cơ chế trọng tâm đã học.`,
           `Giải quyết tình huống thực tiễn: "${profile.openingQuestion}" và bài toán định lượng: "${profile.calcQuestion}".`,
           ...(customGuide ? [`Nhiệm vụ dự án mở rộng của GV: ${customGuide}`] : [])
         ],
@@ -3417,14 +3453,14 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
         ? `${profile.openingQuestion} (Tích hợp định hướng của GV: ${customGuide})`
         : profile.openingQuestion,
       miniGameQuestions: [
-        `Câu hỏi Khởi động 1 (Quan sát thực tế): Hiện tượng thực tiễn nào trong đời sống hằng ngày gắn liền trực tiếp với chủ đề "${lessonTitle}"?`,
+        `Câu hỏi Khởi động 1 (Quan sát thực tế): Hiện tượng thực tiễn nào trong đời sống hằng ngày gắn liền trực tiếp với các quá trình khoa học đang tìm hiểu?`,
         `Câu hỏi Khởi động 2 (Mâu thuẫn nhận thức): ${profile.openingQuestion}`,
         `Câu hỏi Khởi động 3 (Dự đoán khoa học): Nếu điều kiện cấu trúc hoặc môi trường trong tình huống trên bị biến đổi đột ngột thì kết quả sinh học/công nghệ sẽ thay đổi như thế nào?`
       ],
-      gvAction: `GV tổ chức trò chơi khởi động chớp nhoáng <strong>"Giải Mã Nhanh Sinh Học / Công Nghệ"</strong> kết hợp trình chiếu tình huống thực tiễn mở đầu bài "${lessonTitle}": <em>"${profile.openingQuestion}"</em> và nêu 3 câu hỏi kích thích tư duy.`,
+      gvAction: `GV tổ chức trò chơi khởi động chớp nhoáng <strong>"Giải Mã Nhanh Khoa Học"</strong> kết hợp trình chiếu tình huống thực tiễn mở đầu: <em>"${profile.openingQuestion}"</em> và nêu 3 câu hỏi kích thích tư duy.`,
       hsAction: `HS hào hứng tham gia giải mã nhanh theo cặp đôi (Think - Pair - Share), vận dụng hiểu biết thực tế để đưa ra giả thuyết dự đoán ban đầu; các cặp đôi khác bổ sung, phản biện.`,
-      product: `${profile.openingAnswer} (HS nhận ra giới hạn của kiến thức cũ và xuất hiện nhu cầu khám phá bản chất khoa học của bài "${lessonTitle}").`,
-      leadIn: `Từ kết quả giải mã tình huống thực tiễn trên, để hiểu rõ bản chất cấu trúc, cơ chế diễn biến và ứng dụng khoa học chuẩn xác của hiện tượng này, thầy/cô và các em cùng bước vào khám phá bài học hôm nay: "${lessonTitle}".`
+      product: `${profile.openingAnswer} (HS nhận ra giới hạn của kiến thức cũ và xuất hiện nhu cầu khám phá bản chất khoa học của bài học mới).`,
+      leadIn: `Từ kết quả giải mã tình huống thực tiễn trên, để hiểu rõ bản chất cấu trúc, cơ chế diễn biến và ứng dụng khoa học chuẩn xác của hiện tượng này, thầy/cô và các em cùng bước vào khám phá nội dung bài học hôm nay.`
     },
     sections: enrichedSections,
     practice: {
@@ -3433,10 +3469,10 @@ window.synthesizeDeepAIResponse = function({ selectedModel, promptText, requireJ
       shortAns: (profile.practice.short || []).slice(0, 3)
     },
     applicationTask: {
-      projectTitle: `DỰ ÁN MINI-STEM & GIẢI QUYẾT BÀI TOÁN THỰC TIỄN (${lessonTitle.toUpperCase()})`,
+      projectTitle: `DỰ ÁN MINI-STEM & GIẢI QUYẾT BÀI TOÁN THỰC TIỄN`,
       problem: customGuide
-        ? `${customGuide} — Vận dụng kiến thức bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống), hãy thiết kế phương án giải thích hiện tượng thực tiễn: "${profile.openingQuestion}" và giải bài toán định lượng: "${profile.calcQuestion}"`
-        : `Vận dụng toàn diện kiến thức bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống), các nhóm hãy thực hiện 2 nhiệm vụ: (1) Phân tích và giải thích hiện tượng thực tiễn: "${profile.openingQuestion}"; (2) Giải quyết bài toán ứng dụng định lượng: "${profile.calcQuestion}".`,
+        ? `${customGuide} — Vận dụng kiến thức vừa học trong SGK ${subject} ${grade} (Kết nối tri thức với cuộc sống), hãy thiết kế phương án giải thích hiện tượng thực tiễn: "${profile.openingQuestion}" và giải bài toán định lượng: "${profile.calcQuestion}"`
+        : `Vận dụng toàn diện kiến thức vừa học trong SGK ${subject} ${grade} (Kết nối tri thức với cuộc sống), các nhóm hãy thực hiện 2 nhiệm vụ: (1) Phân tích và giải thích hiện tượng thực tiễn: "${profile.openingQuestion}"; (2) Giải quyết bài toán ứng dụng định lượng: "${profile.calcQuestion}".`,
       solutionGuide: `1. Cơ sở khoa học & Giải thích hiện tượng thực tiễn: ${profile.openingAnswer}\n2. Phương pháp tính toán & Lời giải bài toán thực tế: ${profile.calcAnswer}\n3. Đề xuất giải pháp ứng dụng bền vững vào đời sống và sản xuất: ${profile.yccd[profile.yccd.length - 1]}`
     }
   };
@@ -3538,7 +3574,7 @@ window.testGeminiApiKey = async function() {
   if (!val || val.length < 15) {
     if (statusEl) {
       statusEl.className = 'p-3 rounded-xl bg-amber-950/70 border border-amber-400/50 text-amber-200 text-xs flex items-center gap-2';
-      statusEl.innerHTML = `<i class="fa-solid fa-circle-info text-amber-300 text-base"></i> <span>Chưa nhập Key cá nhân — Hệ thống đang sử dụng <strong>Động cơ AI Sư phạm Đa tầng tích hợp sẵn</strong> (Hoạt động mượt mà 100% cho cả 4 mô hình: gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao), gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt), gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu), gemini-4-argon (Gemini 4 Argon — Thế hệ mới)).</span>`;
+      statusEl.innerHTML = `<i class="fa-solid fa-circle-info text-amber-300 text-base"></i> <span>Chưa nhập Key cá nhân — Hệ thống đang sử dụng <strong>Động cơ AI Sư phạm Đa tầng tích hợp sẵn</strong> (Hoạt động mượt mà 100% cho cả 4 mô hình: gemini-3.8-flash (Gemini 3.8 Flash — Tốc độ cao), gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt), gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu), gemini-4-argon (Gemini 4 Argon — Thế hệ mới)).</span>`;
     }
     window.showBioToast('Hệ thống AI tích hợp sẵn đang hoạt động mượt mà 100%!', 'success');
     return;
@@ -3591,7 +3627,7 @@ window.callGeminiDirect = async function(apiKeyArg, selectedModel, promptText, r
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          selectedModel: selectedModel || 'gemini-3.5-flash',
+          selectedModel: selectedModel || 'gemini-3.8-flash',
           promptText,
           requireJson,
           systemInstruction,
@@ -3673,13 +3709,13 @@ window.callGeminiDirect = async function(apiKeyArg, selectedModel, promptText, r
 // Hàm hợp nhất thông minh phản hồi từ LLM với khung Sư phạm Chuyên sâu cho Giáo án 5512
 window.enrichAIPlanWithDeepPedagogy = function(rawAiObj, subject, grade, lessonTitle, modelLabel) {
   const deepRaw = window.synthesizeDeepAIResponse({
-    selectedModel: modelLabel || 'gemini-3.5-flash',
+    selectedModel: modelLabel || 'gemini-3.8-flash',
     promptText: 'KẾ HOẠCH BÀI DẠY 5512',
     requireJson: true
   });
   const deepBase = window.safeParseAIJson(deepRaw) || {};
   if (!rawAiObj || typeof rawAiObj !== 'object') {
-    return { ...deepBase, isAIComposed: true, aiModelBadge: modelLabel || 'Gemini 3.5 Flash', modelLabel: modelLabel || 'Gemini 3.5 Flash' };
+    return { ...deepBase, isAIComposed: true, aiModelBadge: modelLabel || 'Gemini 3.8 Flash', modelLabel: modelLabel || 'Gemini 3.8 Flash' };
   }
 
   const isValidText = (str, minLen = 25) =>
@@ -3715,8 +3751,8 @@ window.enrichAIPlanWithDeepPedagogy = function(rawAiObj, subject, grade, lessonT
     ...deepBase,
     ...rawAiObj,
     isAIComposed: true,
-    aiModelBadge: modelLabel || 'Gemini 3.5 Flash',
-    modelLabel: modelLabel || rawAiObj.modelLabel || 'Gemini 3.5 Flash',
+    aiModelBadge: modelLabel || 'Gemini 3.8 Flash',
+    modelLabel: modelLabel || rawAiObj.modelLabel || 'Gemini 3.8 Flash',
     knowledgeObjectives: Array.isArray(rawAiObj.knowledgeObjectives) && rawAiObj.knowledgeObjectives.filter(o => isValidText(o, 25)).length >= 2
       ? rawAiObj.knowledgeObjectives.filter(o => isValidText(o, 25))
       : deepBase.knowledgeObjectives,
@@ -3752,13 +3788,13 @@ window.enrichAIPlanWithDeepPedagogy = function(rawAiObj, subject, grade, lessonT
 // Hàm chuẩn hóa & làm giàu 34 Slide PPT đảm bảo 100% câu hỏi và nội dung bám sát kiến thức & YCCĐ bài học (0% câu chung chung)
 window.enrichAISlideDeckWithDeepContent = function(rawSlideObj, subject, grade, lessonTitle, modelLabel) {
   const deepSlideRaw = window.synthesizeDeepAIResponse({
-    selectedModel: modelLabel || 'gemini-3.5-flash',
+    selectedModel: modelLabel || 'gemini-3.8-flash',
     promptText: '34 SLIDE',
     requireJson: true
   });
   const baseSlide = window.safeParseAIJson(deepSlideRaw) || {};
   if (!rawSlideObj || typeof rawSlideObj !== 'object') {
-    return { ...baseSlide, isAIComposed: true, aiModelBadge: modelLabel || 'Gemini 3.5 Flash' };
+    return { ...baseSlide, isAIComposed: true, aiModelBadge: modelLabel || 'Gemini 3.8 Flash' };
   }
 
   const isSpecific = (txt, minLen = 22) => {
@@ -3839,7 +3875,7 @@ window.enrichAISlideDeckWithDeepContent = function(rawSlideObj, subject, grade, 
   return {
     ...baseSlide,
     isAIComposed: true,
-    aiModelBadge: modelLabel || 'Gemini 3.5 Flash',
+    aiModelBadge: modelLabel || 'Gemini 3.8 Flash',
     objectives: (Array.isArray(rawSlideObj.objectives) && rawSlideObj.objectives.filter(o => isSpecific(o, 25)).length >= 2)
       ? rawSlideObj.objectives.filter(o => isSpecific(o, 25))
       : baseSlide.objectives,
@@ -3881,13 +3917,14 @@ window.getNormalizedLessonProfile = function(subject, grade, lessonTitle) {
     ? window.getLessonCurriculumProfile(subject, grade, lessonTitle)
     : null;
   const isAgri = subject && subject.toLowerCase().includes('công nghệ');
+  const topicCore = String(lessonTitle || '').replace(/^Bài\s*\d+[\.\:\-]?\s*/i, '').trim() || 'bài học';
 
   const yccdList = (raw && Array.isArray(raw.yccd) && raw.yccd.length > 0)
     ? raw.yccd.filter(Boolean)
     : [
-        `Nêu được các khái niệm và đặc điểm cơ bản của bài ${lessonTitle}.`,
-        `Trình bày và giải thích được cơ chế, quy luật diễn biến trọng tâm của bài ${lessonTitle}.`,
-        `Vận dụng được kiến thức bài ${lessonTitle} vào giải thích hiện tượng thực tiễn trong đời sống và sản xuất.`
+        `Nêu được các khái niệm và đặc điểm cơ bản về ${topicCore.toLowerCase()}.`,
+        `Trình bày và giải thích được cơ chế, quy luật diễn biến trọng tâm của ${topicCore.toLowerCase()}.`,
+        `Vận dụng được kiến thức về ${topicCore.toLowerCase()} vào giải thích hiện tượng thực tiễn trong đời sống và sản xuất.`
       ];
 
   const sections = (raw && Array.isArray(raw.sections) && raw.sections.length > 0 ? raw.sections : []).map((s, idx) => {
@@ -3953,7 +3990,7 @@ window.getNormalizedLessonProfile = function(subject, grade, lessonTitle) {
   const extraMcqs = [
     {
       level: 'Nhận biết',
-      q: `Theo Yêu cầu cần đạt Chương trình GDPT 2018 đối với bài "${lessonTitle}", nội dung trọng tâm nào cần nắm vững ở "${s1.heading}"?`,
+      q: `Theo Yêu cầu cần đạt Chương trình GDPT 2018, nội dung trọng tâm nào cần nắm vững khi tìm hiểu mục "${s1.heading}"?`,
       options: [
         `A. ${s1.yccd_nb}`,
         `B. Các quá trình sinh học diễn ra không cần sự tham gia của vật chất và năng lượng.`,
@@ -3965,7 +4002,7 @@ window.getNormalizedLessonProfile = function(subject, grade, lessonTitle) {
     },
     {
       level: 'Nhận biết',
-      q: `Trong bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức), yêu cầu cần đạt cốt lõi khi nghiên cứu "${s2.heading}" là gì?`,
+      q: `Theo SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống, yêu cầu cần đạt cốt lõi khi nghiên cứu mục "${s2.heading}" là gì?`,
       options: [
         `A. Bỏ qua các bước kiểm chứng thực nghiệm và đối chứng khoa học.`,
         `B. ${s2.yccd_th}`,
@@ -3977,7 +4014,7 @@ window.getNormalizedLessonProfile = function(subject, grade, lessonTitle) {
     },
     {
       level: 'Thông hiểu',
-      q: `Khi khai thác học liệu số [${nls.code}] tại "${nls.targetSection}" của bài "${lessonTitle}", hoạt động nào giúp học sinh nắm bắt đúng bản chất khoa học?`,
+      q: `Khi khai thác học liệu số [${nls.code}] tại "${nls.targetSection}", hoạt động nào giúp học sinh nắm bắt đúng bản chất khoa học?`,
       options: [
         `A. Chỉ ghi nhớ máy móc tên gọi mà không phân tích sơ đồ cấu trúc - cơ chế.`,
         `B. Sao chép thông tin chưa kiểm chứng trên mạng xã hội.`,
@@ -3989,7 +4026,7 @@ window.getNormalizedLessonProfile = function(subject, grade, lessonTitle) {
     },
     {
       level: 'Vận dụng',
-      q: `Để vận dụng kiến thức mục "${s3.heading}" của bài "${lessonTitle}" vào giải quyết vấn đề thực tiễn, định hướng nào sau đây là chuẩn xác nhất theo CT GDPT 2018?`,
+      q: `Để vận dụng kiến thức mục "${s3.heading}" vào giải quyết vấn đề thực tiễn, định hướng nào sau đây là chuẩn xác nhất theo CT GDPT 2018?`,
       options: [
         `A. Khai thác tối đa tài nguyên mà không cần quan tâm đến cân bằng sinh thái.`,
         `B. Áp dụng cảm tính không cần dựa trên giới hạn sinh thái hay quy trình kĩ thuật.`,
@@ -4009,7 +4046,7 @@ window.getNormalizedLessonProfile = function(subject, grade, lessonTitle) {
     lessonTitle: raw?.lessonTitle || lessonTitle,
     yccd: yccdList,
     sections,
-    openingQuestion: raw?.openingQuestion || `Trong thực tiễn đời sống và sản xuất, hiện tượng nào gắn liền trực tiếp với nội dung bài "${lessonTitle}" và cơ chế khoa học nào giải thích điều đó?`,
+    openingQuestion: raw?.openingQuestion || `Trong thực tiễn đời sống và sản xuất, hiện tượng nào gắn liền trực tiếp với chủ đề ${topicCore.toLowerCase()} và cơ chế khoa học nào giải thích điều đó?`,
     openingAnswer: raw?.openingAnswer || yccdList[yccdList.length - 1],
     nls,
     ai,
@@ -4024,7 +4061,7 @@ window.getNormalizedLessonProfile = function(subject, grade, lessonTitle) {
   };
 };
 
-// ==================== 1. SOẠN ĐẦY ĐỦ GIÁO ÁN 5512 (ĐỦ 4 PHẦN, TRỌN VẸN, KHÔNG TỪ THỪA) ====================
+// ==================== 1. SOẠN ĐẦY ĐỦ GIÁO ÁN 5512 (ĐỦ 4 PHẦN, TRỌN VẸN, KHÔNG TRÙNG LẶP TÊN BÀI) ====================
 window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiPlanObjOrHtml = null) {
   const docContainer = document.getElementById('container-a4-doc');
   const profile = window.getNormalizedLessonProfile(subject, grade, lessonTitle);
@@ -4078,7 +4115,7 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
 
   const warmupGV = (planData && planData.warmup && planData.warmup.gvAction)
     ? planData.warmup.gvAction
-    : `GV chiếu tình huống thực tiễn mở đầu bài "${lessonTitle}" và đặt câu hỏi gợi mở: "${warmupQuestion}"`;
+    : `GV chiếu tình huống thực tiễn mở đầu bài học và đặt câu hỏi gợi mở: "${warmupQuestion}"`;
 
   const warmupHS = (planData && planData.warmup && planData.warmup.hsAction)
     ? planData.warmup.hsAction
@@ -4112,25 +4149,26 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
   const applicationTask = (planData && planData.applicationTask && planData.applicationTask.problem)
     ? planData.applicationTask
     : {
-        problem: `Vận dụng kiến thức bài "${lessonTitle}" (SGK ${subject} ${grade} - Kết nối tri thức với cuộc sống), hãy giải thích câu hỏi thực tiễn: "${profile.openingQuestion}" và giải bài toán ứng dụng: "${profile.calcQuestion}"`,
+        problem: `Vận dụng kiến thức trọng tâm đã học trong SGK ${subject} ${grade} (Kết nối tri thức với cuộc sống), hãy giải thích câu hỏi thực tiễn: "${profile.openingQuestion}" và giải bài toán ứng dụng: "${profile.calcQuestion}"`,
         solutionGuide: `1. Giải thích hiện tượng thực tiễn: ${profile.openingAnswer}\n2. Lời giải bài toán thực tế: ${profile.calcAnswer}`
       };
 
   const bietItems = [...new Set([
-    ...sections.map(s => s.yccd_nb).filter(Boolean),
-    knowledgeYccdList[0]
-  ].filter(Boolean))].slice(0, 3);
+    knowledgeYccdList[0],
+    ...sections.map(s => s.yccd_nb).filter(Boolean)
+  ].map(x => window.cleanUnwantedMetaPhrases(String(x || '')).trim()).filter(Boolean))].slice(0, 3);
 
   const hieuItems = [...new Set([
-    ...sections.map(s => s.yccd_th).filter(Boolean),
-    knowledgeYccdList[1] || knowledgeYccdList[0]
-  ].filter(Boolean))].slice(0, 3);
+    knowledgeYccdList[1],
+    knowledgeYccdList[2],
+    ...sections.map(s => s.yccd_th).filter(Boolean)
+  ].map(x => window.cleanUnwantedMetaPhrases(String(x || '')).trim()).filter(x => x && !bietItems.includes(x)))].slice(0, 3);
 
   const vanDungItems = [...new Set([
-    ...sections.map(s => s.yccd_vd).filter(Boolean),
     knowledgeYccdList[knowledgeYccdList.length - 1],
+    ...sections.map(s => s.yccd_vd).filter(Boolean),
     `Vận dụng giải thích hiện tượng thực tiễn: ${profile.openingAnswer}`
-  ].filter(Boolean))].slice(0, 3);
+  ].map(x => window.cleanUnwantedMetaPhrases(String(x || '')).trim()).filter(x => x && !bietItems.includes(x) && !hieuItems.includes(x)))].slice(0, 3);
 
   const htmlOutput = `
     <div style="text-align: center; margin-bottom: 12px; border-bottom: 2px solid #1e3a8a; padding-bottom: 8px;">
@@ -4145,11 +4183,11 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
     <p style="font-weight: bold; margin: 10px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">I. MỤC TIÊU</p>
 
     <p style="margin: 4px 0 3px 10px;"><strong>1. Về kiến thức (Yêu cầu cần đạt chuẩn CT GDPT 2018):</strong></p>
-    <p style="margin: 3px 0 2px 18px;"><strong>- Biết:</strong> Nhận biết, nêu và trình bày được các khái niệm, thành phần, đặc điểm nền tảng của bài "${lessonTitle}":</p>
+    <p style="margin: 3px 0 2px 18px;"><strong>- Biết:</strong> Nhận biết, nêu và trình bày được các khái niệm, thành phần và đặc điểm nền tảng theo yêu cầu cần đạt:</p>
     ${bietItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
-    <p style="margin: 4px 0 2px 18px;"><strong>- Hiểu:</strong> Phân tích, phân biệt và giải thích được bản chất, cơ chế khoa học trọng tâm của bài "${lessonTitle}":</p>
+    <p style="margin: 4px 0 2px 18px;"><strong>- Hiểu:</strong> Phân tích, phân biệt và giải thích được bản chất, cơ chế khoa học trọng tâm:</p>
     ${hieuItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
-    <p style="margin: 4px 0 2px 18px;"><strong>- Vận dụng:</strong> Vận dụng kiến thức bài "${lessonTitle}" vào giải thích hiện tượng thực tiễn, giải bài tập và ứng dụng trong đời sống, sản xuất:</p>
+    <p style="margin: 4px 0 2px 18px;"><strong>- Vận dụng:</strong> Vận dụng kiến thức đã học vào giải thích hiện tượng thực tiễn, giải bài tập và ứng dụng trong đời sống, sản xuất:</p>
     ${vanDungItems.map(item => `<p style="margin: 2px 0 2px 30px;">+ ${item}</p>`).join('')}
 
     <p style="margin: 6px 0 3px 10px;"><strong>2. Về năng lực:</strong></p>
@@ -4179,12 +4217,12 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
     </div>
 
     <p style="margin: 6px 0 2px 10px;"><strong>3. Về phẩm chất:</strong></p>
-    <p style="margin: 2px 0 2px 22px;">- <strong>Chăm chỉ và Trách nhiệm:</strong> Chủ động nghiên cứu bài "${lessonTitle}" trong SGK Kết nối tri thức với cuộc sống, tích cực hợp tác hoàn thành nhiệm vụ học tập và có ý thức vận dụng kiến thức vào bảo vệ sức khỏe, môi trường.</p>
+    <p style="margin: 2px 0 2px 22px;">- <strong>Chăm chỉ và Trách nhiệm:</strong> Chủ động đọc trước nội dung bài học trong SGK Kết nối tri thức với cuộc sống, tích cực hợp tác hoàn thành nhiệm vụ học tập và có ý thức vận dụng kiến thức vào bảo vệ sức khỏe, môi trường.</p>
     <p style="margin: 2px 0 2px 22px;">- <strong>Trung thực:</strong> Trung thực trong báo cáo kết quả thảo luận, xử lí số liệu thực hành và kiểm chứng thông tin khoa học dựa trên bằng chứng từ SGK.</p>
 
     <!-- ==================== PHẦN II: THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU ==================== -->
     <p style="font-weight: bold; margin: 12px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">II. THIẾT BỊ DẠY HỌC VÀ HỌC LIỆU</p>
-    <p style="margin: 3px 0 2px 15px;"><strong>1. Chuẩn bị của giáo viên:</strong> Hệ thống học liệu, thiết bị dạy học và công cụ đánh giá phục vụ bài "${lessonTitle}":</p>
+    <p style="margin: 3px 0 2px 15px;"><strong>1. Chuẩn bị của giáo viên:</strong> Hệ thống thiết bị dạy học, học liệu số và công cụ đánh giá phục vụ tiết dạy:</p>
     <p style="margin: 2px 0 2px 28px;">+ Sách giáo khoa, Sách giáo viên, Sách bài tập <strong>${subject} ${grade} - Kết nối tri thức với cuộc sống</strong>; Kế hoạch bài dạy và Bộ 34 Slide bài giảng điện tử tương tác.</p>
     <p style="margin: 2px 0 2px 28px; color: #92400e;">+ Bộ Phiếu học tập số 1, 2, 3 theo các mục kiến thức và Bảng tiêu chí Rubric đánh giá sản phẩm hoạt động nhóm [${otherComp.code}].</p>
     <p style="margin: 2px 0 2px 28px; color: #0369a1;">+ Hình ảnh trực quan, sơ đồ/mô phỏng số hóa phục vụ hoạt động khai thác dữ liệu tại <em>${nlsInfo.targetSection}</em> [${nlsInfo.code}].</p>
@@ -4192,7 +4230,7 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
 
     <p style="margin: 5px 0 2px 15px;"><strong>2. Chuẩn bị của học sinh:</strong> Học liệu cá nhân và sự chuẩn bị kiến thức trước tiết học:</p>
     <p style="margin: 2px 0 2px 28px;">+ Sách giáo khoa <strong>${subject} ${grade} (Kết nối tri thức với cuộc sống)</strong>, vở ghi bài, dụng cụ học tập, bút màu vẽ sơ đồ tư duy và bảng phụ nhóm (A1/A0).</p>
-    <p style="margin: 2px 0 2px 28px;">+ Đọc trước nội dung bài "${lessonTitle}", trả lời các câu hỏi trong SGK và sưu tầm các ví dụ thực tiễn liên quan đến bài học.</p>
+    <p style="margin: 2px 0 2px 28px;">+ Đọc trước nội dung bài mới, trả lời các câu hỏi thảo luận trong SGK và sưu tầm các ví dụ thực tiễn liên quan đến chủ đề bài học.</p>
     <p style="margin: 2px 0 2px 28px;">+ Thiết bị kết nối Internet (nếu có) để tham gia tra cứu học liệu số theo hướng dẫn của giáo viên.</p>
 
     <!-- ==================== PHẦN III: TIẾN TRÌNH DẠY HỌC ==================== -->
@@ -4200,7 +4238,7 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
 
     <!-- HOẠT ĐỘNG 1: MỞ ĐẦU -->
     <p style="font-weight: bold; color: #1e40af; margin: 8px 0 3px 0;">1. HOẠT ĐỘNG 1: MỞ ĐẦU (KHỞI ĐỘNG & TẠO MÂU THUẪN NHẬN THỨC)</p>
-    <p style="margin: 2px 0 2px 15px;"><strong>a) Mục tiêu:</strong> Khơi gợi hứng thú học tập, huy động kiến thức thực tiễn của học sinh để xác định vấn đề trọng tâm của bài "${lessonTitle}" <span style="color: #92400e; font-weight: bold;">[${otherComp.code}; GQVĐ]</span>.</p>
+    <p style="margin: 2px 0 2px 15px;"><strong>a) Mục tiêu:</strong> Khơi gợi hứng thú học tập, tạo mâu thuẫn nhận thức và huy động hiểu biết thực tiễn của học sinh để xác định vấn đề trọng tâm của tiết học <span style="color: #92400e; font-weight: bold;">[${otherComp.code}; GQVĐ]</span>.</p>
     <p style="margin: 2px 0 2px 15px;"><strong>b) Nội dung:</strong> Học sinh tham gia khởi động nhanh và giải quyết câu hỏi tình huống thực tiễn mở đầu: <em>"${warmupQuestion}"</em></p>
     <p style="margin: 2px 0 2px 15px;"><strong>c) Sản phẩm:</strong> Câu trả lời dự đoán của học sinh và định hướng giải thích khoa học: <em>${warmupAnswer}</em></p>
     <p style="margin: 2px 0 4px 15px;"><strong>d) Tổ chức thực hiện:</strong></p>
@@ -4224,7 +4262,7 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
               ` : ''}
               <p style="margin: 2px 0;"><strong>- Bước 2: Thực hiện nhiệm vụ:</strong> ${warmupHS}</p>
               <p style="margin: 2px 0;"><strong>- Bước 3: Báo cáo, thảo luận:</strong> GV mời 2 - 3 HS chia sẻ nhanh lập luận cá nhân; các HS khác bổ sung hoặc nêu ý kiến phản biện.</p>
-              <p style="margin: 2px 0;"><strong>- Bước 4: Kết luận, nhận định:</strong> ${warmupLeadIn || `GV ghi nhận các ý kiến dự đoán của học sinh, chỉ ra điểm mâu thuẫn nhận thức và dẫn dắt vào bài mới "${lessonTitle}".`}</p>
+              <p style="margin: 2px 0;"><strong>- Bước 4: Kết luận, nhận định:</strong> ${warmupLeadIn || 'GV ghi nhận các ý kiến dự đoán của học sinh, chỉ ra điểm mâu thuẫn nhận thức và dẫn dắt vào nội dung bài học mới.'}</p>
             </td>
             <td style="vertical-align: top;">
               <p style="margin: 0 0 4px 0; font-weight: bold; color: #1e3a8a;">1. Đáp án câu hỏi & Tình huống Mở đầu:</p>
@@ -4238,13 +4276,13 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
       <p style="margin: 2px 0 2px 25px;">- <strong>Bước 1: Chuyển giao nhiệm vụ:</strong> ${warmupGV}</p>
       <p style="margin: 2px 0 2px 25px;">- <strong>Bước 2: Thực hiện nhiệm vụ:</strong> ${warmupHS}</p>
       <p style="margin: 2px 0 2px 25px;">- <strong>Bước 3: Báo cáo, thảo luận:</strong> GV mời 2 - 3 học sinh trình bày câu trả lời trước lớp; các học sinh khác nhận xét, bổ sung.</p>
-      <p style="margin: 2px 0 6px 25px;">- <strong>Bước 4: Kết luận, nhận định:</strong> GV tổng hợp các ý kiến của học sinh, dẫn dắt vào nội dung kiến thức mới của bài "${lessonTitle}".</p>
+      <p style="margin: 2px 0 6px 25px;">- <strong>Bước 4: Kết luận, nhận định:</strong> GV tổng hợp các ý kiến dự đoán của học sinh, nhận xét và dẫn dắt vào nội dung kiến thức mới của bài học.</p>
     `}
 
     <!-- HOẠT ĐỘNG 2: HÌNH THÀNH KIẾN THỨC MỚI -->
     <div id="wrapper-act234-zone">
       <p style="font-weight: bold; color: #1e40af; margin: 10px 0 3px 0;">2. HOẠT ĐỘNG 2: HÌNH THÀNH KIẾN THỨC MỚI</p>
-      <p style="margin: 2px 0 2px 15px;"><strong>a) Mục tiêu:</strong> Học sinh trình bày, phân tích và giải thích được toàn bộ nội dung kiến thức theo Yêu cầu cần đạt của bài "${lessonTitle}"; phát triển năng lực môn học <span style="color: #92400e; font-weight: bold;">[${otherComp.code}]</span>, năng lực số <span style="color: #0369a1; font-weight: bold;">[${nlsInfo.code}]</span> và năng lực phản biện thông tin AI <span style="color: #b91c1c; font-weight: bold;">[${aiInfo.code}]</span>.</p>
+      <p style="margin: 2px 0 2px 15px;"><strong>a) Mục tiêu:</strong> Học sinh trình bày, phân tích và giải thích được toàn bộ nội dung kiến thức trọng tâm theo Yêu cầu cần đạt CT GDPT 2018; phát triển năng lực môn học <span style="color: #92400e; font-weight: bold;">[${otherComp.code}]</span>, năng lực số <span style="color: #0369a1; font-weight: bold;">[${nlsInfo.code}]</span> và năng lực phản biện thông tin AI <span style="color: #b91c1c; font-weight: bold;">[${aiInfo.code}]</span>.</p>
       <p style="margin: 2px 0 2px 15px;"><strong>b) Nội dung:</strong> Học sinh nghiên cứu kênh chữ, kênh hình trong SGK Kết nối tri thức với cuộc sống, thảo luận nhóm hoàn thành hệ thống Phiếu học tập chuyên sâu theo từng mục nội dung.</p>
       <p style="margin: 2px 0 2px 15px;"><strong>c) Sản phẩm:</strong> Phiếu học tập đã hoàn thiện, sơ đồ cơ chế và nội dung kiến thức trọng tâm ghi vở.</p>
       <p style="margin: 2px 0 4px 15px;"><strong>d) Tổ chức thực hiện:</strong></p>
@@ -4347,11 +4385,11 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
 
       <!-- HOẠT ĐỘNG 3: LUYỆN TẬP -->
       <p style="font-weight: bold; color: #1e40af; margin: 12px 0 3px 0;">3. HOẠT ĐỘNG 3: LUYỆN TẬP & KHẮC SÂU KIẾN THỨC</p>
-      <p style="margin: 2px 0 2px 15px;"><strong>a) Mục tiêu:</strong> Củng cố, hệ thống hóa kiến thức vừa hình thành của bài "${lessonTitle}" và rèn luyện kĩ năng giải các dạng câu hỏi trắc nghiệm theo cấu trúc định dạng mới <span style="color: #92400e; font-weight: bold;">[${otherComp.code}; TCTH]</span>.</p>
+      <p style="margin: 2px 0 2px 15px;"><strong>a) Mục tiêu:</strong> Củng cố, hệ thống hóa kiến thức vừa hình thành và rèn luyện kĩ năng giải các dạng câu hỏi trắc nghiệm theo cấu trúc định dạng mới <span style="color: #92400e; font-weight: bold;">[${otherComp.code}; TCTH]</span>.</p>
       <p style="margin: 2px 0 2px 15px;"><strong>b) Nội dung:</strong> Học sinh hoàn thành bộ câu hỏi luyện tập gồm 3 dạng thức: Trắc nghiệm nhiều phương án lựa chọn (${mcqList.length} câu), Trắc nghiệm Đúng/Sai (${tfList.length} câu) và Trắc nghiệm trả lời ngắn (${shortList.length} câu).</p>
       <p style="margin: 2px 0 2px 15px;"><strong>c) Sản phẩm:</strong> Đáp án và lời giải thích khoa học chi tiết của học sinh cho từng câu hỏi.</p>
       <p style="margin: 2px 0 2px 15px;"><strong>d) Tổ chức thực hiện:</strong></p>
-      <p style="margin: 2px 0 2px 25px;">- <strong>Bước 1: Chuyển giao nhiệm vụ:</strong> GV trình chiếu lần lượt bộ câu hỏi luyện tập của bài "${lessonTitle}", yêu cầu HS suy nghĩ cá nhân hoặc thảo luận cặp đôi để đưa ra phương án trả lời.</p>
+      <p style="margin: 2px 0 2px 25px;">- <strong>Bước 1: Chuyển giao nhiệm vụ:</strong> GV trình chiếu lần lượt bộ câu hỏi luyện tập theo 3 dạng thức, yêu cầu HS suy nghĩ cá nhân hoặc thảo luận cặp đôi để đưa ra phương án trả lời.</p>
       <p style="margin: 2px 0 2px 25px;">- <strong>Bước 2: Thực hiện nhiệm vụ:</strong> HS vận dụng kiến thức đã học ở Hoạt động 2 để phân tích từng câu hỏi, lựa chọn đáp án và trình bày phép tính.</p>
       <p style="margin: 2px 0 2px 25px;">- <strong>Bước 3: Báo cáo, thảo luận:</strong> GV mời đại diện HS trả lời và giải thích cơ sở khoa học của phương án đã chọn; các HS khác nhận xét, bổ sung.</p>
       <p style="margin: 2px 0 4px 25px;">- <strong>Bước 4: Kết luận, nhận định:</strong> GV chốt đáp án đúng, phân tích các bẫy tư duy thường gặp và chuẩn hóa kiến thức.</p>
@@ -4400,7 +4438,7 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
 
       <!-- HOẠT ĐỘNG 4: VẬN DỤNG -->
       <p style="font-weight: bold; color: #1e40af; margin: 12px 0 3px 0;">4. HOẠT ĐỘNG 4: VẬN DỤNG & DỰ ÁN MINI-STEM</p>
-      <p style="margin: 2px 0 2px 15px;"><strong>a) Mục tiêu:</strong> Vận dụng kiến thức của bài "${lessonTitle}" để giải thích hiện tượng thực tiễn trong đời sống, sản xuất và thiết kế sản phẩm học tập sáng tạo <span style="color: #92400e; font-weight: bold;">[${otherComp.code}; GQVĐ]</span>.</p>
+      <p style="margin: 2px 0 2px 15px;"><strong>a) Mục tiêu:</strong> Vận dụng kiến thức trọng tâm đã học để giải thích hiện tượng thực tiễn trong đời sống, sản xuất và thiết kế sản phẩm học tập sáng tạo <span style="color: #92400e; font-weight: bold;">[${otherComp.code}; GQVĐ]</span>.</p>
       <p style="margin: 2px 0 2px 15px;"><strong>b) Nội dung:</strong> ${applicationTask.problem}</p>
       <p style="margin: 2px 0 2px 15px;"><strong>c) Sản phẩm:</strong> Báo cáo giải thích cơ sở khoa học, lời giải bài toán thực tế và Infographic khuyến nghị ứng dụng của học sinh.</p>
       <p style="margin: 2px 0 2px 15px;"><strong>d) Tổ chức thực hiện:</strong></p>
@@ -4417,7 +4455,7 @@ window.renderGiaoAn5512HighEnd = function(subject, grade, book, lessonTitle, aiP
     <!-- ==================== PHẦN IV: HỒ SƠ DẠY HỌC VÀ ĐÁNH GIÁ ==================== -->
     <p style="font-weight: bold; margin: 14px 0 4px 0; font-size: 12.5pt; color: #1e3a8a;">IV. HỒ SƠ DẠY HỌC VÀ CÔNG CỤ ĐÁNH GIÁ</p>
 
-    <p style="font-weight: bold; margin: 4px 0;">1. Tổng hợp cấu trúc Phiếu học tập (${lessonTitle}):</p>
+    <p style="font-weight: bold; margin: 4px 0;">1. Tổng hợp cấu trúc Phiếu học tập theo các trạm nghiên cứu:</p>
     <table>
       <thead>
         <tr style="background: #E6EEF8; text-align: center; font-weight: bold;">
@@ -5078,7 +5116,7 @@ window.renderPowerPointSlideDeck = function(subject, grade, book, lessonTitle, a
     : (planSource.practice.tf || []);
   for (let i = 0; i < 4; i++) {
     const fbTf = (planSource.practice.tf || [])[i % (planSource.practice.tf?.length || 1)] || {
-      stem: `Khi nghiên cứu nội dung bài "${lessonTitle}" (SGK Kết nối tri thức với cuộc sống), mỗi nhận định sau đây là Đúng hay Sai?`,
+      stem: `Khi nghiên cứu nội dung kiến thức trong SGK Kết nối tri thức với cuộc sống, mỗi nhận định sau đây là Đúng hay Sai?`,
       statements: [
         { label: "a)", text: sec1.yccd_nb, ans: "Đúng" },
         { label: "b)", text: sec2.yccd_th, ans: "Đúng" },
@@ -5156,7 +5194,7 @@ window.renderPowerPointSlideDeck = function(subject, grade, book, lessonTitle, a
   const hwTasks = (enrichedAI && enrichedAI.homework && Array.isArray(enrichedAI.homework.tasks))
     ? enrichedAI.homework.tasks
     : [
-        `Hệ thống hóa kiến thức trọng tâm bài "${lessonTitle}" (${sec1.heading}; ${sec2.heading}; ${sec3.heading}) bằng sơ đồ tư duy và hoàn thành bài tập SGK Kết nối tri thức.`,
+        `Hệ thống hóa các nội dung kiến thức trọng tâm (${sec1.heading}; ${sec2.heading}; ${sec3.heading}) bằng sơ đồ tư duy và hoàn thành bài tập trong SGK Kết nối tri thức.`,
         `Vận dụng giải thích hiện tượng thực tiễn: "${planSource.openingQuestion}"`
       ];
   const hwPrep = (enrichedAI && enrichedAI.homework && Array.isArray(enrichedAI.homework.nextPrep))
@@ -5532,7 +5570,7 @@ window.renderMaTranDeKiemTra = function(subject, grade, book, customAiExamHtml =
 
 // ==================== ĐIỀU PHỐI AI CHUYÊN SÂU CHO CẢ 3 PHÂN HỆ ====================
 window.executeActionAI = async function() {
-  const selectedModel = document.getElementById('sel-gemini-model') ? document.getElementById('sel-gemini-model').value : 'gemini-3.5-flash';
+  const selectedModel = document.getElementById('sel-gemini-model') ? document.getElementById('sel-gemini-model').value : 'gemini-3.8-flash';
   const subject = document.getElementById('sel-subject').value;
   const grade = document.getElementById('sel-grade').value;
   const book = document.getElementById('sel-book').value;
@@ -5570,7 +5608,7 @@ window.executeActionAI = async function() {
         `Mục ${i + 1}: ${s.heading}\n  + Nội dung SGK: ${s.sgkContent.join(' ')}`
       ).join('\n');
 
-      const prompt5512 = `[MÔ HÌNH THỰC THI: ${fullModelSpec} | HỆ THỐNG ĐA MÔ HÌNH: gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao), gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt), gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu), gemini-4-argon (Gemini 4 Argon — Thế hệ mới)]
+      const prompt5512 = `[MÔ HÌNH THỰC THI: ${fullModelSpec} | HỆ THỐNG ĐA MÔ HÌNH: gemini-3.8-flash (Gemini 3.8 Flash — Tốc độ cao), gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt), gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu), gemini-4-argon (Gemini 4 Argon — Thế hệ mới)]
 Bạn là Chuyên gia Sư phạm môn ${subject}. Hãy biên soạn dữ liệu JSON cho KẾ HOẠCH BÀI DẠY bài: "${lessonTitle}" - Môn ${subject} Lớp ${grade}, Bộ sách Kết nối tri thức với cuộc sống (CT GDPT 2018).
 
 YÊU CẦU CẦN ĐẠT VÀ NỘI DUNG SGK KẾT NỐI TRI THỨC:
@@ -5578,7 +5616,7 @@ YÊU CẦU CẦN ĐẠT VÀ NỘI DUNG SGK KẾT NỐI TRI THỨC:
 ${sgkSectionsContext}
 
 LƯU Ý QUAN TRỌNG:
-- Tuyệt đối KHÔNG ghi các cụm từ giải thích hướng dẫn hoặc câu chữ chung chung. Mọi nội dung và câu hỏi phải bám sát 100% kiến thức cụ thể của bài "${lessonTitle}".
+- Tuyệt đối KHÔNG ghi các cụm từ giải thích hướng dẫn hoặc câu chữ chung chung, và KHÔNG lặp lại cụm từ 'bài "${lessonTitle}"' trong các mục nội dung chi tiết. Mọi nội dung và câu hỏi phải bám sát 100% kiến thức cụ thể, diễn đạt tự nhiên, chuẩn mực sư phạm.
 - Tích hợp Năng lực số (Mã ${profile.nls.code}) ở 1 hoạt động nhỏ thuộc Mục I, nêu cụ thể hoạt động của GV và HS.
 - Tích hợp Năng lực AI (Mã ${profile.ai.code}) ở 1 hoạt động nhỏ thuộc Mục II, nêu cụ thể nhận định cần kiểm chứng và cách HS đối chiếu SGK để phản biện.
 
@@ -5610,7 +5648,7 @@ Trả về DUY NHẤT một đối tượng JSON hợp lệ theo cấu trúc:
     "hsAction": "HS thảo luận nhóm và giải thích thực tiễn như thế nào..."
   },
   "warmup": {
-    "situation": "Câu hỏi tình huống thực tiễn mở đầu bài ${lessonTitle}...",
+    "situation": "Câu hỏi tình huống thực tiễn mở đầu...",
     "gvAction": "Hoạt động chuyển giao nhiệm vụ của GV...",
     "hsAction": "Hoạt động suy nghĩ và trả lời của HS...",
     "product": "Câu trả lời giải thích chính xác cho tình huống mở đầu..."
@@ -5670,13 +5708,13 @@ Trả về DUY NHẤT một đối tượng JSON hợp lệ theo cấu trúc:
     ]
   },
   "applicationTask": {
-    "problem": "Bài toán/tình huống vận dụng thực tiễn của bài ${lessonTitle}...",
+    "problem": "Bài toán/tình huống vận dụng thực tiễn...",
     "solutionGuide": "Hướng dẫn giải chi tiết dựa trên kiến thức SGK..."
   }
 }
 Ghi chú bổ sung: ${customGuide}${filePromptPart}`;
 
-      const ragSysInstruction = `HỆ THỐNG RAG CHỐNG ẢO GIÁC KHOA HỌC (RETRIEVAL-AUGMENTED GENERATION): Bắt buộc neo giữ 100% kiến thức vào ngữ liệu gốc SGK Kết nối tri thức với cuộc sống và Yêu cầu cần đạt CT GDPT 2018 đã cung cấp. Sử dụng chuẩn danh pháp quốc tế (DNA, RNA, ATP, enzyme, hormone, polypeptide, amino acid, glucose...). Tuyệt đối không bịa đặt thông tin khoa học ngoài ngữ cảnh.`;
+      const ragSysInstruction = `HỆ THỐNG RAG CHỐNG ẢO GIÁC KHOA HỌC (RETRIEVAL-AUGMENTED GENERATION): Bắt buộc neo giữ 100% kiến thức vào ngữ liệu gốc SGK Kết nối tri thức với cuộc sống và Yêu cầu cần đạt CT GDPT 2018 đã cung cấp. Sử dụng chuẩn danh pháp quốc tế (DNA, RNA, ATP, enzyme, hormone, polypeptide, amino acid, glucose...). Tuyệt đối không bịa đặt thông tin khoa học ngoài ngữ cảnh và không lặp lại tên bài học nhiều lần trong thân giáo án.`;
       const rawJson = await window.callGeminiDirect('', selectedModel, prompt5512, true, ragSysInstruction);
       let aiPlanObj = window.safeParseAIJson(rawJson);
 
@@ -5742,11 +5780,11 @@ Ghi chú bổ sung: ${customGuide}${filePromptPart}`;
         `Mục ${idx + 1}: ${s.heading}\n  - Nội dung SGK & YCCĐ: ${(s.sgkContent || []).join(' | ')}`
       ).join('\n');
 
-      const slidePrompt = `[MÔ HÌNH THỰC THI: ${fullModelSpec} | HỆ THỐNG ĐA MÔ HÌNH: gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao), gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt), gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu), gemini-4-argon (Gemini 4 Argon — Thế hệ mới)]
+      const slidePrompt = `[MÔ HÌNH THỰC THI: ${fullModelSpec} | HỆ THỐNG ĐA MÔ HÌNH: gemini-3.8-flash (Gemini 3.8 Flash — Tốc độ cao), gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt), gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu), gemini-4-argon (Gemini 4 Argon — Thế hệ mới)]
 Bạn là Chuyên gia Thiết kế Bài giảng Điện tử THPT. Hãy biên soạn dữ liệu JSON cho bộ 34 SLIDE bài giảng của bài "${lessonTitle}" (Môn ${subject} ${grade}, Bộ sách Kết nối tri thức với cuộc sống).
 
 YÊU CẦU BẮT BUỘC:
-1. Toàn bộ kiến thức và câu hỏi phải cụ thể 100% theo đúng bài "${lessonTitle}" và Yêu cầu cần đạt CT GDPT 2018 (${planSource.yccd.join('; ')}). Tuyệt đối không viết chung chung hay dùng "Phương án nhiễu 1, 2, 3".
+1. Toàn bộ kiến thức và câu hỏi phải cụ thể 100% theo đúng Yêu cầu cần đạt CT GDPT 2018 (${planSource.yccd.join('; ')}). Tuyệt đối không viết chung chung hay dùng "Phương án nhiễu 1, 2, 3".
 2. Nội dung kiến thức lấy từ HOẠT ĐỘNG HÌNH THÀNH KIẾN THỨC của Giáo án 5512:
 ${act2Context}
 3. Biên soạn ĐỦ 16 CÂU HỎI BÀI TẬP ĐẦY ĐỦ NỘI DUNG cho 16 Slide bài tập:
@@ -5883,7 +5921,7 @@ Ghi chú bổ sung: ${customGuide}${filePromptPart}`;
    - SỐ CÂU BẮT BUỘC CỦA BÀI NÀY: Phần I: ${p1Sum} câu (Biết: ${c.p1_b||0}, Hiểu: ${c.p1_h||0}, VD: ${c.p1_vd||0}); Phần II Đ/S: ${p2Sum} câu; Phần III Ngắn: ${p3Sum} câu; Phần IV Tự luận: ${p4Sum} câu.`;
       }).join('\n\n');
 
-      const examPrompt = `[MÔ HÌNH THỰC THI: ${fullModelSpec} | HỆ THỐNG ĐA MÔ HÌNH: gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao), gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt), gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu), gemini-4-argon (Gemini 4 Argon — Thế hệ mới)]
+      const examPrompt = `[MÔ HÌNH THỰC THI: ${fullModelSpec} | HỆ THỐNG ĐA MÔ HÌNH: gemini-3.8-flash (Gemini 3.8 Flash — Tốc độ cao), gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt), gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu), gemini-4-argon (Gemini 4 Argon — Thế hệ mới)]
 Bạn là Chuyên gia Khảo thí môn ${subject}. Hãy biên soạn bộ câu hỏi JSON cho ĐỀ KIỂM TRA ĐỊNH KÌ theo cấu trúc Công văn 7991 cho môn ${subject} Lớp ${grade} (Bộ sách Kết nối tri thức với cuộc sống).
 
 DỮ LIỆU YÊU CẦU CẦN ĐẠT & SỐ CÂU PHÂN BỔ ĐỀU CHO TỪNG BÀI:
@@ -6248,13 +6286,25 @@ window.saveDriveScriptUrl = function() {
 };
 
 window.initBioMasterUpgrade = function() {
-  // Xóa cache cũ bị lệch câu hoặc định dạng bảng cũ của phiên bản trước
+  // Xóa cache cũ bị lệch câu hoặc định dạng cũ của phiên bản trước
   try {
     Object.keys(localStorage).forEach(k => {
-      if (k.startsWith('biomaster_v7_') || k.startsWith('biomaster_v8_') || k.startsWith('structured_plan_v8_')) {
+      if (
+        k.startsWith('biomaster_v7_') ||
+        k.startsWith('biomaster_v8_') ||
+        k.startsWith('biomaster_v9_') ||
+        k.startsWith('structured_plan_v8_') ||
+        k.startsWith('structured_plan_v9_')
+      ) {
         localStorage.removeItem(k);
       }
     });
+    const savedModel = localStorage.getItem('selected_gemini_model');
+    if (savedModel === 'gemini-3.5-flash') {
+      localStorage.setItem('selected_gemini_model', 'gemini-3.8-flash');
+      const sel = document.getElementById('sel-gemini-model');
+      if (sel) sel.value = 'gemini-3.8-flash';
+    }
   } catch (e) {}
 
   if (typeof window.distributeMatrixFromTotals === 'function') {

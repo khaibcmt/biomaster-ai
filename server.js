@@ -121,19 +121,19 @@ function pickNextApiKey() {
 }
 
 const MODEL_LABELS = {
-  'gemini-3.5-flash': 'gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao)',
+  'gemini-3.8-flash': 'gemini-3.8-flash (Gemini 3.8 Flash — Tốc độ cao)',
   'gemini-3.5-flash-lite': 'gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt)',
   'gemini-3.1-pro': 'gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu)',
   'gemini-4-argon': 'gemini-4-argon (Gemini 4 Argon — Thế hệ mới)'
 };
 
 function resolveModelName(requested) {
-  if (!requested) return 'gemini-3.5-flash';
+  if (!requested) return 'gemini-3.8-flash';
   const r = String(requested).toLowerCase();
   if (r.includes('lite')) return 'gemini-3.5-flash-lite';
   if (r.includes('3.1') || r.includes('pro')) return 'gemini-3.1-pro';
   if (r.includes('argon') || r.includes('agon') || r.includes('4')) return 'gemini-4-argon';
-  return 'gemini-3.5-flash';
+  return 'gemini-3.8-flash';
 }
 
 function sleep(ms) {
@@ -159,7 +159,7 @@ async function executeGeminiWithFailover({ selectedModel, promptText, requireJso
   const primaryModel = resolveModelName(selectedModel);
   const fallbackChain = [
     primaryModel,
-    'gemini-3.5-flash',
+    'gemini-3.8-flash',
     'gemini-3.5-flash-lite',
     'gemini-3.1-pro',
     'gemini-4-argon',
