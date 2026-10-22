@@ -120,11 +120,20 @@ function pickNextApiKey() {
   return selected;
 }
 
+const MODEL_LABELS = {
+  'gemini-3.5-flash': 'gemini-3.5-flash (Gemini 3.5 Flash — Tốc độ cao)',
+  'gemini-3.5-flash-lite': 'gemini-3.5-flash-lite (Gemini 3.5 Flash-Lite — Siêu mượt)',
+  'gemini-3.1-pro': 'gemini-3.1-pro (Gemini 3.1 Pro — Chuyên sâu)',
+  'gemini-4-argon': 'gemini-4-argon (Gemini 4 Argon — Thế hệ mới)'
+};
+
 function resolveModelName(requested) {
-  if (!requested) return 'gemini-3-flash-preview';
-  if (requested.includes('lite') || requested.includes('3.5')) return 'gemini-3.1-flash-lite-preview';
-  if (requested.includes('argon') || requested.includes('4') || requested.includes('pro')) return 'gemini-3-flash-preview';
-  return 'gemini-3-flash-preview';
+  if (!requested) return 'gemini-3.5-flash';
+  const r = String(requested).toLowerCase();
+  if (r.includes('lite')) return 'gemini-3.5-flash-lite';
+  if (r.includes('3.1') || r.includes('pro')) return 'gemini-3.1-pro';
+  if (r.includes('argon') || r.includes('agon') || r.includes('4')) return 'gemini-4-argon';
+  return 'gemini-3.5-flash';
 }
 
 function sleep(ms) {
@@ -148,14 +157,14 @@ function isRateLimitOrQuotaError(err) {
 
 async function executeGeminiWithFailover({ selectedModel, promptText, requireJson, systemInstruction }) {
   const primaryModel = resolveModelName(selectedModel);
-  // Chuỗi 6 mô hình thuộc các nhóm hạn ngạch (quota bucket) độc lập để tự động chuyển tải khi 1 model chạm trần RPM/TPM
   const fallbackChain = [
     primaryModel,
+    'gemini-3.5-flash',
+    'gemini-3.5-flash-lite',
+    'gemini-3.1-pro',
+    'gemini-4-argon',
     'gemini-3-flash-preview',
     'gemini-3.1-flash-lite-preview',
-    'gemini-2.5-flash',
-    'gemini-2.5-flash-lite',
-    'gemini-flash-latest',
     'gemini-3.1-pro-preview'
   ].filter((v, i, a) => a.indexOf(v) === i);
 
@@ -164,7 +173,6 @@ async function executeGeminiWithFailover({ selectedModel, promptText, requireJso
   await acquireConcurrencySlot();
   try {
     for (const modelName of fallbackChain) {
-      // Thử tối đa 2 lần cho mỗi model nếu gặp lỗi nghẽn mạng / 429 tạm thời
       for (let attempt = 0; attempt < 2; attempt++) {
         const apiKey = pickNextApiKey();
         if (!apiKey) {
@@ -209,12 +217,11 @@ async function executeGeminiWithFailover({ selectedModel, promptText, requireJso
         } catch (err) {
           lastError = err;
           if (isRateLimitOrQuotaError(err)) {
-            // Đánh dấu tạm nghỉ 15s cho key vừa chạm giới hạn RPM và backoff nhẹ trước khi chuyển sang model/key kế tiếp
             keyCooldownMap.set(apiKey, Date.now() + 15000);
             const backoffMs = 350 * (attempt + 1) + Math.floor(Math.random() * 250);
             await sleep(backoffMs);
           } else {
-            break; // Chuyển ngay sang model tiếp theo trong chuỗi fallback
+            break;
           }
         }
       }
@@ -241,9 +248,13 @@ app.post(['/api/gemini', '/biomaster-ai/api/gemini'], async (req, res) => {
     }
 
     if (clientApiKey && typeof clientApiKey === 'string' && clientApiKey.trim().length > 20) {
-      const cleanClientKey = clientApiKey.trim();
-      if (!process.env.GEMINI_API_KEYS?.includes(cleanClientKey)) {
-        process.env.GEMINI_API_KEYS = [cleanClientKey, process.env.GEMINI_API_KEYS || ''].filter(Boolean).join(',');
+      const clientKeys = clientApiKey
+        .split(/[\n,;]+/)
+        .map(k => k.trim())
+        .filter(k => k.length > 20);
+      if (clientKeys.length > 0) {
+        const merged = [...new Set([...clientKeys, ...(process.env.GEMINI_API_KEYS || '').split(',').map(k => k.trim()).filter(Boolean)])];
+        process.env.GEMINI_API_KEYS = merged.join(',');
       }
     }
 
