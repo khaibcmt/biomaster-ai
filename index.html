@@ -2078,12 +2078,6 @@
         // ==================== ĐIỀU PHỐI AI THEO ĐÚNG PHÂN HỆ ĐANG MỞ ====================
         async function executeActionAI() {
             const savedKey = (localStorage.getItem('gemini_api_key') || '').trim();
-            if (!savedKey) {
-                openAIKeyModal();
-                alert("Thầy vui lòng nhập và lưu Gemini API Key trước khi bắt đầu tạo nội dung bằng AI!");
-                return;
-            }
-
             const selectedModel = document.getElementById('sel-gemini-model') ? document.getElementById('sel-gemini-model').value : 'gemini-3.8-flash';
             const subject = document.getElementById('sel-subject').value;
             const grade = document.getElementById('sel-grade').value;
@@ -3449,8 +3443,6 @@ Quy cách: Font Times New Roman 13pt. Không bọc thẻ markdown.`;
     <!-- ==================== HỆ THỐNG DỮ LIỆU CHƯƠNG TRÌNH GDPT 2018 & SGK KẾT NỐI TRI THỨC ==================== -->
     <script id="biomaster-inline-curriculum-and-upgrade">
 
-if (!window.__BIOMASTER_UPGRADE_LOADED__) {
-window.__BIOMASTER_UPGRADE_LOADED__ = true;
 // ============================================================================
 // CƠ SỞ DỮ LIỆU CHƯƠNG TRÌNH GDPT 2018 (THÔNG TƯ 32/2018/TT-BGDĐT)
 // & SÁCH GIÁO KHOA KẾT NỐI TRI THỨC VỚI CUỘC SỐNG (NXB GIÁO DỤC VIỆT NAM)
@@ -10260,7 +10252,6 @@ window.addEventListener('DOMContentLoaded', window.initBioMasterUpgrade);
 
 
 
-}
 
     </script>
 </body>

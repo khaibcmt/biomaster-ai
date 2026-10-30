@@ -155,18 +155,19 @@ function isRateLimitOrQuotaError(err) {
   );
 }
 
+function getBackendModelChain(primaryModel) {
+  if (primaryModel === 'gemini-3.5-flash-lite') {
+    return ['gemini-3.1-flash-lite-preview', 'gemini-3-flash-preview', 'gemini-2.5-flash'];
+  }
+  if (primaryModel === 'gemini-3.1-pro' || primaryModel === 'gemini-4-argon') {
+    return ['gemini-3-flash-preview', 'gemini-3.1-pro-preview', 'gemini-2.5-flash'];
+  }
+  return ['gemini-3-flash-preview', 'gemini-3.1-flash-lite-preview', 'gemini-2.5-flash'];
+}
+
 async function executeGeminiWithFailover({ selectedModel, promptText, requireJson, systemInstruction }) {
   const primaryModel = resolveModelName(selectedModel);
-  const fallbackChain = [
-    primaryModel,
-    'gemini-3.8-flash',
-    'gemini-3.5-flash-lite',
-    'gemini-3.1-pro',
-    'gemini-4-argon',
-    'gemini-3-flash-preview',
-    'gemini-3.1-flash-lite-preview',
-    'gemini-3.1-pro-preview'
-  ].filter((v, i, a) => a.indexOf(v) === i);
+  const fallbackChain = getBackendModelChain(primaryModel);
 
   let lastError = null;
 
@@ -209,7 +210,8 @@ async function executeGeminiWithFailover({ selectedModel, promptText, requireJso
           if (textOut && textOut.trim() !== '') {
             return {
               text: textOut,
-              modelUsed: modelName,
+              modelUsed: primaryModel,
+              modelLabel: MODEL_LABELS[primaryModel] || primaryModel,
               fromServerCache: false
             };
           }

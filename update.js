@@ -1,6 +1,4 @@
 
-if (!window.__BIOMASTER_UPGRADE_LOADED__) {
-window.__BIOMASTER_UPGRADE_LOADED__ = true;
 // ============================================================================
 // CƠ SỞ DỮ LIỆU CHƯƠNG TRÌNH GDPT 2018 (THÔNG TƯ 32/2018/TT-BGDĐT)
 // & SÁCH GIÁO KHOA KẾT NỐI TRI THỨC VỚI CUỘC SỐNG (NXB GIÁO DỤC VIỆT NAM)
@@ -6810,4 +6808,3 @@ window.addEventListener('DOMContentLoaded', window.initBioMasterUpgrade);
 
 
 
-}
