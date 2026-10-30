@@ -3585,6 +3585,11 @@ window.openRAGInspectorModal = function() {
   const sub = document.getElementById('rag-modal-subtitle');
   if (!modal || !body) return;
 
+  const guideModal = document.getElementById('modal-user-guide');
+  const featuresModal = document.getElementById('modal-web-features');
+  if (guideModal) guideModal.classList.add('hidden');
+  if (featuresModal) featuresModal.classList.add('hidden');
+
   const subject = document.getElementById('sel-subject') ? document.getElementById('sel-subject').value : 'Sinh học';
   const grade = document.getElementById('sel-grade') ? document.getElementById('sel-grade').value : '10';
   const lessonTitle = typeof currentSelectedLesson !== 'undefined' ? currentSelectedLesson : 'Bài 1: Giới thiệu khái quát môn Sinh học';
@@ -3686,9 +3691,35 @@ window.openRAGInspectorModal = function() {
   modal.classList.remove('hidden');
 };
 
+window.closeAllHubModals = function() {
+  const guideModal = document.getElementById('modal-user-guide');
+  const featuresModal = document.getElementById('modal-web-features');
+  const ragModal = document.getElementById('modal-rag-inspector');
+  if (guideModal) guideModal.classList.add('hidden');
+  if (featuresModal) featuresModal.classList.add('hidden');
+  if (ragModal) ragModal.classList.add('hidden');
+};
+
+window.openSystemHubModal = function(tab = 'guide') {
+  window.closeAllHubModals();
+  if (tab === 'features') {
+    const modal = document.getElementById('modal-web-features');
+    if (modal) modal.classList.remove('hidden');
+  } else if (tab === 'rag') {
+    if (typeof window.openRAGInspectorModal === 'function') {
+      window.openRAGInspectorModal();
+    } else {
+      const modal = document.getElementById('modal-rag-inspector');
+      if (modal) modal.classList.remove('hidden');
+    }
+  } else {
+    const modal = document.getElementById('modal-user-guide');
+    if (modal) modal.classList.remove('hidden');
+  }
+};
+
 window.closeRAGInspectorModal = function() {
-  const modal = document.getElementById('modal-rag-inspector');
-  if (modal) modal.classList.add('hidden');
+  window.closeAllHubModals();
 };
 
 window.runRAGLiveAudit = function() {
